@@ -201,7 +201,7 @@ async def test_create_appointment_success(client: AsyncClient, async_session: As
     # Create a session for this clinic
     from src.models import AgentSession, SessionStatus
     session = AgentSession(
-        id=uuid4(),
+        session_id=uuid4(),
         patient_id=patient.id,
         clinic_id=clinic.id,
         current_node="Receptionist",
@@ -214,7 +214,7 @@ async def test_create_appointment_success(client: AsyncClient, async_session: As
 
     # Create a slot_id manually
     start_time = (datetime.now() + timedelta(days=7)).replace(hour=10, minute=0, second=0, microsecond=0)
-    slot_id = f"{dentist.id}-{start_time.isoformat()}"
+    slot_id = f"{dentist.id}@{start_time.isoformat()}"
 
     response = await client.post(
         "/appointments",
@@ -225,6 +225,8 @@ async def test_create_appointment_success(client: AsyncClient, async_session: As
             "procedure_code": "D1110",
         },
     )
+
+    if response.status_code != 201:
 
     assert response.status_code == 201
     data = response.json()
@@ -239,7 +241,7 @@ async def test_create_appointment_success(client: AsyncClient, async_session: As
 @pytest.mark.asyncio
 async def test_create_appointment_double_booking(client: AsyncClient, async_session: AsyncSession):
     """Test that double-booking the same slot returns 409."""
-    from src.models import Clinic, Dentist, Patient, Procedure, Appointment, AppointmentStatus
+    from src.models import Clinic, Dentist, Patient, Procedure, Appointment, AppointmentStatus, AgentSession, SessionStatus
     from uuid import uuid4
 
     # Create entities
@@ -250,6 +252,18 @@ async def test_create_appointment_double_booking(client: AsyncClient, async_sess
     procedure = Procedure(id=uuid4(), code="D1110", name="Prophylaxis", category="Preventive", default_duration_mins=30, base_value=150.0, priority_weight=0.3)
 
     async_session.add_all([clinic, dentist, patient1, patient2, procedure])
+    await async_session.commit()
+
+    # Create a session
+    session = AgentSession(
+        session_id=uuid4(),
+        patient_id=patient1.id,
+        clinic_id=clinic.id,
+        current_node="Receptionist",
+        messages=[],
+        status=SessionStatus.ACTIVE,
+    )
+    async_session.add(session)
     await async_session.commit()
 
     # Create existing appointment
@@ -270,11 +284,11 @@ async def test_create_appointment_double_booking(client: AsyncClient, async_sess
     await async_session.commit()
 
     # Try to book same slot
-    slot_id = f"{dentist.id}-{start_time.isoformat()}"
+    slot_id = f"{dentist.id}@{start_time.isoformat()}"
     response = await client.post(
         "/appointments",
         json={
-            "session_id": str(clinic.id),
+            "session_id": str(session.session_id),
             "patient_id": str(patient2.id),
             "slot_id": slot_id,
             "procedure_code": "D1110",
@@ -423,3 +437,5 @@ async def test_cancel_appointment_not_found(client: AsyncClient):
     response = await client.delete(f"/appointments/{uuid4()}")
 
     assert response.status_code == 404
+
+import sys

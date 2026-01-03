@@ -2,7 +2,7 @@
 
 from datetime import datetime, timedelta
 from typing import Annotated
-from uuid import UUID
+from uuid import UUID, uuid4
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import BaseModel, Field
@@ -167,7 +167,7 @@ async def get_available_slots(
             if slot_available:
                 slots.append(
                     SlotResponse(
-                        id=f"{dentist.id}-{current_time.isoformat()}",
+                        id=f"{dentist.id}@{current_time.isoformat()}",
                         start_time=current_time,
                         end_time=slot_end,
                         dentist_id=str(dentist.id),
@@ -241,15 +241,16 @@ async def create_appointment(
         )
 
     # Parse slot_id to extract dentist_id and start_time
-    # Format: "{dentist_id}-{start_time_iso}"
+    # Format: "{dentist_id}@{start_time_iso}"
+    # Using @ as delimiter to avoid conflicts with UUID and ISO date hyphens
     try:
-        dentist_id_str, start_time_str = request.slot_id.split("-", 1)
+        dentist_id_str, start_time_str = request.slot_id.split("@", 1)
         dentist_uuid = PyUUID(dentist_id_str)
         start_time = datetime.fromisoformat(start_time_str)
     except (ValueError, IndexError):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid slot_id format",
+            detail="Invalid slot_id format. Expected format: {uuid}@{iso_datetime}",
         )
 
     # Get dentist and clinic
@@ -294,7 +295,7 @@ async def create_appointment(
 
     # Create appointment
     appointment = Appointment(
-        id=PyUUID(),  # Generate new UUID
+        id=uuid4(),  # Generate new UUID
         patient_id=patient_uuid,
         clinic_id=dentist.clinic_id,
         dentist_id=dentist_uuid,
