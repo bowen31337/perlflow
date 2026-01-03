@@ -24,12 +24,13 @@ test.describe('PearlFlow Chat Widget - Basic Functionality', () => {
     const chatButton = page.getByRole('button', { name: 'Open chat' });
     await chatButton.click();
 
-    // Wait for chat window to appear
-    const chatWindow = page.getByText('PearlFlow Assistant');
+    // Wait for chat window to appear - use heading role to target chat header specifically
+    const chatWindow = page.getByRole('heading', { name: 'PearlFlow Assistant' });
     await expect(chatWindow).toBeVisible();
 
-    // Check for welcome message
-    const welcomeMessage = page.getByText(/welcome|hello/i);
+    // Check for welcome message (inside chat window, not page text)
+    // The welcome message appears in the chat messages area
+    const welcomeMessage = page.locator('.pf-overflow-y-auto').getByText(/welcome|hello/i);
     await expect(welcomeMessage).toBeVisible();
   });
 
@@ -38,15 +39,16 @@ test.describe('PearlFlow Chat Widget - Basic Functionality', () => {
     const chatButton = page.getByRole('button', { name: 'Open chat' });
     await chatButton.click();
 
-    // Wait for chat window
-    await expect(page.getByText('PearlFlow Assistant')).toBeVisible();
+    // Wait for chat window - use heading to target chat header specifically
+    await expect(page.getByRole('heading', { name: 'PearlFlow Assistant' })).toBeVisible();
 
     // Click minimize button
     const minimizeButton = page.getByRole('button', { name: 'Minimize chat' });
     await minimizeButton.click();
 
     // Chat window should be hidden, button should be visible
-    await expect(page.getByText('PearlFlow Assistant')).not.toBeVisible();
+    // The chat window is a container with pf-w-96 class
+    await expect(page.locator('.pf-w-96')).not.toBeVisible();
     await expect(chatButton).toBeVisible();
   });
 });
@@ -56,8 +58,8 @@ test.describe('PearlFlow Chat Widget - Message Flow', () => {
     await page.goto('/');
     // Open chat widget
     await page.getByRole('button', { name: 'Open chat' }).click();
-    // Wait for session to be created
-    await expect(page.getByText('PearlFlow Assistant')).toBeVisible();
+    // Wait for session to be created - use heading to target chat header
+    await expect(page.getByRole('heading', { name: 'PearlFlow Assistant' })).toBeVisible();
   });
 
   test('User can send a message', async ({ page }) => {
@@ -70,8 +72,10 @@ test.describe('PearlFlow Chat Widget - Message Flow', () => {
     // Send message
     await sendButton.click();
 
-    // User message should appear
-    await expect(page.getByText('Hello, I have a toothache')).toBeVisible();
+    // User message should appear in chat window (not in page text)
+    // Look for the message within the chat messages area
+    const messagesArea = page.locator('.pf-overflow-y-auto');
+    await expect(messagesArea.getByText('Hello, I have a toothache')).toBeVisible();
   });
 
   test('Agent responds with typing indicator', async ({ page }) => {
@@ -82,8 +86,9 @@ test.describe('PearlFlow Chat Widget - Message Flow', () => {
     await input.fill('I have severe toothache');
     await sendButton.click();
 
-    // Check for typing indicator
-    const typingIndicator = page.getByText(/is typing\.\.\./i);
+    // Check for typing indicator within chat window
+    const messagesArea = page.locator('.pf-overflow-y-auto');
+    const typingIndicator = messagesArea.getByText(/is typing\.\.\./i);
     await expect(typingIndicator).toBeVisible();
   });
 
@@ -96,7 +101,9 @@ test.describe('PearlFlow Chat Widget - Message Flow', () => {
     await sendButton.click();
 
     // Wait for response and check agent indicator in header
-    await expect(page.getByText(/Triage Nurse|IntakeSpecialist/i)).toBeVisible();
+    // The agent indicator is in the chat header
+    const header = page.locator('.pf-flex.pf-items-center.pf-justify-between');
+    await expect(header.getByText(/Triage Nurse|IntakeSpecialist/i)).toBeVisible();
   });
 
   test('Conversation flow maintains state', async ({ page }) => {
@@ -107,15 +114,17 @@ test.describe('PearlFlow Chat Widget - Message Flow', () => {
     await input.fill('I have severe toothache');
     await sendButton.click();
 
-    // Wait for first response
-    await expect(page.getByText(/pain/i)).toBeVisible();
+    // Wait for first response in messages area
+    // Use first() to avoid strict mode violation when multiple matches exist
+    const messagesArea = page.locator('.pf-overflow-y-auto');
+    await expect(messagesArea.getByText(/pain/i).first()).toBeVisible();
 
     // Send pain level
     await input.fill('My pain level is 8');
     await sendButton.click();
 
     // Should ask about swelling (state is maintained)
-    await expect(page.getByText(/swelling/i)).toBeVisible();
+    await expect(messagesArea.getByText(/swelling/i).first()).toBeVisible();
   });
 });
 
@@ -123,7 +132,8 @@ test.describe('PearlFlow Chat Widget - UI Components', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
     await page.getByRole('button', { name: 'Open chat' }).click();
-    await expect(page.getByText('PearlFlow Assistant')).toBeVisible();
+    // Use heading to target chat header specifically
+    await expect(page.getByRole('heading', { name: 'PearlFlow Assistant' })).toBeVisible();
   });
 
   test('Pain scale selector appears for pain messages', async ({ page }) => {
@@ -134,9 +144,9 @@ test.describe('PearlFlow Chat Widget - UI Components', () => {
     await input.fill('I have a toothache');
     await sendButton.click();
 
-    // Wait for UI component to appear
-    // The PainScaleSelector should render
-    await expect(page.getByText(/pain/i)).toBeVisible();
+    // Wait for UI component to appear in messages area
+    const messagesArea = page.locator('.pf-overflow-y-auto');
+    await expect(messagesArea.getByText(/pain/i)).toBeVisible();
   });
 
   test('Message bubbles have correct styling', async ({ page }) => {
@@ -148,7 +158,9 @@ test.describe('PearlFlow Chat Widget - UI Components', () => {
     await sendButton.click();
 
     // User message should have distinct styling (right-aligned, colored)
-    const userMessage = page.locator('div', { hasText: 'Test message' }).first();
+    // Look within the chat messages area
+    const messagesArea = page.locator('.pf-overflow-y-auto');
+    const userMessage = messagesArea.locator('div', { hasText: 'Test message' }).first();
     await expect(userMessage).toBeVisible();
   });
 
@@ -161,7 +173,8 @@ test.describe('PearlFlow Chat Widget - UI Components', () => {
     await sendButton.click();
 
     // Agent name should be visible in header
-    await expect(page.getByText(/Receptionist/i)).toBeVisible();
+    const header = page.locator('.pf-flex.pf-items-center.pf-justify-between');
+    await expect(header.getByText(/Receptionist/i)).toBeVisible();
   });
 });
 
