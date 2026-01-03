@@ -40,38 +40,34 @@ async def send_notification(
 
     Send a notification to a patient.
     """
-    try:
-        if request.type == "reminder":
-            success = await sms_service.send_appointment_reminder(
-                phone=request.phone,
-                appointment_details=request.appointment_details or {}
-            )
-        elif request.type == "confirmation":
-            success = await sms_service.send_confirmation(
-                phone=request.phone,
-                appointment_details=request.appointment_details or {}
-            )
-        elif request.type == "emergency":
-            success = await sms_service.send_emergency_alert(
-                phone=request.phone,
-                priority=request.priority or "URGENT",
-                message=request.message or "Emergency alert"
-            )
-        else:
-            raise HTTPException(status_code=400, detail=f"Unknown notification type: {request.type}")
+    if request.type == "reminder":
+        success = await sms_service.send_appointment_reminder(
+            phone=request.phone,
+            appointment_details=request.appointment_details or {}
+        )
+    elif request.type == "confirmation":
+        success = await sms_service.send_confirmation(
+            phone=request.phone,
+            appointment_details=request.appointment_details or {}
+        )
+    elif request.type == "emergency":
+        success = await sms_service.send_emergency_alert(
+            phone=request.phone,
+            priority=request.priority or "URGENT",
+            message=request.message or "Emergency alert"
+        )
+    else:
+        raise HTTPException(status_code=400, detail=f"Unknown notification type: {request.type}")
 
-        if success:
-            return NotificationResponse(
-                success=True,
-                message_id=f"msg_{int(datetime.now().timestamp())}",
-                status="sent",
-                timestamp=datetime.now().isoformat()
-            )
-        else:
-            raise HTTPException(status_code=500, detail="Failed to send notification")
-
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    if success:
+        return NotificationResponse(
+            success=True,
+            message_id=f"msg_{int(datetime.now().timestamp())}",
+            status="sent",
+            timestamp=datetime.now().isoformat()
+        )
+    else:
+        raise HTTPException(status_code=500, detail="Failed to send notification")
 
 
 @router.get("/status/{message_id}")

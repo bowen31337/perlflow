@@ -72,6 +72,7 @@ class TestSMSService:
         assert len(service.sent_messages) == 1
         assert service.sent_messages[0]["type"] == "emergency"
         assert service.sent_messages[0]["priority"] == "URGENT"
+        assert service.sent_messages[0]["message"] == "Please call immediately"
 
     def test_get_sent_messages(self):
         """Verify getting sent messages works correctly."""

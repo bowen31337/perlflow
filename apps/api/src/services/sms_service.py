@@ -90,3 +90,11 @@ class SMSService:
     def clear_messages(self) -> None:
         """Clear sent messages list."""
         self.sent_messages = []
+
+
+# Singleton instance for API routes
+sms_service = SMSService(provider="mock")
+
+
+# Create a default instance for easy importing
+sms_service = SMSService()
