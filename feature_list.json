@@ -1413,8 +1413,10 @@
     "passes": true,
     "is_dev_done": true,
     "is_qa_passed": true,
-    "dev_completed_at": "2026-01-03T16:06:45.946966+00:00",
-    "qa_completed_at": "2026-01-03T16:06:45.946966+00:00"
+    "dev_completed_at": "2026-01-03T16:14:03.586810Z",
+    "qa_completed_at": "2026-01-03T16:06:45.946966+00:00",
+    "qa_retry_count": 0,
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
