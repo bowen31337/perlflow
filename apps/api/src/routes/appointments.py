@@ -72,8 +72,8 @@ class UpdateAppointmentRequest(BaseModel):
 async def get_available_slots(
     clinic_id: Annotated[UUID, Query(description="Clinic UUID")],
     date_range: Annotated[str, Query(description="Date range (e.g., '2024-01-01/2024-01-07')")],
+    db: Annotated[AsyncSession, Depends(get_db)],
     procedure_code: Annotated[str | None, Query(description="Optional procedure code filter")] = None,
-    db: Annotated[AsyncSession, Depends(get_db)] = None,
 ) -> AvailableSlotsResponse:
     """
     Get available appointment slots.

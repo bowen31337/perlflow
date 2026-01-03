@@ -349,14 +349,11 @@
       "Step 4: Verify available slots are returned to user"
     ],
     "passes": false,
-    "is_dev_done": false,
+    "is_dev_done": true,
     "is_qa_passed": false,
     "qa_retry_count": 0,
-    "dev_failure_count": 1,
-    "last_dev_failure_at": "2026-01-03T14:29:39.049949Z",
-    "dev_failure_reasons": [
-      "Worker session timed out"
-    ]
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-03T14:42:30.465056Z"
   },
   {
     "category": "functional",
@@ -447,8 +444,11 @@
       "Step 3: Verify these are prioritized for move suggestions"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-03T14:35:28.268354Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -505,8 +505,11 @@
       "Step 5: Verify appointment stored in database"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-03T14:37:21.440811Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -545,8 +548,11 @@
       "Step 5: Verify old slot now available"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-03T14:41:45.884060Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
