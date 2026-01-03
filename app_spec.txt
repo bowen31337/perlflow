@@ -1,0 +1,849 @@
+<project_specification>
+  <project_name>PearlFlow - Intelligent Dental Practice AI Assistant</project_name>
+
+  <overview>
+    Build an agentic AI-powered dental practice management system that automates patient intake,
+    triage, and intelligent appointment scheduling. Features include multi-agent orchestration using
+    the deepagents library (built on LangGraph), revenue-based appointment optimization, proactive
+    patient engagement, and a reusable embeddable chat widget. The system uses a hierarchical agent
+    architecture with a root "Receptionist" agent delegating to specialized sub-agents via
+    SubAgentMiddleware. Acts as a virtual senior receptionist with autonomous decision-making while
+    ensuring AHPRA compliance and Australian Privacy Principles adherence.
+  </overview>
+
+  <technology_stack>
+    <language_preference>
+      IMPORTANT: Use TypeScript (.ts, .tsx) for ALL frontend code. Do NOT use JavaScript (.js, .jsx).
+      All frontend files must have proper type annotations and strict type checking enabled.
+      Use Python 3.11+ with 100% type hints for ALL backend code.
+    </language_preference>
+    <api_key>
+      You can use an API key located at /tmp/api-key for testing.
+    </api_key>
+    <frontend>
+      <framework>React 18+ with Vite (Library Mode) and TypeScript</framework>
+      <language>TypeScript (strict mode) - use .tsx for components, .ts for utilities</language>
+      <styling>Tailwind CSS with 'pf-' prefix to avoid style conflicts</styling>
+      <state_management>React hooks with typed state, Context for session management</state_management>
+      <streaming>Server-Sent Events (SSE) for real-time token streaming</streaming>
+      <testing>Vitest for unit testing, Storybook 8 for component documentation</testing>
+      <type_safety>Enable strict mode in tsconfig.json, no implicit any</type_safety>
+      <port>Only launch on port {frontend_port}</port>
+      <packaging>
+        <output>@pearlflow/chat-ui npm package</output>
+        <bundle_size>Less than 50kb gzipped, tree-shakable</bundle_size>
+        <formats>ESM and CJS dual builds</formats>
+      </packaging>
+    </frontend>
+    <backend>
+      <runtime>Python 3.11+ with FastAPI</runtime>
+      <language>Python with 100% type hints and Pydantic models</language>
+      <agent_framework>
+        <library>deepagents (built on LangGraph)</library>
+        <core_imports>
+          - from deepagents import create_deep_agent
+          - from deepagents.middleware import SubAgentMiddleware
+          - from deepagents.tools import Tool
+          - from langchain_core.messages import HumanMessage
+        </core_imports>
+        <patterns>
+          - create_deep_agent() for agent creation with name, instructions, tools, middleware
+          - SubAgentMiddleware for registering sub-agents with root orchestrator
+          - Tool.from_function() for wrapping async Python functions as agent tools
+          - ainvoke() for async agent execution with thread_id for session management
+        </patterns>
+      </agent_framework>
+      <database>PostgreSQL (ACID compliance + JSONB for agent state)</database>
+      <package_manager>uv for Python dependency management</package_manager>
+      <communication>HTTP/2 (REST) + SSE (Streaming)</communication>
+      <type_safety>All agent tools must have docstrings for LLM introspection</type_safety>
+    </backend>
+    <communication>
+      <api>RESTful endpoints with typed request/response interfaces</api>
+      <streaming>SSE for token-by-token responses and agent state updates</streaming>
+      <shared_types>API types generated from OpenAPI spec (Single Source of Truth)</shared_types>
+    </communication>
+    <monorepo>
+      <manager>TurboRepo for polyglot (JS/Python) workflows</manager>
+      <js_package_manager>pnpm</js_package_manager>
+      <python_package_manager>uv</python_package_manager>
+    </monorepo>
+  </technology_stack>
+
+  <prerequisites>
+    <environment_setup>
+      - Repository uses TurboRepo monorepo structure
+      - Frontend dependencies managed via pnpm
+      - Backend dependencies managed via uv
+      - PostgreSQL database with JSONB support for agent checkpoints
+      - Mock PMS (Practice Management System) data included
+      - deepagents library installed with LangGraph backend
+      - langchain_core for message types (HumanMessage, AIMessage)
+    </environment_setup>
+  </prerequisites>
+
+  <core_features>
+    <multi_agent_orchestration>
+      - Root "Receptionist" agent created via create_deep_agent()
+      - SubAgentMiddleware for registering and delegating to sub-agents
+      - Sub-agents: "IntakeSpecialist" (triage) and "ResourceOptimiser" (scheduler)
+      - Intent types: Emergency/Pain -> IntakeSpecialist, Booking -> ResourceOptimiser
+      - Visual indicators for agent hand-offs in UI
+      - Stateful conversation management with thread_id session persistence
+      - Support for concurrent agent sessions per clinic via configurable thread_id
+    </multi_agent_orchestration>
+
+    <intake_triage_agent>
+      - Diagnostic dialogue for symptom assessment
+      - Pain level scoring (1-10 scale)
+      - Clinical red flag screening (swelling, fever, breathing difficulty)
+      - Priority score calculation
+      - Empathetic conversational flow
+      - 80%+ triage accuracy target
+    </intake_triage_agent>
+
+    <resource_optimiser_agent>
+      - Revenue-based appointment heuristics ("Move Score")
+      - High-value procedure prioritization (Crowns, Implants)
+      - Low-value appointment identification (Routine Cleaning)
+      - Autonomous schedule rearrangement suggestions
+      - Chair utilization maximization
+      - Tool-calling interface for PMS queries
+    </resource_optimiser_agent>
+
+    <proactive_negotiation>
+      - Outbound communication flow triggers
+      - Incentive offer generation (discounts, priority slots)
+      - Patient acceptance rate optimization
+      - AHPRA-compliant messaging
+      - Voluntary reschedule request handling
+    </proactive_negotiation>
+
+    <chat_widget>
+      - Embeddable React component library
+      - Provider and Widget pattern for easy integration
+      - Typewriter effect for streaming responses
+      - Loading states and typing indicators
+      - Agent state visualization (which agent is active)
+      - Generative UI components (DatePickers, PainScaleSelector)
+      - SSE reconnection logic
+      - Mobile-responsive design
+      - Theme customization support
+    </chat_widget>
+
+    <pms_integration>
+      - Mock Practice Management System adapter
+      - Tool-based interface using deepagents Tool.from_function()
+      - Async tool functions with docstrings for LLM introspection
+      - Appointment CRUD operations
+      - Patient lookup by phone (E.164 format)
+      - Slot availability checking via check_availability(start, end) tool
+      - Heuristic calculations via heuristic_move_check(appointment_id, new_value) tool
+      - Procedure code support (e.g., "D1110" - Prophy)
+    </pms_integration>
+
+    <compliance_safety>
+      - AHPRA advertising compliance filter
+      - Testimonial/review language blocking
+      - Australian Privacy Principles (APP) adherence
+      - Data encryption at rest and in transit
+      - Manual audit/approval for patient feedback exposure
+    </compliance_safety>
+
+    <session_management>
+      - Persistent session_id (thread_id) tracking across turns
+      - deepagents checkpoint serialization to Postgres
+      - Conversation history preservation via HumanMessage/AIMessage
+      - Agent state recovery on reconnection using config={"configurable": {"thread_id": session_id}}
+      - Isolated state backend per clinic
+      - Async execution via root_agent.ainvoke() with session config
+    </session_management>
+  </core_features>
+
+  <database_schema>
+    <tables>
+      <patients>
+        - id: UUID (Primary Key)
+        - phone: E.164 String (Unique, lookup key)
+        - name: String
+        - email: String
+        - risk_profile: JSONB (pain_tolerance, anxiety_level)
+        - ltv_score: Float (Lifetime Value for heuristics)
+        - created_at, updated_at: DateTime
+      </patients>
+
+      <appointments>
+        - id: UUID (Primary Key)
+        - patient_id: UUID (Foreign Key)
+        - clinic_id: UUID (Foreign Key)
+        - dentist_id: UUID (Foreign Key)
+        - start_time: DateTime (UTC)
+        - duration_mins: Integer
+        - procedure_code: String (e.g., "D1110")
+        - procedure_name: String
+        - estimated_value: Float
+        - status: Enum (BOOKED, CANCELLED, OFFERING_MOVE, COMPLETED, NO_SHOW)
+        - notes: Text
+        - created_at, updated_at: DateTime
+      </appointments>
+
+      <agent_sessions>
+        - session_id: UUID (Primary Key)
+        - patient_id: UUID (Foreign Key, nullable for anonymous)
+        - clinic_id: UUID (Foreign Key)
+        - state_snapshot: JSONB (LangGraph checkpoint)
+        - current_node: String (Active agent: "Intake", "Scheduler", "Negotiation")
+        - messages: JSONB (Conversation history)
+        - started_at, updated_at: DateTime
+        - status: Enum (ACTIVE, COMPLETED, ABANDONED)
+      </agent_sessions>
+
+      <clinics>
+        - id: UUID (Primary Key)
+        - name: String
+        - timezone: String
+        - settings: JSONB (operating hours, slot duration, etc.)
+        - api_key: String (For widget authentication)
+        - created_at, updated_at: DateTime
+      </clinics>
+
+      <dentists>
+        - id: UUID (Primary Key)
+        - clinic_id: UUID (Foreign Key)
+        - name: String
+        - specializations: JSONB
+        - schedule: JSONB (weekly availability)
+        - is_active: Boolean
+      </dentists>
+
+      <procedures>
+        - id: UUID (Primary Key)
+        - code: String (Unique, e.g., "D1110")
+        - name: String
+        - category: String
+        - default_duration_mins: Integer
+        - base_value: Float
+        - priority_weight: Float (For heuristics)
+      </procedures>
+
+      <move_offers>
+        - id: UUID (Primary Key)
+        - original_appointment_id: UUID (Foreign Key)
+        - target_appointment_id: UUID (Foreign Key)
+        - incentive_type: Enum (DISCOUNT, PRIORITY_SLOT, GIFT)
+        - incentive_value: Float
+        - move_score: Float
+        - status: Enum (PENDING, ACCEPTED, DECLINED, EXPIRED)
+        - offered_at, responded_at: DateTime
+      </move_offers>
+
+      <feedback>
+        - id: UUID (Primary Key)
+        - patient_id: UUID (Foreign Key)
+        - appointment_id: UUID (Foreign Key)
+        - rating: Integer (1-5)
+        - content: Text
+        - is_approved: Boolean (For AHPRA compliance)
+        - approved_by: UUID (Admin user)
+        - created_at, approved_at: DateTime
+      </feedback>
+    </tables>
+  </database_schema>
+
+  <api_specification>
+    <session>
+      - POST /session
+        Request: { "clinic_api_key": "..." }
+        Response: { "session_id": "abc-123", "welcome_message": "..." }
+      - GET /session/{session_id}
+        Response: { "session_id": "...", "status": "...", "current_agent": "..." }
+    </session>
+
+    <chat>
+      - POST /chat/message
+        Request: { "session_id": "...", "text": "I have a toothache" }
+        Response: 200 OK (Acknowledgment only)
+      - GET /chat/stream/{session_id} (SSE)
+        Events:
+          - "token" -> Partial text for typewriter effect
+          - "agent_state" -> { "active_agent": "Intake", "thinking": true }
+          - "ui_component" -> { "type": "PainScaleSelector", "props": {...} }
+          - "complete" -> Final message signal
+    </chat>
+
+    <appointments>
+      - GET /appointments/available
+        Query: { "clinic_id": "...", "date_range": "...", "procedure_code": "..." }
+        Response: { "slots": [...] }
+      - POST /appointments
+        Request: { "session_id": "...", "patient_id": "...", "slot_id": "...", "procedure_code": "..." }
+        Response: { "appointment": {...} }
+      - PUT /appointments/{id}
+        Request: { "status": "...", "start_time": "..." }
+        Response: { "appointment": {...} }
+      - DELETE /appointments/{id}
+        Response: 204 No Content
+    </appointments>
+
+    <patients>
+      - GET /patients/lookup
+        Query: { "phone": "+61..." }
+        Response: { "patient": {...} } or 404
+      - POST /patients
+        Request: { "phone": "...", "name": "...", "email": "..." }
+        Response: { "patient": {...} }
+      - PUT /patients/{id}
+        Request: { "risk_profile": {...}, "ltv_score": ... }
+        Response: { "patient": {...} }
+    </patients>
+
+    <heuristics>
+      - POST /heuristics/move-score
+        Request: { "appointment_id": "...", "candidate_slot": "...", "new_procedure_value": ... }
+        Response: { "move_score": 85, "recommendation": "MOVE", "incentive_needed": "10% discount" }
+      - POST /heuristics/optimize-day
+        Request: { "clinic_id": "...", "date": "..." }
+        Response: { "suggestions": [...] }
+    </heuristics>
+
+    <admin>
+      - GET /admin/analytics
+        Response: { "no_show_rate": ..., "chair_utilization": ..., "revenue_optimization": ... }
+      - GET /admin/feedback/pending
+        Response: { "feedback_items": [...] }
+      - PUT /admin/feedback/{id}/approve
+        Response: { "feedback": {...} }
+    </admin>
+  </api_specification>
+
+  <component_architecture>
+    <exported_components>
+      - DeepManusProvider: Context provider for API key and theme
+      - ChatWidget: Main embeddable chat interface
+      - ChatWindow: Container handling scroll, history, input
+      - MessageBubble: Polymorphic (Text, Markdown, Generative UI)
+      - useConnection: Headless hook for SSE management
+    </exported_components>
+
+    <consumer_usage>
+      import { DeepManusProvider, ChatWidget } from '@pearlflow/chat-ui';
+      import '@pearlflow/chat-ui/dist/style.css';
+
+      export const App = () => (
+        &lt;DeepManusProvider apiKey="pf_live_..." theme={{ primary: '#00D4FF' }}&gt;
+          &lt;ChatWidget position="bottom-right" defaultOpen={false} /&gt;
+        &lt;/DeepManusProvider&gt;
+      );
+    </consumer_usage>
+
+    <generative_ui_components>
+      - PainScaleSelector: 1-10 pain rating slider
+      - DateTimePicker: Appointment slot selection
+      - SlotList: Available appointment times
+      - ConfirmationCard: Appointment summary
+      - IncentiveOffer: Reschedule offer with discount
+      - AgentIndicator: Shows active agent identity
+    </generative_ui_components>
+  </component_architecture>
+
+  <agent_architecture>
+    <deepagents_hierarchy>
+      <description>
+        The system uses a hierarchical agent architecture with deepagents library.
+        Root agent delegates to sub-agents via SubAgentMiddleware pattern.
+        All agents are created using create_deep_agent() with typed instructions.
+      </description>
+
+      <root_agent name="Receptionist">
+        <purpose>Main orchestrator for intent classification and delegation</purpose>
+        <creation>create_deep_agent(name, instructions, middleware=[sub_agent_middleware])</creation>
+        <instructions>
+          You are the Main Receptionist.
+          - If user has pain/emergency -> Delegate to 'IntakeSpecialist'.
+          - If user wants to book -> Delegate to 'ResourceOptimiser'.
+          - Always maintain a polite, helpful tone.
+        </instructions>
+        <middleware>SubAgentMiddleware(sub_agents=[intake_agent, scheduler_agent])</middleware>
+        <tools>None (delegates to sub-agents)</tools>
+      </root_agent>
+
+      <sub_agent name="IntakeSpecialist">
+        <purpose>Triage Nurse Agent for diagnostic dialogue</purpose>
+        <creation>create_deep_agent(name, instructions, tools=[])</creation>
+        <instructions>
+          You are a Triage Nurse Agent.
+          1. Ask patient for pain level (1-10).
+          2. Check for red flags (swelling, fever).
+          3. Output a PRIORITY score.
+        </instructions>
+        <tools>None (conversational agent, no tools needed)</tools>
+        <output>PRIORITY score for urgency classification</output>
+      </sub_agent>
+
+      <sub_agent name="ResourceOptimiser">
+        <purpose>Scheduling Optimiser for appointment management</purpose>
+        <creation>create_deep_agent(name, instructions, tools=[...])</creation>
+        <instructions>
+          You are the Scheduling Optimiser.
+          1. Use 'check_availability' to find slots.
+          2. If no slots, use 'heuristic_move_check' to find low-value appointments to move.
+          3. Negotiate moves if score > 70.
+        </instructions>
+        <tools>
+          - Tool.from_function(check_availability)
+          - Tool.from_function(heuristic_move_check)
+        </tools>
+        <output>Available slots or move recommendations</output>
+      </sub_agent>
+    </deepagents_hierarchy>
+
+    <agent_tools>
+      <tool name="check_availability">
+        <signature>async def check_availability(start: str, end: str) -> str</signature>
+        <docstring>Checks for open slots in the PMS.</docstring>
+        <purpose>Query PMS for available appointment slots</purpose>
+        <params>
+          - start: str - Start datetime for availability window
+          - end: str - End datetime for availability window
+        </params>
+        <returns>String description of available slots</returns>
+        <registration>Tool.from_function(check_availability)</registration>
+      </tool>
+
+      <tool name="heuristic_move_check">
+        <signature>async def heuristic_move_check(appointment_id: str, new_value: float) -> dict</signature>
+        <docstring>Calculates move score based on revenue vs loyalty.</docstring>
+        <purpose>Calculate whether an existing appointment should be moved for a higher-value one</purpose>
+        <params>
+          - appointment_id: str - ID of the appointment to potentially move
+          - new_value: float - Revenue value of the new procedure
+        </params>
+        <returns>{"move_score": int, "incentive_needed": str}</returns>
+        <registration>Tool.from_function(heuristic_move_check)</registration>
+        <threshold>Negotiate moves if move_score > 70</threshold>
+      </tool>
+
+      <tool name="book_appointment">
+        <signature>async def book_appointment(patient_id: str, slot_id: str, procedure_code: str) -> dict</signature>
+        <docstring>Books an appointment in the PMS.</docstring>
+        <purpose>Create new appointment in Practice Management System</purpose>
+        <params>
+          - patient_id: str - UUID of the patient
+          - slot_id: str - UUID of the available slot
+          - procedure_code: str - Dental procedure code (e.g., "D1110")
+        </params>
+        <returns>Appointment confirmation object</returns>
+        <registration>Tool.from_function(book_appointment)</registration>
+      </tool>
+
+      <tool name="send_move_offer">
+        <signature>async def send_move_offer(original_appointment_id: str, new_slot: str, incentive: str) -> dict</signature>
+        <docstring>Initiates outbound offer to patient for rescheduling.</docstring>
+        <purpose>Generate and send incentive offer to patient for voluntary reschedule</purpose>
+        <params>
+          - original_appointment_id: str - UUID of appointment to move
+          - new_slot: str - Proposed new slot ID
+          - incentive: str - Incentive offer (e.g., "10% discount")
+        </params>
+        <returns>Offer tracking object with status</returns>
+        <registration>Tool.from_function(send_move_offer)</registration>
+      </tool>
+    </agent_tools>
+
+    <execution_pattern>
+      <description>Async execution with session/thread management</description>
+      <code_example>
+        async def run_chat(user_input: str, session_id: str):
+            response = await root_agent.ainvoke(
+                {"messages": [HumanMessage(content=user_input)]},
+                config={"configurable": {"thread_id": session_id}}
+            )
+            return response
+      </code_example>
+      <key_patterns>
+        - Use HumanMessage from langchain_core.messages for user input
+        - Pass thread_id via config["configurable"] for session persistence
+        - Use ainvoke() for async execution
+        - Response contains agent messages and tool call results
+      </key_patterns>
+    </execution_pattern>
+  </agent_architecture>
+
+  <ui_layout>
+    <chat_widget>
+      - Floating button (bottom-right default)
+      - Expandable chat window
+      - Clinic branding header
+      - Message history with scroll
+      - Typing indicator with agent name
+      - Input field with send button
+      - Minimize/close controls
+    </chat_widget>
+
+    <intake_chat_view>
+      - Conversational triage flow
+      - Pain scale selector component
+      - Red flag checklist display
+      - Priority score visualization
+      - Emergency escalation indicator
+    </intake_chat_view>
+
+    <booking_optimization_view>
+      - Available slots grid/list
+      - Priority vs Standard slot indicators
+      - Suggested move recommendations
+      - Incentive offer cards
+      - Confirmation summary
+    </booking_optimization_view>
+
+    <agent_indicator>
+      - Active agent avatar/icon
+      - Agent name label
+      - "Thinking..." status
+      - Hand-off animation
+    </agent_indicator>
+  </ui_layout>
+
+  <design_system>
+    <color_palette>
+      - Primary: Dental Blue (#00D4FF)
+      - Secondary: Trust Green (#10B981)
+      - Background: White, Gray-50
+      - Text: Gray-900, Gray-600
+      - Emergency: Red-500
+      - Success: Green-500
+      - Warning: Amber-500
+      - Agent: Purple-500 (for agent indicators)
+    </color_palette>
+
+    <typography>
+      - Font: Inter, system-ui
+      - Message text: text-sm to text-base
+      - Agent labels: font-medium, text-xs
+      - Headings: font-semibold, text-lg
+    </typography>
+
+    <tailwind_prefix>
+      All Tailwind classes prefixed with 'pf-' to avoid conflicts
+      Example: pf-bg-primary, pf-text-gray-900
+    </tailwind_prefix>
+
+    <components>
+      - Chat bubbles with tail indicators
+      - Floating action button
+      - Pill-shaped quick reply buttons
+      - Progress indicators for multi-step flows
+      - Skeleton loaders for streaming
+      - Toast notifications for confirmations
+    </components>
+  </design_system>
+
+  <repository_structure>
+    pearlflow/
+    ├── apps/
+    │   ├── api/                   # Python/FastAPI Agent Backend
+    │   │   ├── src/
+    │   │   │   ├── agents/        # deepagents agent definitions
+    │   │   │   │   ├── __init__.py
+    │   │   │   │   ├── receptionist.py    # Root agent with SubAgentMiddleware
+    │   │   │   │   ├── intake.py          # IntakeSpecialist (triage)
+    │   │   │   │   ├── scheduler.py       # ResourceOptimiser (scheduling)
+    │   │   │   │   └── middleware.py      # SubAgentMiddleware setup
+    │   │   │   ├── tools/         # PMS integration tools (Tool.from_function)
+    │   │   │   │   ├── __init__.py
+    │   │   │   │   ├── availability.py    # check_availability
+    │   │   │   │   ├── heuristics.py      # heuristic_move_check
+    │   │   │   │   ├── booking.py         # book_appointment
+    │   │   │   │   └── offers.py          # send_move_offer
+    │   │   │   ├── models/        # Pydantic models
+    │   │   │   ├── routes/        # FastAPI endpoints
+    │   │   │   └── services/      # Business logic
+    │   │   ├── tests/
+    │   │   └── pyproject.toml
+    │   ├── demo-web/              # Next.js Integration Testbed
+    │   └── docs/                  # Storybook Static Build
+    ├── packages/
+    │   ├── chat-ui/               # Reusable React Component Library
+    │   │   ├── src/
+    │   │   │   ├── components/
+    │   │   │   │   ├── ChatWidget.tsx
+    │   │   │   │   ├── ChatWindow.tsx
+    │   │   │   │   ├── MessageBubble.tsx
+    │   │   │   │   └── AgentIndicator.tsx
+    │   │   │   ├── hooks/
+    │   │   │   │   └── useConnection.ts   # SSE management
+    │   │   │   ├── context/
+    │   │   │   │   └── PearlFlowProvider.tsx
+    │   │   │   └── types/
+    │   │   ├── tests/
+    │   │   └── package.json
+    │   └── ts-client/             # Typed API Client (shared)
+    │       ├── src/
+    │       └── package.json
+    ├── infrastructure/            # Terraform/Docker definitions
+    ├── turbo.json
+    └── package.json
+  </repository_structure>
+
+  <code_patterns>
+    <description>
+      Reference implementation patterns based on deepagents_structure.py.
+      All agent code must follow this structure for consistency.
+    </description>
+
+    <imports>
+      from deepagents import create_deep_agent
+      from deepagents.middleware import SubAgentMiddleware
+      from deepagents.tools import Tool
+      from langchain_core.messages import HumanMessage
+    </imports>
+
+    <tool_definition_pattern>
+      # All tools are async functions with type hints and docstrings
+      async def check_availability(start: str, end: str) -> str:
+          """Checks for open slots in the PMS."""
+          # Implementation here
+          return f"Available slots between {start} and {end}: [...]"
+
+      async def heuristic_move_check(appointment_id: str, new_value: float) -> dict:
+          """Calculates move score based on revenue vs loyalty."""
+          # Implementation here
+          return {"move_score": 85, "incentive_needed": "10% discount"}
+    </tool_definition_pattern>
+
+    <sub_agent_pattern>
+      # Sub-agents are created with create_deep_agent()
+      # IntakeSpecialist has no tools (conversational only)
+      intake_agent = create_deep_agent(
+          name="IntakeSpecialist",
+          instructions="""
+          You are a Triage Nurse Agent.
+          1. Ask patient for pain level (1-10).
+          2. Check for red flags (swelling, fever).
+          3. Output a PRIORITY score.
+          """,
+          tools=[],
+      )
+
+      # ResourceOptimiser has tools for PMS integration
+      scheduler_agent = create_deep_agent(
+          name="ResourceOptimiser",
+          instructions="""
+          You are the Scheduling Optimiser.
+          1. Use 'check_availability' to find slots.
+          2. If no slots, use 'heuristic_move_check' to find low-value appointments to move.
+          3. Negotiate moves if score > 70.
+          """,
+          tools=[
+              Tool.from_function(check_availability),
+              Tool.from_function(heuristic_move_check)
+          ],
+      )
+    </sub_agent_pattern>
+
+    <middleware_pattern>
+      # SubAgentMiddleware registers sub-agents with the root orchestrator
+      sub_agent_middleware = SubAgentMiddleware(
+          sub_agents=[intake_agent, scheduler_agent]
+      )
+    </middleware_pattern>
+
+    <root_agent_pattern>
+      # Root agent uses middleware to delegate to sub-agents
+      root_agent = create_deep_agent(
+          name="Receptionist",
+          instructions="""
+          You are the Main Receptionist.
+          - If user has pain/emergency -> Delegate to 'IntakeSpecialist'.
+          - If user wants to book -> Delegate to 'ResourceOptimiser'.
+          - Always maintain a polite, helpful tone.
+          """,
+          middleware=[sub_agent_middleware],
+      )
+    </root_agent_pattern>
+
+    <execution_pattern>
+      # Async execution with session/thread management
+      async def run_chat(user_input: str, session_id: str):
+          response = await root_agent.ainvoke(
+              {"messages": [HumanMessage(content=user_input)]},
+              config={"configurable": {"thread_id": session_id}}
+          )
+          return response
+    </execution_pattern>
+
+    <fastapi_integration>
+      # FastAPI route example for chat endpoint
+      from fastapi import FastAPI, Request
+      from fastapi.responses import StreamingResponse
+
+      app = FastAPI()
+
+      @app.post("/chat/message")
+      async def chat_message(request: Request):
+          data = await request.json()
+          session_id = data["session_id"]
+          text = data["text"]
+          # Queue message for processing
+          return {"status": "received"}
+
+      @app.get("/chat/stream/{session_id}")
+      async def chat_stream(session_id: str):
+          async def event_generator():
+              response = await run_chat(pending_message, session_id)
+              for token in response.content:
+                  yield f"event: token\ndata: {token}\n\n"
+              yield f"event: complete\ndata: done\n\n"
+          return StreamingResponse(event_generator(), media_type="text/event-stream")
+    </fastapi_integration>
+  </code_patterns>
+
+  <implementation_steps>
+    <step number="1">
+      <title>Foundation Setup</title>
+      <tasks>
+        - Initialize TurboRepo monorepo structure
+        - Set up apps/api with FastAPI and uv
+        - Install deepagents, langchain_core, langgraph dependencies
+        - Set up packages/chat-ui with Vite library mode
+        - Configure PostgreSQL with agent checkpoint tables
+        - Create shared type definitions for API contracts
+        - Set up Vitest for both frontend and backend testing
+        - Configure Storybook for component development
+      </tasks>
+    </step>
+
+    <step number="2">
+      <title>deepagents Agent Foundation</title>
+      <tasks>
+        - Create base tool functions with async signatures and docstrings
+        - Implement check_availability(start, end) PMS tool
+        - Implement heuristic_move_check(appointment_id, new_value) tool
+        - Create IntakeSpecialist agent via create_deep_agent() with triage instructions
+        - Create ResourceOptimiser agent with Tool.from_function() tool bindings
+        - Build SubAgentMiddleware with sub_agents=[intake_agent, scheduler_agent]
+        - Create root Receptionist agent with middleware for delegation
+        - Implement run_chat() async execution with thread_id session management
+        - Set up SSE streaming endpoint for agent responses
+      </tasks>
+    </step>
+
+    <step number="3">
+      <title>Resource Optimiser Logic</title>
+      <tasks>
+        - Build availability checking with check_availability tool
+        - Implement revenue-based heuristic algorithm in heuristic_move_check
+        - Create Move Score calculation (threshold > 70 for negotiation)
+        - Implement incentive offer generation ("10% discount", priority slots)
+        - Add book_appointment and send_move_offer tools
+        - Test tool invocation via ResourceOptimiser agent
+      </tasks>
+    </step>
+
+    <step number="4">
+      <title>Chat Widget Development</title>
+      <tasks>
+        - Create PearlFlowProvider context (API key, theme, session)
+        - Build ChatWidget main component
+        - Implement SSE connection hook with reconnection logic
+        - Create MessageBubble component (Text, Markdown, Generative UI)
+        - Add Generative UI components (PainScaleSelector, DateTimePicker)
+        - Implement theme customization with pf- Tailwind prefix
+        - Build Storybook stories for all agent states
+      </tasks>
+    </step>
+
+    <step number="5">
+      <title>API Integration</title>
+      <tasks>
+        - Create FastAPI routes for /session, /chat/message, /chat/stream/{session_id}
+        - Connect widget to backend endpoints
+        - Implement SSE token streaming with agent state events
+        - Add agent hand-off visualization (IntakeSpecialist, ResourceOptimiser)
+        - Handle reconnection logic with session recovery
+        - Create typed API client package (@pearlflow/ts-client)
+      </tasks>
+    </step>
+
+    <step number="6">
+      <title>PMS Integration Layer</title>
+      <tasks>
+        - Build mock PMS adapter with SQLite/file backend
+        - Wrap all PMS operations as async tool functions
+        - Implement Tool.from_function() for each PMS operation
+        - Implement appointment CRUD operations
+        - Create patient lookup functionality by phone (E.164)
+        - Add procedure code support with base values for heuristics
+        - Build availability query system
+      </tasks>
+    </step>
+
+    <step number="7">
+      <title>Compliance &amp; Security</title>
+      <tasks>
+        - Implement AHPRA testimonial filter
+        - Add output parsers for review language
+        - Set up data encryption
+        - Implement CSP documentation
+        - Add input sanitization via Pydantic
+      </tasks>
+    </step>
+
+    <step number="8">
+      <title>Polish &amp; Performance</title>
+      <tasks>
+        - Optimize bundle size (target &lt;50kb)
+        - Implement optimistic UI updates
+        - Tune TTFT to &lt;800ms
+        - Mobile responsiveness optimization
+        - Accessibility audit (WCAG AA)
+        - Create npm publish workflow
+      </tasks>
+    </step>
+  </implementation_steps>
+
+  <success_criteria>
+    <functionality>
+      - deepagents multi-agent orchestration works end-to-end
+      - Root Receptionist correctly delegates to IntakeSpecialist for pain/emergency
+      - Root Receptionist correctly delegates to ResourceOptimiser for booking
+      - Triage via IntakeSpecialist achieves 80%+ accuracy on test cases
+      - Tool.from_function() tools execute correctly in ResourceOptimiser
+      - Move Score heuristic (threshold > 70) produces valid recommendations
+      - Session state persists via thread_id config across reconnections
+      - SubAgentMiddleware correctly routes between sub-agents
+      - Widget embeds in external sites without style conflicts
+    </functionality>
+
+    <performance>
+      - Intent classification within 2 seconds
+      - First token time (TTFT) under 800ms via SSE
+      - Chat widget bundle under 50kb gzipped
+      - Concurrent sessions supported per clinic
+    </performance>
+
+    <compliance>
+      - AHPRA testimonial filter blocks review language
+      - No patient feedback exposed without approval
+      - Data encrypted at rest and in transit
+      - Australian Privacy Principles adherence documented
+    </compliance>
+
+    <ux>
+      - Seamless agent hand-off experience
+      - Visual indicators for agent activity
+      - Mobile-first responsive design
+      - WCAG AA accessibility compliance
+      - Empathetic, frictionless triage flow
+    </ux>
+
+    <deliverables>
+      - Published @pearlflow/chat-ui npm package
+      - Documented Storybook component library
+      - OpenAPI specification for all endpoints
+      - Deployment infrastructure (Docker/Terraform)
+      - Demo integration testbed
+    </deliverables>
+  </success_criteria>
+</project_specification>
+

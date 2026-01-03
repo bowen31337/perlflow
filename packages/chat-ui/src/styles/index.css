@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* PearlFlow Chat UI Styles */
+/* All classes are prefixed with 'pf-' to avoid conflicts */
+
+/* Custom slider styling */
+input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: white;
+  border: 3px solid currentColor;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+input[type='range']::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: white;
+  border: 3px solid currentColor;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Ensure widget doesn't inherit host styles */
+.pf-chat-widget {
+  all: initial;
+  font-family: Inter, system-ui, -apple-system, sans-serif;
+  box-sizing: border-box;
+  line-height: 1.5;
+}
+
+.pf-chat-widget *,
+.pf-chat-widget *::before,
+.pf-chat-widget *::after {
+  box-sizing: inherit;
+}
+
+/* Scrollbar styling */
+.pf-overflow-y-auto::-webkit-scrollbar {
+  width: 6px;
+}
+
+.pf-overflow-y-auto::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.pf-overflow-y-auto::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+.pf-overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+}
