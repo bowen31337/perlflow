@@ -74,6 +74,7 @@ export function ChatWindow({ onClose, className }: ChatWindowProps): JSX.Element
             <AgentIndicator
               agentName={agentState.activeAgent}
               thinking={agentState.thinking}
+              previousAgent={agentState.previousAgent}
               className="pf-text-white/80"
             />
           </div>

@@ -131,6 +131,9 @@ async def generate_sse_events(db: AsyncSession, session_id: UUID) -> AsyncGenera
     if "priority_score" not in state:
         state["priority_score"] = 0
 
+    # Track previous agent for hand-off visualization
+    previous_agent = session.current_node
+
     # Determine response based on conversation state using keyword-based routing
     active_agent = "Receptionist"
     response_text = ""
@@ -199,18 +202,18 @@ async def generate_sse_events(db: AsyncSession, session_id: UUID) -> AsyncGenera
             response_text = "Please let me know if you have swelling (yes/no)."
 
     elif state["conversation_state"] == "waiting_fever":
-        # Check for fever
-        if "yes" in last_user_message_lower or "fever" in last_user_message_lower or "hot" in last_user_message_lower:
+        # Check for fever - check NO first to handle "no fever" correctly
+        if "no" in last_user_message_lower:
+            state["red_flags"]["fever"] = False
+            state["conversation_state"] = "triage_complete"
+            active_agent = "IntakeSpecialist"
+            response_text = f"Thank you for the information. Your priority score is {state['priority_score']}. We'll help you get an appointment soon."
+        elif "yes" in last_user_message_lower or "fever" in last_user_message_lower or "hot" in last_user_message_lower:
             state["red_flags"]["fever"] = True
             state["priority_score"] += 40
             state["conversation_state"] = "triage_complete"
             active_agent = "IntakeSpecialist"
             response_text = f"Fever with dental pain is concerning. Your priority score is {state['priority_score']}. I recommend urgent care."
-        elif "no" in last_user_message_lower:
-            state["red_flags"]["fever"] = False
-            state["conversation_state"] = "triage_complete"
-            active_agent = "IntakeSpecialist"
-            response_text = f"Thank you for the information. Your priority score is {state['priority_score']}. We'll help you get an appointment soon."
         else:
             active_agent = "IntakeSpecialist"
             response_text = "Please let me know if you have a fever (yes/no)."
@@ -242,14 +245,18 @@ async def generate_sse_events(db: AsyncSession, session_id: UUID) -> AsyncGenera
 
     # Update session state
     session.state_snapshot = state
+    session.current_node = active_agent
     # Mark the JSONB field as modified so SQLAlchemy tracks the change
     from sqlalchemy.orm.attributes import flag_modified
     flag_modified(session, "state_snapshot")
     await db.commit()
 
     # Generate SSE events
-    # Agent state event
-    yield f'event: agent_state\ndata: {{"active_agent": "{active_agent}", "thinking": true}}\n\n'
+    # Agent state event - include previous_agent if hand-off occurred
+    agent_state_data = {"active_agent": active_agent, "thinking": True}
+    if previous_agent != active_agent:
+        agent_state_data["previous_agent"] = previous_agent
+    yield f'event: agent_state\ndata: {json.dumps(agent_state_data)}\n\n'
     await asyncio.sleep(0.3)
 
     # UI component event (if applicable)

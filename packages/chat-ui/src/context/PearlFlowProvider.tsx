@@ -78,6 +78,7 @@ export function PearlFlowProvider({
   const [agentState, setAgentState] = useState<AgentState>({
     activeAgent: 'Receptionist',
     thinking: false,
+    previousAgent: undefined,
   });
   const [messages, setMessages] = useState<Message[]>([]);
   const [isConnected, setIsConnected] = useState(false);
@@ -99,12 +100,13 @@ export function PearlFlowProvider({
     switch (event.type) {
       case 'agent_state':
         if (typeof event.data === 'object' && event.data !== null) {
-          const data = event.data as { active_agent?: string; thinking?: boolean };
+          const data = event.data as { active_agent?: string; thinking?: boolean; previous_agent?: string };
           if (data.active_agent) {
             const activeAgent = data.active_agent as AgentState['activeAgent'];
             setAgentState((prev) => ({
               activeAgent: activeAgent || prev.activeAgent,
               thinking: data.thinking ?? prev.thinking,
+              previousAgent: data.previous_agent as AgentState['previousAgent'],
             }));
           }
         }
@@ -238,6 +240,16 @@ export function PearlFlowProvider({
       sseDisconnect();
     };
   }, [sseDisconnect]);
+
+  // Clear previousAgent after animation completes
+  useEffect(() => {
+    if (agentState.previousAgent) {
+      const timer = setTimeout(() => {
+        setAgentState((prev) => ({ ...prev, previousAgent: undefined }));
+      }, 1500); // Match the animation duration in AgentIndicator
+      return () => clearTimeout(timer);
+    }
+  }, [agentState.previousAgent]);
 
   const createSession = useCallback(async () => {
     setIsLoading(true);

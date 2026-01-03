@@ -862,7 +862,12 @@
     "passes": true,
     "is_dev_done": true,
     "is_qa_passed": true,
-    "qa_retry_count": 0
+    "qa_retry_count": 0,
+    "dev_failure_count": 1,
+    "last_dev_failure_at": "2026-01-03T15:47:19.853616Z",
+    "dev_failure_reasons": [
+      "Worker session timed out"
+    ]
   },
   {
     "category": "functional",
@@ -890,8 +895,10 @@
     "passes": true,
     "is_dev_done": true,
     "is_qa_passed": true,
-    "dev_completed_at": "2026-01-03T15:36:06.697096+00:00",
-    "qa_completed_at": "2026-01-03T15:36:06.697104+00:00"
+    "dev_completed_at": "2026-01-03T15:38:34.770271Z",
+    "qa_completed_at": "2026-01-03T15:36:06.697104+00:00",
+    "qa_retry_count": 0,
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -902,9 +909,13 @@
       "Step 3: Verify testimonial language is filtered out",
       "Step 4: Verify no review language appears in response"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "dev_completed_at": "2026-01-03T15:52:05.216394Z",
+    "qa_completed_at": "2026-01-03T15:39:14.773066+00:00",
+    "qa_retry_count": 0,
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -915,9 +926,13 @@
       "Step 3: Verify comparative claims are filtered",
       "Step 4: Verify 'guaranteed' language is blocked"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "dev_completed_at": "2026-01-03T15:45:01.579382Z",
+    "qa_completed_at": "2026-01-03T15:39:14.773074+00:00",
+    "qa_retry_count": 0,
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -998,9 +1013,11 @@
       "Step 6: Verify agent state is recovered",
       "Step 7: Continue conversation seamlessly"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "dev_completed_at": "2026-01-03T15:48:30.080198+00:00",
+    "qa_completed_at": "2026-01-03T15:48:30.080208+00:00"
   },
   {
     "category": "functional",
@@ -1012,9 +1029,13 @@
       "Step 4: Verify current_node matches active agent",
       "Step 5: Verify messages JSONB contains history"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-03T15:48:30.080213+00:00",
+    "dev_failure_count": 0,
+    "qa_completed_at": "2026-01-03T15:48:30.080214+00:00"
   },
   {
     "category": "functional",
@@ -1025,9 +1046,11 @@
       "Step 3: Verify sessions are isolated",
       "Step 4: Verify no state leakage between sessions"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "dev_completed_at": "2026-01-03T15:48:30.080217+00:00",
+    "qa_completed_at": "2026-01-03T15:48:30.080218+00:00"
   },
   {
     "category": "functional",
@@ -1038,9 +1061,13 @@
       "Step 3: Verify status changes to COMPLETED",
       "Step 4: Verify abandoned sessions timeout correctly"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "dev_completed_at": "2026-01-03T15:53:06.668325Z",
+    "qa_completed_at": "2026-01-03T15:48:30.080221+00:00",
+    "qa_retry_count": 0,
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -1053,8 +1080,9 @@
       "Step 5: Verify new agent avatar/name shown"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "dev_completed_at": "2026-01-04T02:50:40.000000+00:00"
   },
   {
     "category": "functional",
@@ -1078,8 +1106,8 @@
       "Step 3: Verify returned slots match PMS data",
       "Step 4: Verify slot format is correct"
     ],
-    "passes": false,
-    "is_dev_done": false,
+    "passes": true,
+    "is_dev_done": true,
     "is_qa_passed": false
   },
   {
@@ -1107,8 +1135,8 @@
       "Step 3: Verify confirmation returned",
       "Step 4: Verify slot is no longer available"
     ],
-    "passes": false,
-    "is_dev_done": false,
+    "passes": true,
+    "is_dev_done": true,
     "is_qa_passed": false
   },
   {
@@ -1120,8 +1148,8 @@
       "Step 3: Verify offer status is returned",
       "Step 4: Verify outbound notification triggered"
     ],
-    "passes": false,
-    "is_dev_done": false,
+    "passes": true,
+    "is_dev_done": true,
     "is_qa_passed": false
   },
   {
@@ -1134,8 +1162,8 @@
       "Step 4: Verify JSONB risk_profile works",
       "Step 5: Delete patient (soft delete)"
     ],
-    "passes": false,
-    "is_dev_done": false,
+    "passes": true,
+    "is_dev_done": true,
     "is_qa_passed": false
   },
   {
@@ -1148,8 +1176,8 @@
       "Step 4: Verify status enum constraint",
       "Step 5: Soft delete appointment"
     ],
-    "passes": false,
-    "is_dev_done": false,
+    "passes": true,
+    "is_dev_done": true,
     "is_qa_passed": false
   },
   {
@@ -1161,8 +1189,8 @@
       "Step 3: Verify slot_duration stored",
       "Step 4: Verify API key unique constraint"
     ],
-    "passes": false,
-    "is_dev_done": false,
+    "passes": true,
+    "is_dev_done": true,
     "is_qa_passed": false
   },
   {
@@ -1174,8 +1202,8 @@
       "Step 3: Verify specializations JSONB works",
       "Step 4: Test is_active toggle"
     ],
-    "passes": false,
-    "is_dev_done": false,
+    "passes": true,
+    "is_dev_done": true,
     "is_qa_passed": false
   },
   {
@@ -1187,8 +1215,8 @@
       "Step 3: Verify priority_weight for heuristics",
       "Step 4: Verify unique code constraint"
     ],
-    "passes": false,
-    "is_dev_done": false,
+    "passes": true,
+    "is_dev_done": true,
     "is_qa_passed": false
   },
   {
@@ -1200,8 +1228,8 @@
       "Step 3: Attempt appointment with invalid clinic_id",
       "Step 4: Verify FK constraint error"
     ],
-    "passes": false,
-    "is_dev_done": false,
+    "passes": true,
+    "is_dev_done": true,
     "is_qa_passed": false
   },
   {
@@ -1214,8 +1242,11 @@
       "Step 4: Test with various input types"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-03T15:52:18.831215Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
