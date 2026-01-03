@@ -153,11 +153,14 @@ export function PearlFlowProvider({
           if (data.text && currentAssistantMessageRef.current) {
             currentAssistantMessageRef.current.content += data.text;
 
+            // Capture current state before async update
+            const currentMessage = { ...currentAssistantMessageRef.current };
+
             // Update messages with partial content
             setMessages((prev) => {
               // Find if we already have this message in progress
               const existingIndex = prev.findIndex(
-                (m) => m.id === currentAssistantMessageRef.current?.id
+                (m) => m.id === currentMessage.id
               );
 
               if (existingIndex >= 0) {
@@ -165,8 +168,8 @@ export function PearlFlowProvider({
                 const updated = [...prev];
                 updated[existingIndex] = {
                   ...updated[existingIndex],
-                  content: currentAssistantMessageRef.current!.content,
-                  uiComponent: currentAssistantMessageRef.current!.uiComponent,
+                  content: currentMessage.content,
+                  uiComponent: currentMessage.uiComponent,
                 };
                 return updated;
               } else {
@@ -174,12 +177,12 @@ export function PearlFlowProvider({
                 return [
                   ...prev,
                   {
-                    id: currentAssistantMessageRef.current!.id,
+                    id: currentMessage.id,
                     role: 'assistant',
-                    content: currentAssistantMessageRef.current!.content,
+                    content: currentMessage.content,
                     timestamp: new Date(),
-                    agentName: currentAssistantMessageRef.current!.agentName,
-                    uiComponent: currentAssistantMessageRef.current!.uiComponent,
+                    agentName: currentMessage.agentName,
+                    uiComponent: currentMessage.uiComponent,
                   },
                 ];
               }

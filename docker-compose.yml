@@ -1,0 +1,67 @@
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: pearlflow-postgres
+    environment:
+      POSTGRES_USER: pearlflow
+      POSTGRES_PASSWORD: pearlflow_password
+      POSTGRES_DB: pearlflow_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pearlflow -d pearlflow_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis (for caching/session management)
+  redis:
+    image: redis:7-alpine
+    container_name: pearlflow-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  # API Backend
+  api:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile
+    container_name: pearlflow-api
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+asyncpg://pearlflow:pearlflow_password@postgres:5432/pearlflow_db
+      REDIS_URL: redis://redis:6379
+      SECRET_KEY: dev-secret-key-change-in-production
+      ENVIRONMENT: production
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # Frontend (Demo Web App)
+  demo-web:
+    build:
+      context: ./apps/demo-web
+      dockerfile: Dockerfile  # We'll create this next
+    container_name: pearlflow-demo-web
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: http://api:8000
+    depends_on:
+      - api
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

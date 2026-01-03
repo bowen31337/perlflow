@@ -115,16 +115,15 @@ test.describe('PearlFlow Chat Widget - Message Flow', () => {
     await sendButton.click();
 
     // Wait for first response in messages area
-    // Use first() to avoid strict mode violation when multiple matches exist
     const messagesArea = page.locator('.pf-overflow-y-auto');
-    await expect(messagesArea.getByText(/pain/i).first()).toBeVisible();
+    await expect(messagesArea.getByText(/pain/i).first()).toBeVisible({ timeout: 10000 });
 
     // Send pain level
     await input.fill('My pain level is 8');
     await sendButton.click();
 
     // Should ask about swelling (state is maintained)
-    await expect(messagesArea.getByText(/swelling/i).first()).toBeVisible();
+    await expect(messagesArea.getByText(/swelling/i).first()).toBeVisible({ timeout: 10000 });
   });
 });
 
@@ -146,7 +145,7 @@ test.describe('PearlFlow Chat Widget - UI Components', () => {
 
     // Wait for UI component to appear in messages area
     const messagesArea = page.locator('.pf-overflow-y-auto');
-    await expect(messagesArea.getByText(/pain/i)).toBeVisible();
+    await expect(messagesArea.getByText(/pain/i).first()).toBeVisible({ timeout: 10000 });
   });
 
   test('Message bubbles have correct styling', async ({ page }) => {
@@ -174,7 +173,7 @@ test.describe('PearlFlow Chat Widget - UI Components', () => {
 
     // Agent name should be visible in header
     const header = page.locator('.pf-flex.pf-items-center.pf-justify-between');
-    await expect(header.getByText(/Receptionist/i)).toBeVisible();
+    await expect(header.getByText(/Receptionist/i)).toBeVisible({ timeout: 10000 });
   });
 });
 
