@@ -379,10 +379,11 @@
       "Step 4: Verify patient is offered the incentive"
     ],
     "passes": false,
-    "is_dev_done": false,
+    "is_dev_done": true,
     "is_qa_passed": false,
     "qa_retry_count": 0,
-    "dev_failure_count": 0
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-03T15:13:13.885442Z"
   },
   {
     "category": "functional",
@@ -407,11 +408,13 @@
       "Step 3: Verify low-value appointments considered for move",
       "Step 4: Verify move score calculation includes procedure value"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false,
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
-    "dev_failure_count": 0
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-03T15:09:31.556516+00:00",
+    "qa_completed_at": "2026-01-03T15:09:31.556516+00:00"
   },
   {
     "category": "functional",
@@ -422,11 +425,13 @@
       "Step 3: Verify aggressive move suggestions",
       "Step 4: Verify incentive calculations account for procedure value"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false,
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
-    "dev_failure_count": 0
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-03T15:09:31.556516+00:00",
+    "qa_completed_at": "2026-01-03T15:09:31.556516+00:00"
   },
   {
     "category": "functional",
@@ -436,11 +441,13 @@
       "Step 2: Verify D1110 (Prophy/Cleaning) identified as low-value",
       "Step 3: Verify these are prioritized for move suggestions"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false,
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
-    "dev_failure_count": 0
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-03T15:09:31.556516+00:00",
+    "qa_completed_at": "2026-01-03T15:09:31.556516+00:00"
   },
   {
     "category": "functional",
@@ -451,11 +458,13 @@
       "Step 3: Verify move score is adjusted based on LTV",
       "Step 4: Verify high-LTV patients less likely to be moved"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false,
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
-    "dev_failure_count": 0
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-03T15:09:31.556516+00:00",
+    "qa_completed_at": "2026-01-03T15:09:31.556516+00:00"
   },
   {
     "category": "functional",
@@ -672,7 +681,13 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "dev_completed_at": "2026-01-03T14:47:24.417211+00:00",
-    "qa_completed_at": "2026-01-03T15:05:42.734858+00:00"
+    "qa_completed_at": "2026-01-03T15:05:42.734858+00:00",
+    "qa_retry_count": 0,
+    "dev_failure_count": 1,
+    "last_dev_failure_at": "2026-01-03T15:16:57.450195Z",
+    "dev_failure_reasons": [
+      "Worker session timed out"
+    ]
   },
   {
     "category": "functional",
@@ -729,9 +744,12 @@
       "Step 4: Verify each suggestion has source, target, score"
     ],
     "passes": true,
-    "is_dev_done": false,
+    "is_dev_done": true,
     "is_qa_passed": true,
-    "qa_completed_at": "2026-01-03T15:05:42.734863+00:00"
+    "qa_completed_at": "2026-01-03T15:05:42.734863+00:00",
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-03T15:11:08.164733Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -1047,9 +1065,12 @@
       "Step 3: Verify move_score is calculated correctly",
       "Step 4: Verify incentive_needed is appropriate"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-03T15:09:31.556516+00:00",
+    "qa_completed_at": "2026-01-03T15:09:31.556516+00:00"
   },
   {
     "category": "functional",

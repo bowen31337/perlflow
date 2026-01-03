@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { usePearlFlow } from '../context/PearlFlowProvider';
 import { ChatWindow } from './ChatWindow';
 import { clsx } from 'clsx';

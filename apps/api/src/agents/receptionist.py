@@ -2,7 +2,7 @@
 
 from typing import Any, List
 
-from deepagents import create_deep_agent, SubAgentMiddleware
+from src.agent_framework import create_deep_agent, SubAgentMiddleware
 from langchain_openai import ChatOpenAI
 from langchain_core.language_models import BaseChatModel
 from langchain_core.messages import HumanMessage

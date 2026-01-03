@@ -1,9 +1,6 @@
 """Move offer tool for patient rescheduling incentives."""
 
-from typing import TypedDict, TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from sqlalchemy.ext.asyncio import AsyncSession
+from typing import TypedDict, Any
 
 OfferResult = TypedDict('OfferResult', {
     'offer_id': str,
@@ -20,7 +17,7 @@ async def send_move_offer(
     original_appointment_id: str,
     new_slot: str,
     incentive: str,
-    db: 'AsyncSession | None' = None,
+    db: Any = None,
 ) -> OfferResult:
     """
     Initiates an outbound offer to a patient for voluntary rescheduling.

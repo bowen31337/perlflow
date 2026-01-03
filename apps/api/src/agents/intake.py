@@ -2,7 +2,7 @@
 
 from typing import Any
 
-from deepagents import create_deep_agent
+from src.agent_framework import create_deep_agent
 from langchain_core.language_models import BaseChatModel
 
 INTAKE_SPECIALIST_INSTRUCTIONS = """

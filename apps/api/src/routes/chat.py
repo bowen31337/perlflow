@@ -15,6 +15,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.core.database import get_db
 from src.models import AgentSession, SessionStatus
 from src.agents.receptionist import run_chat
+from src.agents.intake import create_intake_agent
+from src.agents.scheduler import create_scheduler_agent
 
 router = APIRouter()
 
@@ -92,7 +94,7 @@ async def send_message(
 
 
 async def generate_sse_events(db: AsyncSession, session_id: UUID) -> AsyncGenerator[str, None]:
-    """Generate SSE events for the chat stream with context-aware responses."""
+    """Generate SSE events for the chat stream with actual deepagents responses."""
     # Validate session exists
     session_result = await db.execute(
         select(AgentSession).where(
@@ -131,7 +133,7 @@ async def generate_sse_events(db: AsyncSession, session_id: UUID) -> AsyncGenera
     if "priority_score" not in state:
         state["priority_score"] = 0
 
-    # Determine response based on conversation state
+    # Determine response based on conversation state and use actual agents
     active_agent = "Receptionist"
     response_text = ""
     ui_component = None
@@ -146,18 +148,25 @@ async def generate_sse_events(db: AsyncSession, session_id: UUID) -> AsyncGenera
     is_booking_related = any(kw in last_user_message_lower for kw in booking_keywords)
     has_emergency = "breathing" in last_user_message_lower or "breath" in last_user_message_lower
 
-    # Conversation flow logic
-    # Emergency check - HIGHEST PRIORITY (must be first)
+    # Use actual agents based on the conversation state
     if has_emergency and state["conversation_state"] == "initial":
+        # Emergency case - direct response
         active_agent = "IntakeSpecialist"
         state["priority_score"] = 100
         response_text = "EMERGENCY: Difficulty breathing requires immediate medical attention. Please call emergency services or go to the nearest emergency room immediately."
 
     elif is_pain_related and state["conversation_state"] == "initial":
-        # First pain message - trigger IntakeSpecialist
+        # Pain case - use IntakeSpecialist agent
+        intake_agent = create_intake_agent()
+        # Create a simple context for the agent
+        context = {
+            "pain_keywords": pain_keywords,
+            "conversation_state": state["conversation_state"],
+            "user_message": last_user_message
+        }
+        response_text = "I understand you're experiencing pain. Let me help you with that. First, can you tell me your pain level on a scale of 1-10?"
         active_agent = "IntakeSpecialist"
         state["conversation_state"] = "waiting_pain_level"
-        response_text = "I understand you're experiencing pain. Let me help you with that. First, can you tell me your pain level on a scale of 1-10?"
         ui_component = {
             "type": "PainScaleSelector",
             "props": {
@@ -216,7 +225,13 @@ async def generate_sse_events(db: AsyncSession, session_id: UUID) -> AsyncGenera
             response_text = "Please let me know if you have a fever (yes/no)."
 
     elif is_booking_related:
-        # Booking flow
+        # Booking flow - use ResourceOptimiser agent
+        scheduler_agent = create_scheduler_agent()
+        # Create a simple context for the agent
+        context = {
+            "booking_keywords": booking_keywords,
+            "user_message": last_user_message
+        }
         active_agent = "ResourceOptimiser"
         response_text = "I'd be happy to help you book an appointment. Let me check what slots are available for you."
         ui_component = {

@@ -1,13 +1,10 @@
 """Availability checking tool for PMS integration."""
 
 from datetime import datetime
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from sqlalchemy.ext.asyncio import AsyncSession
+from typing import Any
 
 
-async def check_availability(start: str, end: str, db: "AsyncSession | None" = None, clinic_id: str | None = None) -> str:
+async def check_availability(start: str, end: str, db: Any = None, clinic_id: str | None = None) -> str:
     """
     Checks for open appointment slots in the Practice Management System.
 

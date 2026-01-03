@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useMemo, useState, useCallback, useRef, useEffect } from 'react';
+import { createContext, useContext, useMemo, useState, useCallback, useRef, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import type { Session, AgentState, Message } from '../types';
 import { useConnection, type SSEEvent } from '../hooks/useConnection';
@@ -56,11 +56,6 @@ const defaultTheme: PearlFlowTheme = {
   fontFamily: 'Inter, system-ui, sans-serif',
 };
 
-const defaultAgentState: AgentState = {
-  activeAgent: 'Receptionist',
-  thinking: false,
-};
-
 const PearlFlowContext = createContext<PearlFlowContextValue | null>(null);
 
 /**
@@ -80,7 +75,10 @@ export function PearlFlowProvider({
   children,
 }: PearlFlowProviderProps): JSX.Element {
   const [session, setSession] = useState<Session | null>(null);
-  const [agentState, setAgentState] = useState<AgentState>(defaultAgentState);
+  const [agentState, setAgentState] = useState<AgentState>({
+    activeAgent: 'Receptionist',
+    thinking: false,
+  });
   const [messages, setMessages] = useState<Message[]>([]);
   const [isConnected, setIsConnected] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -101,10 +99,13 @@ export function PearlFlowProvider({
       case 'agent_state':
         if (typeof event.data === 'object' && event.data !== null) {
           const data = event.data as { active_agent?: string; thinking?: boolean };
-          setAgentState((prev) => ({
-            activeAgent: data.active_agent || prev.activeAgent,
-            thinking: data.thinking ?? prev.thinking,
-          }));
+          if (data.active_agent) {
+            const activeAgent = data.active_agent as AgentState['activeAgent'];
+            setAgentState((prev) => ({
+              activeAgent: activeAgent || prev.activeAgent,
+              thinking: data.thinking ?? prev.thinking,
+            }));
+          }
         }
         break;
 
@@ -120,7 +121,7 @@ export function PearlFlowProvider({
 
         if (typeof event.data === 'object' && event.data !== null) {
           const data = event.data as { text?: string };
-          if (data.text) {
+          if (data.text && currentAssistantMessageRef.current) {
             currentAssistantMessageRef.current.content += data.text;
 
             // Update messages with partial content
@@ -135,7 +136,7 @@ export function PearlFlowProvider({
                 const updated = [...prev];
                 updated[existingIndex] = {
                   ...updated[existingIndex],
-                  content: currentAssistantMessageRef.current.content,
+                  content: currentAssistantMessageRef.current!.content,
                 };
                 return updated;
               } else {
@@ -175,7 +176,6 @@ export function PearlFlowProvider({
   const {
     isConnected: sseConnected,
     isConnecting,
-    error: sseError,
     connect: sseConnect,
     disconnect: sseDisconnect,
   } = useConnection({

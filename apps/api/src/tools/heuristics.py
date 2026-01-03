@@ -1,9 +1,6 @@
 """Heuristic move check tool for appointment optimization."""
 
-from typing import TypedDict, TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from sqlalchemy.ext.asyncio import AsyncSession
+from typing import TypedDict, Any
 
 MoveCheckResult = TypedDict('MoveCheckResult', {
     'move_score': int,
@@ -16,7 +13,7 @@ MoveCheckResult = TypedDict('MoveCheckResult', {
 async def heuristic_move_check(
     appointment_id: str,
     new_value: float,
-    db: 'AsyncSession | None' = None,
+    db: Any = None,
 ) -> MoveCheckResult:
     """
     Calculates the move score for an appointment based on revenue vs loyalty factors.

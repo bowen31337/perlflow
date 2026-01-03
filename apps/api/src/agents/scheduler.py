@@ -2,8 +2,7 @@
 
 from typing import Any, List
 
-from deepagents import create_deep_agent
-from langchain_core.tools import StructuredTool
+from src.agent_framework import create_deep_agent, Tool
 from langchain_core.language_models import BaseChatModel
 
 # Import PMS tools
@@ -63,25 +62,25 @@ def create_scheduler_agent(llm: BaseChatModel | None = None) -> Any:
     """
     # Create tool wrappers for the PMS tools
     tools = [
-        StructuredTool.from_function(
+        Tool.from_function(
             check_availability,
             name="check_availability",
             description="Find open slots in the Practice Management System. "
                        "Takes start and end datetime strings and returns available slots."
         ),
-        StructuredTool.from_function(
+        Tool.from_function(
             heuristic_move_check,
             name="heuristic_move_check",
             description="Calculate if moving an existing appointment is beneficial. "
                        "Takes appointment_id and new_value, returns move_score and recommendation."
         ),
-        StructuredTool.from_function(
+        Tool.from_function(
             book_appointment,
             name="book_appointment",
             description="Book an appointment for a patient. "
                        "Takes patient_id, slot_id, and procedure_code."
         ),
-        StructuredTool.from_function(
+        Tool.from_function(
             send_move_offer,
             name="send_move_offer",
             description="Send an incentive offer to a patient to reschedule. "
@@ -89,7 +88,7 @@ def create_scheduler_agent(llm: BaseChatModel | None = None) -> Any:
         ),
     ]
 
-    # Create the agent with tools using the installed deepagents API
+    # Create the agent with tools
     scheduler_agent = create_deep_agent(
         name="ResourceOptimiser",
         instructions=RESOURCE_OPTIMISER_INSTRUCTIONS,

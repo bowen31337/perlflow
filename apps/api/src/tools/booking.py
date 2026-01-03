@@ -1,9 +1,6 @@
 """Appointment booking tool for PMS integration."""
 
-from typing import TypedDict, TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from sqlalchemy.ext.asyncio import AsyncSession
+from typing import TypedDict, Any
 
 BookingResult = TypedDict('BookingResult', {
     'appointment_id': str,
@@ -20,7 +17,7 @@ async def book_appointment(
     patient_id: str,
     slot_id: str,
     procedure_code: str,
-    db: 'AsyncSession | None' = None,
+    db: Any = None,
 ) -> BookingResult:
     """
     Books an appointment in the Practice Management System.
