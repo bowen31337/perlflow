@@ -332,11 +332,12 @@
       "Step 4: Calculate accuracy percentage",
       "Step 5: Verify accuracy is >= 80%"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false,
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
-    "dev_failure_count": 0
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-03T15:25:58.721169Z"
   },
   {
     "category": "functional",
@@ -347,9 +348,9 @@
       "Step 3: Verify tool receives start and end datetime",
       "Step 4: Verify available slots are returned to user"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false,
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_failure_count": 0
   },
@@ -363,9 +364,9 @@
       "Step 4: Verify low-value appointments are identified",
       "Step 5: Verify move recommendations are generated"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false,
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_failure_count": 0
   },
@@ -378,9 +379,9 @@
       "Step 3: Verify incentive offer is generated",
       "Step 4: Verify patient is offered the incentive"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_failure_count": 0,
     "dev_completed_at": "2026-01-03T15:13:13.885442Z"
@@ -393,11 +394,12 @@
       "Step 2: Verify agent does not initiate negotiation",
       "Step 3: Verify alternative options are suggested"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false,
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
-    "dev_failure_count": 0
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-03T15:17:19.776522Z"
   },
   {
     "category": "functional",
@@ -730,9 +732,12 @@
       "Step 5: Verify response contains incentive_needed"
     ],
     "passes": true,
-    "is_dev_done": false,
+    "is_dev_done": true,
     "is_qa_passed": true,
-    "qa_completed_at": "2026-01-03T15:05:42.734862+00:00"
+    "qa_completed_at": "2026-01-03T15:05:42.734862+00:00",
+    "qa_retry_count": 0,
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-03T15:28:15.046183Z"
   },
   {
     "category": "functional",
@@ -762,9 +767,12 @@
       "Step 5: Verify offer is AHPRA compliant"
     ],
     "passes": true,
-    "is_dev_done": false,
+    "is_dev_done": true,
     "is_qa_passed": true,
-    "qa_completed_at": "2026-01-03T15:05:42.734864+00:00"
+    "qa_completed_at": "2026-01-03T15:05:42.734864+00:00",
+    "qa_retry_count": 0,
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-03T15:26:39.731757Z"
   },
   {
     "category": "functional",
@@ -775,9 +783,9 @@
       "Step 3: Verify priority slot offer generated",
       "Step 4: Verify slot is actually priority (e.g., morning)"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_completed_at": "2026-01-03T15:06:54.454664Z",
     "dev_failure_count": 0
@@ -791,9 +799,9 @@
       "Step 3: Query acceptance rate analytics",
       "Step 4: Verify rate is calculated correctly"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_completed_at": "2026-01-03T15:09:04.673531Z",
     "dev_failure_count": 0
@@ -807,9 +815,10 @@
       "Step 3: Verify incentive may be offered for preferred times",
       "Step 4: Verify reschedule completes successfully"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0
   },
   {
     "category": "functional",
@@ -822,9 +831,12 @@
       "Step 5: Verify status is PENDING"
     ],
     "passes": true,
-    "is_dev_done": false,
+    "is_dev_done": true,
     "is_qa_passed": true,
-    "qa_completed_at": "2026-01-03T15:05:42.734865+00:00"
+    "qa_completed_at": "2026-01-03T15:05:42.734865+00:00",
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-03T15:27:51.812940Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -837,9 +849,10 @@
       "Step 5: Verify new appointment is created",
       "Step 6: Verify incentive is applied"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0
   },
   {
     "category": "functional",
@@ -850,9 +863,10 @@
       "Step 3: Verify offer status is DECLINED",
       "Step 4: Verify original appointment unchanged"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0
   },
   {
     "category": "functional",
