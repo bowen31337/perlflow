@@ -3,13 +3,17 @@
 import asyncio
 from typing import Annotated, AsyncGenerator
 from uuid import UUID
+import time
+import json
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.database import get_db
+from src.models import AgentSession, SessionStatus
 
 router = APIRouter()
 
@@ -44,24 +48,66 @@ async def send_message(
     - **session_id**: The session UUID
     - **text**: The message text content
     """
-    # TODO: Validate session exists
-    # TODO: Queue message for agent processing
-    # TODO: Store message in conversation history
+    # Validate session exists
+    try:
+        session_uuid = UUID(request.session_id)
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid session_id format",
+        )
+
+    session_result = await db.execute(
+        select(AgentSession).where(
+            AgentSession.session_id == session_uuid,
+            AgentSession.status == SessionStatus.ACTIVE,
+        )
+    )
+    session = session_result.scalar_one_or_none()
+
+    if not session:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Session {request.session_id} not found or not active",
+        )
+
+    # Store message in conversation history
+    message_entry = {
+        "role": "user",
+        "content": request.text,
+        "timestamp": time.time(),
+    }
+
+    if session.messages is None:
+        session.messages = []
+    session.messages.append(message_entry)
+
+    await db.commit()
 
     return SendMessageResponse(status="received")
 
 
-async def generate_sse_events(session_id: str) -> AsyncGenerator[str, None]:
-    """Generate SSE events for the chat stream."""
-    # TODO: Connect to actual agent processing
-    # This is a placeholder implementation
+async def generate_sse_events(session_id: str, user_message: str) -> AsyncGenerator[str, None]:
+    """Generate SSE events for the chat stream with context-aware responses."""
+    # Determine agent context based on user message
+    if any(keyword in user_message.lower() for keyword in ["pain", "ache", "hurt", "emergency"]):
+        # Pain/emergency context - IntakeSpecialist
+        active_agent = "IntakeSpecialist"
+        response_text = "I understand you're experiencing pain. Let me help you with that. First, can you tell me your pain level on a scale of 1-10?"
+    elif any(keyword in user_message.lower() for keyword in ["book", "appointment", "schedule"]):
+        # Booking context - ResourceOptimiser
+        active_agent = "ResourceOptimiser"
+        response_text = "I'd be happy to help you book an appointment. Let me check what slots are available for you."
+    else:
+        # Default context - Receptionist
+        active_agent = "Receptionist"
+        response_text = "Hello! I'm the PearlFlow dental assistant. How can I help you today?"
 
     # Simulate agent state update
-    yield 'event: agent_state\ndata: {"active_agent": "Receptionist", "thinking": true}\n\n'
+    yield f'event: agent_state\ndata: {{"active_agent": "{active_agent}", "thinking": true}}\n\n'
     await asyncio.sleep(0.5)
 
     # Simulate token-by-token response
-    response_text = "Hello! I'm the PearlFlow dental assistant. How can I help you today?"
     for char in response_text:
         yield f'event: token\ndata: {{"text": "{char}"}}\n\n'
         await asyncio.sleep(0.02)

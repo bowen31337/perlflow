@@ -1,0 +1,168 @@
+"""Unit tests for chat API."""
+
+import pytest
+from httpx import AsyncClient
+import uuid
+
+
+@pytest.mark.asyncio
+async def test_send_message_valid_session(client: AsyncClient, test_clinic, async_session):
+    """Test sending a message to a valid session returns acknowledgment."""
+    # First create a session
+    create_response = await client.post(
+        "/session",
+        json={"clinic_api_key": test_clinic.api_key},
+    )
+    session_id = create_response.json()["session_id"]
+
+    # Send a message
+    response = await client.post(
+        "/chat/message",
+        json={"session_id": session_id, "text": "I have a toothache"},
+    )
+
+    assert response.status_code == 200
+    data = response.json()
+    assert data["status"] == "received"
+
+
+@pytest.mark.asyncio
+async def test_send_message_invalid_session(client: AsyncClient):
+    """Test sending a message to an invalid session returns 404."""
+    random_uuid = str(uuid.uuid4())
+    response = await client.post(
+        "/chat/message",
+        json={"session_id": random_uuid, "text": "Hello"},
+    )
+
+    assert response.status_code == 404
+    assert "not found" in response.json()["detail"].lower()
+
+
+@pytest.mark.asyncio
+async def test_stream_chat_valid_session(client: AsyncClient, test_clinic, async_session):
+    """Test SSE streaming returns token events."""
+    # First create a session
+    create_response = await client.post(
+        "/session",
+        json={"clinic_api_key": test_clinic.api_key},
+    )
+    session_id = create_response.json()["session_id"]
+
+    # Send a message first
+    await client.post(
+        "/chat/message",
+        json={"session_id": session_id, "text": "Hello"},
+    )
+
+    # Then stream
+    async with client.stream("GET", f"/chat/stream/{session_id}") as response:
+        assert response.status_code == 200
+        events = []
+        async for chunk in response.aiter_text():
+            # Parse SSE events
+            events.append(chunk)
+
+        # Should contain at least agent_state and token events
+        combined = "".join(events)
+        assert "agent_state" in combined
+        assert "token" in combined
+        assert "complete" in combined
+
+
+@pytest.mark.asyncio
+async def test_stream_chat_invalid_session(client: AsyncClient):
+    """Test SSE streaming with invalid session returns error event."""
+    random_uuid = str(uuid.uuid4())
+
+    async with client.stream("GET", f"/chat/stream/{random_uuid}") as response:
+        assert response.status_code == 200
+        async for chunk in response.aiter_text():
+            assert "error" in chunk.lower()
+            break
+
+
+@pytest.mark.asyncio
+async def test_stream_chat_pain_context(client: AsyncClient, test_clinic, async_session):
+    """Test SSE streaming responds appropriately to pain-related messages."""
+    # Create session
+    create_response = await client.post(
+        "/session",
+        json={"clinic_api_key": test_clinic.api_key},
+    )
+    session_id = create_response.json()["session_id"]
+
+    # Send pain message
+    await client.post(
+        "/chat/message",
+        json={"session_id": session_id, "text": "I have severe toothache"},
+    )
+
+    # Stream and check response
+    async with client.stream("GET", f"/chat/stream/{session_id}") as response:
+        combined = ""
+        async for chunk in response.aiter_text():
+            combined += chunk
+            if "complete" in chunk:
+                break
+
+        # Should contain pain-related response
+        assert "pain" in combined.lower()
+
+
+@pytest.mark.asyncio
+async def test_stream_chat_booking_context(client: AsyncClient, test_clinic, async_session):
+    """Test SSE streaming responds appropriately to booking-related messages."""
+    # Create session
+    create_response = await client.post(
+        "/session",
+        json={"clinic_api_key": test_clinic.api_key},
+    )
+    session_id = create_response.json()["session_id"]
+
+    # Send booking message
+    await client.post(
+        "/chat/message",
+        json={"session_id": session_id, "text": "I want to book an appointment"},
+    )
+
+    # Stream and check response
+    async with client.stream("GET", f"/chat/stream/{session_id}") as response:
+        combined = ""
+        async for chunk in response.aiter_text():
+            combined += chunk
+            if "complete" in chunk:
+                break
+
+        # Should contain booking-related response
+        assert "book" in combined.lower() or "appointment" in combined.lower()
+
+
+@pytest.mark.asyncio
+async def test_send_message_stores_in_history(client: AsyncClient, test_clinic, async_session):
+    """Test that sent messages are stored in session history."""
+    from src.models import AgentSession
+    from sqlalchemy import select
+
+    # Create session
+    create_response = await client.post(
+        "/session",
+        json={"clinic_api_key": test_clinic.api_key},
+    )
+    session_id = create_response.json()["session_id"]
+
+    # Send message
+    await client.post(
+        "/chat/message",
+        json={"session_id": session_id, "text": "Test message"},
+    )
+
+    # Verify message is in database
+    result = await async_session.execute(
+        select(AgentSession).where(AgentSession.session_id == uuid.UUID(session_id))
+    )
+    session = result.scalar_one_or_none()
+    assert session is not None
+    assert len(session.messages) == 1
+    assert session.messages[0]["role"] == "user"
+    assert session.messages[0]["content"] == "Test message"
