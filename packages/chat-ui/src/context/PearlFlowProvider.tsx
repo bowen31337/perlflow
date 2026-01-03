@@ -1,6 +1,6 @@
 import { createContext, useContext, useMemo, useState, useCallback, useRef, useEffect } from 'react';
 import type { ReactNode } from 'react';
-import type { Session, AgentState, Message } from '../types';
+import type { Session, AgentState, Message, UIComponent } from '../types';
 import { useConnection, type SSEEvent } from '../hooks/useConnection';
 
 /**
@@ -89,6 +89,7 @@ export function PearlFlowProvider({
     id: string;
     content: string;
     agentName: string;
+    uiComponent?: UIComponent;
   } | null>(null);
 
   const theme = useMemo(() => ({ ...defaultTheme, ...customTheme }), [customTheme]);
@@ -105,6 +106,32 @@ export function PearlFlowProvider({
               activeAgent: activeAgent || prev.activeAgent,
               thinking: data.thinking ?? prev.thinking,
             }));
+          }
+        }
+        break;
+
+      case 'ui_component':
+        // Store UI component for the current or next assistant message
+        if (typeof event.data === 'object' && event.data !== null) {
+          const data = event.data as { type: string; props: Record<string, unknown> };
+          // If there's a current message being built, attach to it
+          if (currentAssistantMessageRef.current) {
+            currentAssistantMessageRef.current.uiComponent = {
+              type: data.type as UIComponent['type'],
+              props: data.props,
+            };
+          } else {
+            // Create a pending message with UI component to be attached to the next message
+            // This handles the case where ui_component comes before token events
+            currentAssistantMessageRef.current = {
+              id: crypto.randomUUID(),
+              content: '',
+              agentName: agentState.activeAgent,
+              uiComponent: {
+                type: data.type as UIComponent['type'],
+                props: data.props,
+              },
+            };
           }
         }
         break;
@@ -137,6 +164,7 @@ export function PearlFlowProvider({
                 updated[existingIndex] = {
                   ...updated[existingIndex],
                   content: currentAssistantMessageRef.current!.content,
+                  uiComponent: currentAssistantMessageRef.current!.uiComponent,
                 };
                 return updated;
               } else {
@@ -149,6 +177,7 @@ export function PearlFlowProvider({
                     content: currentAssistantMessageRef.current!.content,
                     timestamp: new Date(),
                     agentName: currentAssistantMessageRef.current!.agentName,
+                    uiComponent: currentAssistantMessageRef.current!.uiComponent,
                   },
                 ];
               }

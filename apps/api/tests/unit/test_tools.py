@@ -9,7 +9,7 @@ from uuid import uuid4
 from src.tools.availability import check_availability
 from src.tools.heuristics import heuristic_move_check
 from src.tools.booking import book_appointment
-from src.tools.offers import send_move_offer
+from src.tools.offers import send_move_offer, expire_old_offers
 from src.models import (
     Clinic, Dentist, Patient, Appointment, AppointmentStatus,
     Procedure, MoveOffer, MoveOfferStatus
@@ -267,3 +267,130 @@ async def test_send_move_offer_invalid_appointment(async_session: AsyncSession):
         async_session
     )
     assert result["status"] == "ERROR"
+
+
+@pytest.mark.asyncio
+async def test_expire_old_offers(async_session: AsyncSession):
+    """Test expire_old_offers expires pending offers that have passed their expiry time."""
+    # Create entities
+    clinic = Clinic(id=uuid4(), name="Test Clinic", api_key="test_key", timezone="Australia/Sydney", settings={})
+    dentist = Dentist(id=uuid4(), clinic_id=clinic.id, name="Dr. Test", is_active=True, specializations=["general"], schedule={})
+    patient = Patient(id=uuid4(), phone="+61412345678", name="John Doe")
+    async_session.add_all([clinic, dentist, patient])
+    await async_session.commit()
+
+    # Create appointment
+    start_time = datetime.now() + timedelta(days=7)
+    appointment = Appointment(
+        id=uuid4(),
+        patient_id=patient.id,
+        clinic_id=clinic.id,
+        dentist_id=dentist.id,
+        start_time=start_time,
+        duration_mins=30,
+        procedure_code="D1110",
+        procedure_name="Prophylaxis",
+        estimated_value=150.0,
+        status=AppointmentStatus.BOOKED,
+    )
+    async_session.add(appointment)
+    await async_session.commit()
+
+    # Create two move offers: one expired, one still valid
+    expired_offer = MoveOffer(
+        id=uuid4(),
+        original_appointment_id=appointment.id,
+        target_appointment_id=None,
+        incentive_type="DISCOUNT",
+        incentive_value="10% discount",
+        move_score=75.0,
+        status=MoveOfferStatus.PENDING,
+        offered_at=datetime.now() - timedelta(hours=25),  # 25 hours ago
+        expires_at=datetime.now() - timedelta(hours=1),   # 1 hour ago (expired)
+    )
+    valid_offer = MoveOffer(
+        id=uuid4(),
+        original_appointment_id=appointment.id,
+        target_appointment_id=None,
+        incentive_type="DISCOUNT",
+        incentive_value="5% discount",
+        move_score=50.0,
+        status=MoveOfferStatus.PENDING,
+        offered_at=datetime.now() - timedelta(hours=10),  # 10 hours ago
+        expires_at=datetime.now() + timedelta(hours=14),  # 14 hours from now (still valid)
+    )
+    async_session.add_all([expired_offer, valid_offer])
+    await async_session.commit()
+
+    # Run the expiry job
+    result = await expire_old_offers(async_session)
+
+    # Verify only the expired offer was expired
+    assert result["expired_count"] == 1
+    assert str(expired_offer.id) in result["offer_ids"]
+
+    # Verify the expired offer status changed
+    expired_result = await async_session.execute(
+        select(MoveOffer).where(MoveOffer.id == expired_offer.id)
+    )
+    updated_expired = expired_result.scalar_one_or_none()
+    assert updated_expired.status == MoveOfferStatus.EXPIRED
+    assert updated_expired.responded_at is not None
+
+    # Verify the valid offer is still pending
+    valid_result = await async_session.execute(
+        select(MoveOffer).where(MoveOffer.id == valid_offer.id)
+    )
+    updated_valid = valid_result.scalar_one_or_none()
+    assert updated_valid.status == MoveOfferStatus.PENDING
+    assert updated_valid.responded_at is None
+
+
+@pytest.mark.asyncio
+async def test_expire_old_offers_no_expired(async_session: AsyncSession):
+    """Test expire_old_offers returns zero when no offers are expired."""
+    # Create entities
+    clinic = Clinic(id=uuid4(), name="Test Clinic", api_key="test_key", timezone="Australia/Sydney", settings={})
+    dentist = Dentist(id=uuid4(), clinic_id=clinic.id, name="Dr. Test", is_active=True, specializations=["general"], schedule={})
+    patient = Patient(id=uuid4(), phone="+61412345678", name="John Doe")
+    async_session.add_all([clinic, dentist, patient])
+    await async_session.commit()
+
+    # Create appointment
+    start_time = datetime.now() + timedelta(days=7)
+    appointment = Appointment(
+        id=uuid4(),
+        patient_id=patient.id,
+        clinic_id=clinic.id,
+        dentist_id=dentist.id,
+        start_time=start_time,
+        duration_mins=30,
+        procedure_code="D1110",
+        procedure_name="Prophylaxis",
+        estimated_value=150.0,
+        status=AppointmentStatus.BOOKED,
+    )
+    async_session.add(appointment)
+    await async_session.commit()
+
+    # Create only valid offer
+    valid_offer = MoveOffer(
+        id=uuid4(),
+        original_appointment_id=appointment.id,
+        target_appointment_id=None,
+        incentive_type="DISCOUNT",
+        incentive_value="5% discount",
+        move_score=50.0,
+        status=MoveOfferStatus.PENDING,
+        offered_at=datetime.now() - timedelta(hours=10),
+        expires_at=datetime.now() + timedelta(hours=14),
+    )
+    async_session.add(valid_offer)
+    await async_session.commit()
+
+    # Run the expiry job
+    result = await expire_old_offers(async_session)
+
+    # Verify no offers were expired
+    assert result["expired_count"] == 0
+    assert result["offer_ids"] == []

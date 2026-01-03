@@ -10,7 +10,7 @@ from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.database import get_db
-from src.models import Appointment, AppointmentStatus, Feedback, Patient
+from src.models import Appointment, AppointmentStatus, Feedback, Patient, MoveOffer, MoveOfferStatus
 
 router = APIRouter()
 
@@ -203,3 +203,104 @@ async def approve_feedback(
         approved_by=str(feedback.approved_by) if feedback.approved_by else None,
         approved_at=feedback.approved_at.isoformat() if feedback.approved_at else None,
     )
+
+
+@router.post(
+    "/offers/expire",
+    summary="Expire old move offers",
+    description="Manually trigger expiration of move offers that have passed their expiry time.",
+)
+async def expire_old_offers(
+    db: Annotated[AsyncSession, Depends(get_db)],
+) -> dict[str, Any]:
+    """
+    Expire move offers that have passed their expiration time.
+
+    This endpoint can be used manually by admins or as part of a scheduled job
+    to automatically expire move offers that have not been responded to within
+    their validity period.
+    """
+    from src.services.move_offer_service import MoveOfferService
+
+    service = MoveOfferService(db)
+    expired_count = await service.expire_old_offers()
+
+    return {
+        "message": f"Expired {expired_count} move offers",
+        "expired_count": expired_count,
+        "timestamp": datetime.now().isoformat()
+    }
+
+
+@router.get(
+    "/offers/pending",
+    summary="Get pending move offers",
+    description="Retrieve all move offers that are still pending.",
+)
+async def get_pending_offers(
+    db: Annotated[AsyncSession, Depends(get_db)],
+) -> list[dict[str, Any]]:
+    """
+    Get all pending move offers.
+
+    Returns details of all move offers that are still pending and have not yet
+    expired or been responded to.
+    """
+    from src.services.move_offer_service import MoveOfferService
+
+    service = MoveOfferService(db)
+    pending_offers = await service.get_pending_offers()
+
+    result = []
+    for offer in pending_offers:
+        result.append({
+            "id": str(offer.id),
+            "original_appointment_id": str(offer.original_appointment_id),
+            "target_appointment_id": str(offer.target_appointment_id) if offer.target_appointment_id else None,
+            "incentive_type": offer.incentive_type.value,
+            "incentive_value": offer.incentive_value,
+            "move_score": offer.move_score,
+            "status": offer.status.value,
+            "offered_at": offer.offered_at.isoformat() if offer.offered_at else None,
+            "expires_at": offer.expires_at.isoformat() if offer.expires_at else None,
+            "responded_at": offer.responded_at.isoformat() if offer.responded_at else None,
+        })
+
+    return result
+
+
+@router.get(
+    "/offers/expired",
+    summary="Get expired move offers",
+    description="Retrieve all move offers that have expired.",
+)
+async def get_expired_offers(
+    db: Annotated[AsyncSession, Depends(get_db)],
+) -> list[dict[str, Any]]:
+    """
+    Get all expired move offers.
+
+    Returns details of all move offers that have expired and were not accepted
+    by the patients.
+    """
+    from src.services.move_offer_service import MoveOfferService
+
+    service = MoveOfferService(db)
+    expired_offers = await service.get_expired_offers()
+
+    result = []
+    for offer in expired_offers:
+        result.append({
+            "id": str(offer.id),
+            "original_appointment_id": str(offer.original_appointment_id),
+            "target_appointment_id": str(offer.target_appointment_id) if offer.target_appointment_id else None,
+            "incentive_type": offer.incentive_type.value,
+            "incentive_value": offer.incentive_value,
+            "move_score": offer.move_score,
+            "status": offer.status.value,
+            "offered_at": offer.offered_at.isoformat() if offer.offered_at else None,
+            "expires_at": offer.expires_at.isoformat() if offer.expires_at else None,
+            "responded_at": offer.responded_at.isoformat() if offer.responded_at else None,
+        })
+
+    return result

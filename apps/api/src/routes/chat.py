@@ -13,6 +13,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.database import get_db
+from src.core.compliance import sanitize_agent_response
 from src.models import AgentSession, SessionStatus
 
 router = APIRouter()
@@ -235,6 +236,9 @@ async def generate_sse_events(db: AsyncSession, session_id: UUID) -> AsyncGenera
         # Default - Receptionist greeting
         active_agent = "Receptionist"
         response_text = "Hello! I'm the PearlFlow dental assistant. I'm here to help you. How can I assist you today?"
+
+    # Apply AHPRA compliance filter to response
+    response_text = sanitize_agent_response(response_text)
 
     # Update session state
     session.state_snapshot = state

@@ -130,6 +130,9 @@ async def send_move_offer(
     if "priority" in incentive.lower():
         incentive_type = IncentiveType.PRIORITY_SLOT
 
+    # Calculate expiry time (24 hours from now)
+    expires_at = datetime.now() + timedelta(hours=24)
+
     # Create move offer
     move_offer = MoveOffer(
         id=uuid.uuid4(),
@@ -140,6 +143,7 @@ async def send_move_offer(
         move_score=75,  # Placeholder - would come from heuristic_move_check
         status=MoveOfferStatus.PENDING,
         offered_at=datetime.now(),
+        expires_at=expires_at,
     )
 
     db.add(move_offer)
@@ -151,15 +155,68 @@ async def send_move_offer(
     # For now, assume it succeeds
     notification_sent = True
 
-    # Calculate expiry (24 hours from now)
-    expiry = datetime.now() + timedelta(hours=24)
-
     return {
         "offer_id": str(move_offer.id),
         "status": move_offer.status.value,
         "original_appointment_id": str(move_offer.original_appointment_id),
         "proposed_new_slot": new_slot,
         "incentive": move_offer.incentive_value,
-        "expiry": expiry.isoformat(),
+        "expiry": move_offer.expires_at.isoformat(),
         "notification_sent": notification_sent,
+    }
+
+
+async def expire_old_offers(db: Any) -> dict[str, Any]:
+    """
+    Expires move offers that have passed their expiry time.
+
+    This function should be run periodically (e.g., via cron job or scheduled task)
+    to automatically expire old move offers that haven't been responded to.
+
+    The function:
+    1. Finds all PENDING offers where expires_at < now
+    2. Updates their status to EXPIRED
+    3. Sets responded_at timestamp
+    4. Returns statistics about expired offers
+
+    Args:
+        db: Database session for operations
+
+    Returns:
+        A dictionary with statistics:
+        - expired_count: Number of offers expired
+        - offer_ids: List of expired offer IDs
+    """
+    from datetime import datetime
+    from sqlalchemy import select, update
+    from src.models import MoveOffer, MoveOfferStatus
+
+    # Find all pending offers that have expired
+    result = await db.execute(
+        select(MoveOffer).where(
+            MoveOffer.status == MoveOfferStatus.PENDING,
+            MoveOffer.expires_at < datetime.now(),
+        )
+    )
+    expired_offers = result.scalars().all()
+
+    if not expired_offers:
+        return {"expired_count": 0, "offer_ids": []}
+
+    expired_offer_ids = [offer.id for offer in expired_offers]
+
+    # Update status to EXPIRED and set responded_at
+    await db.execute(
+        update(MoveOffer)
+        .where(MoveOffer.id.in_(expired_offer_ids))
+        .values(
+            status=MoveOfferStatus.EXPIRED,
+            responded_at=datetime.now(),
+        )
+    )
+    await db.commit()
+
+    return {
+        "expired_count": len(expired_offer_ids),
+        "offer_ids": [str(oid) for oid in expired_offer_ids],
     }

@@ -72,6 +72,11 @@ class MoveOffer(Base):
         DateTime(timezone=True),
         server_default=func.now(),
     )
+    expires_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        nullable=False,
+        comment="When the offer expires (default 24 hours after offered_at)",
+    )
     responded_at: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=True),
         nullable=True,
