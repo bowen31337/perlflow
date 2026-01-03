@@ -1,7 +1,7 @@
 {
   "project_name": "pearlflow",
   "project_dir": "pearlflow",
-  "report_generated": "2026-01-03T13:27:49.931719+00:00",
+  "report_generated": "2026-01-03T17:11:54.308110+00:00",
   "summary": {
     "total_sessions": 1,
     "total_api_calls": 1,
@@ -20,34 +20,6 @@
       "estimated_cost_usd": 0.0
     }
   },
-  "sessions": [
-    {
-      "session_id": 1,
-      "start_time": "2026-01-03T13:03:00.140746+00:00",
-      "end_time": "2026-01-03T13:27:49.931626+00:00",
-      "endpoint": "https://api.anthropic.com",
-      "model": "claude-opus-4-5-20251101",
-      "total_calls": 1,
-      "input_tokens": 0,
-      "output_tokens": 0,
-      "total_tokens": 0,
-      "successful_calls": 1,
-      "failed_calls": 0,
-      "duration_seconds": 1488.0907464027405
-    }
-  ],
-  "calls": [
-    {
-      "timestamp": "2026-01-03T13:27:49.910451+00:00",
-      "endpoint": "https://api.anthropic.com",
-      "model": "claude-opus-4-5-20251101",
-      "input_tokens": 0,
-      "output_tokens": 0,
-      "total_tokens": 0,
-      "session_id": 1,
-      "duration_seconds": 1488.0907464027405,
-      "success": true,
-      "error": null
-    }
-  ]
+  "sessions": [],
+  "calls": []
 }
