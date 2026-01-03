@@ -3237,8 +3237,9 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "qa_retry_count": 0,
-    "dev_completed_at": "2026-01-04T03:32:00+00:00",
-    "qa_completed_at": "2026-01-04T03:32:00+00:00"
+    "dev_completed_at": "2026-01-03T16:44:16.629321Z",
+    "qa_completed_at": "2026-01-04T03:32:00+00:00",
+    "dev_failure_count": 0
   },
   {
     "category": "style",
