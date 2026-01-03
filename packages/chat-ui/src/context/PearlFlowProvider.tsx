@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useMemo, useState, useCallback } from 'react';
+import React, { createContext, useContext, useMemo, useState, useCallback, useRef, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import type { Session, AgentState, Message } from '../types';
+import { useConnection, type SSEEvent } from '../hooks/useConnection';
 
 /**
  * Theme configuration for customizing the widget appearance.
@@ -85,7 +86,129 @@ export function PearlFlowProvider({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Track current assistant message being built from SSE tokens
+  const currentAssistantMessageRef = useRef<{
+    id: string;
+    content: string;
+    agentName: string;
+  } | null>(null);
+
   const theme = useMemo(() => ({ ...defaultTheme, ...customTheme }), [customTheme]);
+
+  // SSE event handler
+  const handleSSEEvent = useCallback((event: SSEEvent) => {
+    switch (event.type) {
+      case 'agent_state':
+        if (typeof event.data === 'object' && event.data !== null) {
+          const data = event.data as { active_agent?: string; thinking?: boolean };
+          setAgentState((prev) => ({
+            activeAgent: data.active_agent || prev.activeAgent,
+            thinking: data.thinking ?? prev.thinking,
+          }));
+        }
+        break;
+
+      case 'token':
+        // Start a new assistant message or append to existing
+        if (!currentAssistantMessageRef.current) {
+          currentAssistantMessageRef.current = {
+            id: crypto.randomUUID(),
+            content: '',
+            agentName: agentState.activeAgent,
+          };
+        }
+
+        if (typeof event.data === 'object' && event.data !== null) {
+          const data = event.data as { text?: string };
+          if (data.text) {
+            currentAssistantMessageRef.current.content += data.text;
+
+            // Update messages with partial content
+            setMessages((prev) => {
+              // Find if we already have this message in progress
+              const existingIndex = prev.findIndex(
+                (m) => m.id === currentAssistantMessageRef.current?.id
+              );
+
+              if (existingIndex >= 0) {
+                // Update existing message
+                const updated = [...prev];
+                updated[existingIndex] = {
+                  ...updated[existingIndex],
+                  content: currentAssistantMessageRef.current.content,
+                };
+                return updated;
+              } else {
+                // Add new message
+                return [
+                  ...prev,
+                  {
+                    id: currentAssistantMessageRef.current!.id,
+                    role: 'assistant',
+                    content: currentAssistantMessageRef.current!.content,
+                    timestamp: new Date(),
+                    agentName: currentAssistantMessageRef.current!.agentName,
+                  },
+                ];
+              }
+            });
+          }
+        }
+        break;
+
+      case 'complete':
+        // Reset tracking
+        currentAssistantMessageRef.current = null;
+        setIsLoading(false);
+        setAgentState((prev) => ({ ...prev, thinking: false }));
+        break;
+
+      case 'error':
+        setError(typeof event.data === 'string' ? event.data : 'Stream error');
+        setIsLoading(false);
+        setAgentState((prev) => ({ ...prev, thinking: false }));
+        break;
+    }
+  }, [agentState.activeAgent]);
+
+  // Connection hook for SSE
+  const {
+    isConnected: sseConnected,
+    isConnecting,
+    error: sseError,
+    connect: sseConnect,
+    disconnect: sseDisconnect,
+  } = useConnection({
+    url: `${apiUrl}/chat/stream`,
+    sessionId: session?.sessionId || '',
+    onEvent: handleSSEEvent,
+    onError: (err) => {
+      setError(err.message);
+      setIsLoading(false);
+      setAgentState((prev) => ({ ...prev, thinking: false }));
+    },
+    maxReconnectAttempts: 3,
+    reconnectDelay: 1000,
+  });
+
+  // Sync SSE connection state
+  useEffect(() => {
+    setIsConnected(sseConnected);
+  }, [sseConnected]);
+
+  // Auto-connect when session is created
+  useEffect(() => {
+    if (session && !sseConnected && !isConnecting) {
+      sseConnect();
+    }
+  }, [session, sseConnected, isConnecting, sseConnect]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      sseDisconnect();
+    };
+  }, [sseDisconnect]);
 
   const createSession = useCallback(async () => {
     setIsLoading(true);
@@ -123,8 +246,6 @@ export function PearlFlowProvider({
           },
         ]);
       }
-
-      setIsConnected(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
@@ -136,6 +257,11 @@ export function PearlFlowProvider({
     async (text: string) => {
       if (!session) {
         setError('No active session');
+        return;
+      }
+
+      if (!sseConnected) {
+        setError('Not connected to server');
         return;
       }
 
@@ -153,7 +279,7 @@ export function PearlFlowProvider({
 
       try {
         // Send message to API
-        await fetch(`${apiUrl}/chat/message`, {
+        const response = await fetch(`${apiUrl}/chat/message`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -164,24 +290,19 @@ export function PearlFlowProvider({
           }),
         });
 
-        // TODO: Connect to SSE stream for response
-        // For now, add placeholder response
-        const assistantMessage: Message = {
-          id: crypto.randomUUID(),
-          role: 'assistant',
-          content: "I'm processing your request...",
-          timestamp: new Date(),
-          agentName: agentState.activeAgent,
-        };
-        setMessages((prev) => [...prev, assistantMessage]);
+        if (!response.ok) {
+          throw new Error(`Server returned ${response.status}`);
+        }
+
+        // The SSE stream will handle the response automatically
+        // via the onEvent callback
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to send message');
-      } finally {
         setIsLoading(false);
         setAgentState((prev) => ({ ...prev, thinking: false }));
       }
     },
-    [session, apiUrl, agentState.activeAgent]
+    [session, apiUrl, sseConnected]
   );
 
   const clearError = useCallback(() => {

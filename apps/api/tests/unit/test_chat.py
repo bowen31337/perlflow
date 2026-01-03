@@ -3,10 +3,14 @@
 import pytest
 from httpx import AsyncClient
 import uuid
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
+
+from src.models import AgentSession
 
 
 @pytest.mark.asyncio
-async def test_send_message_valid_session(client: AsyncClient, test_clinic, async_session):
+async def test_send_message_valid_session(client: AsyncClient, test_clinic):
     """Test sending a message to a valid session returns acknowledgment."""
     # First create a session
     create_response = await client.post(
@@ -40,7 +44,7 @@ async def test_send_message_invalid_session(client: AsyncClient):
 
 
 @pytest.mark.asyncio
-async def test_stream_chat_valid_session(client: AsyncClient, test_clinic, async_session):
+async def test_stream_chat_valid_session(client: AsyncClient, test_clinic):
     """Test SSE streaming returns token events."""
     # First create a session
     create_response = await client.post(
@@ -58,13 +62,11 @@ async def test_stream_chat_valid_session(client: AsyncClient, test_clinic, async
     # Then stream
     async with client.stream("GET", f"/chat/stream/{session_id}") as response:
         assert response.status_code == 200
-        events = []
+        combined = ""
         async for chunk in response.aiter_text():
-            # Parse SSE events
-            events.append(chunk)
+            combined += chunk
 
         # Should contain at least agent_state and token events
-        combined = "".join(events)
         assert "agent_state" in combined
         assert "token" in combined
         assert "complete" in combined
@@ -77,14 +79,19 @@ async def test_stream_chat_invalid_session(client: AsyncClient):
 
     async with client.stream("GET", f"/chat/stream/{random_uuid}") as response:
         assert response.status_code == 200
+        combined = ""
         async for chunk in response.aiter_text():
-            assert "error" in chunk.lower()
-            break
+            combined += chunk
+            if "complete" in chunk or "error" in chunk:
+                break
+
+        # Should contain error event
+        assert "error" in combined.lower()
 
 
 @pytest.mark.asyncio
-async def test_stream_chat_pain_context(client: AsyncClient, test_clinic, async_session):
-    """Test SSE streaming responds appropriately to pain-related messages."""
+async def test_stream_chat_pain_context(client: AsyncClient, test_clinic):
+    """Test SSE streaming uses IntakeSpecialist for pain-related messages."""
     # Create session
     create_response = await client.post(
         "/session",
@@ -106,13 +113,13 @@ async def test_stream_chat_pain_context(client: AsyncClient, test_clinic, async_
             if "complete" in chunk:
                 break
 
-        # Should contain pain-related response
-        assert "pain" in combined.lower()
+        # Should use IntakeSpecialist agent
+        assert "intakespecialist" in combined.lower()
 
 
 @pytest.mark.asyncio
-async def test_stream_chat_booking_context(client: AsyncClient, test_clinic, async_session):
-    """Test SSE streaming responds appropriately to booking-related messages."""
+async def test_stream_chat_booking_context(client: AsyncClient, test_clinic):
+    """Test SSE streaming uses ResourceOptimiser for booking-related messages."""
     # Create session
     create_response = await client.post(
         "/session",
@@ -134,16 +141,13 @@ async def test_stream_chat_booking_context(client: AsyncClient, test_clinic, asy
             if "complete" in chunk:
                 break
 
-        # Should contain booking-related response
-        assert "book" in combined.lower() or "appointment" in combined.lower()
+        # Should use ResourceOptimiser agent
+        assert "resourceoptimiser" in combined.lower()
 
 
 @pytest.mark.asyncio
 async def test_send_message_stores_in_history(client: AsyncClient, test_clinic, async_session):
     """Test that sent messages are stored in session history."""
-    from src.models import AgentSession
-    from sqlalchemy import select
-
     # Create session
     create_response = await client.post(
         "/session",
@@ -157,12 +161,13 @@ async def test_send_message_stores_in_history(client: AsyncClient, test_clinic, 
         json={"session_id": session_id, "text": "Test message"},
     )
 
-    # Verify message is in database
+    # Verify message is in database using a fresh query
     result = await async_session.execute(
         select(AgentSession).where(AgentSession.session_id == uuid.UUID(session_id))
     )
     session = result.scalar_one_or_none()
     assert session is not None
+    assert session.messages is not None
     assert len(session.messages) == 1
     assert session.messages[0]["role"] == "user"
     assert session.messages[0]["content"] == "Test message"
