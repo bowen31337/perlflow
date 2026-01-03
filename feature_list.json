@@ -13,8 +13,7 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "qa_retry_count": 0,
-    "dev_failure_count": 0,
-    "is_stuck": false
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -28,8 +27,7 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "qa_retry_count": 0,
-    "dev_failure_count": 0,
-    "is_stuck": false
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -45,8 +43,7 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "qa_retry_count": 0,
-    "dev_failure_count": 0,
-    "is_stuck": false
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -60,8 +57,7 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "qa_retry_count": 0,
-    "dev_failure_count": 0,
-    "is_stuck": false
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
