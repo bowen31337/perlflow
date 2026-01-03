@@ -445,8 +445,11 @@
       "Step 4: Verify high-LTV patients less likely to be moved"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-03T14:31:50.413039Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
