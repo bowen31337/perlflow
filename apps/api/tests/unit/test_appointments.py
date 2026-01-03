@@ -219,7 +219,7 @@ async def test_create_appointment_success(client: AsyncClient, async_session: As
     response = await client.post(
         "/appointments",
         json={
-            "session_id": str(session.id),  # Use actual session ID
+            "session_id": str(session.session_id),  # Use actual session ID
             "patient_id": str(patient.id),
             "slot_id": slot_id,
             "procedure_code": "D1110",
