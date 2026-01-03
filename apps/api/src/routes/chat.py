@@ -171,18 +171,18 @@ async def generate_sse_events(db: AsyncSession, session_id: UUID) -> AsyncGenera
             response_text = "I need to know your pain level on a scale of 1-10 to help you better."
 
     elif state["conversation_state"] == "waiting_swelling":
-        # Check for swelling
-        if "yes" in last_user_message_lower or "i have" in last_user_message_lower or "swelling" in last_user_message_lower:
+        # Check for swelling - check NO first to handle "no swelling" correctly
+        if "no" in last_user_message_lower:
+            state["red_flags"]["swelling"] = False
+            state["conversation_state"] = "waiting_fever"
+            active_agent = "IntakeSpecialist"
+            response_text = "Okay, no swelling. Do you have a fever or feel warm?"
+        elif "yes" in last_user_message_lower or "i have" in last_user_message_lower or "swelling" in last_user_message_lower:
             state["red_flags"]["swelling"] = True
             state["priority_score"] += 30
             state["conversation_state"] = "waiting_fever"
             active_agent = "IntakeSpecialist"
             response_text = "Swelling can be a concern. Do you have a fever or feel warm?"
-        elif "no" in last_user_message_lower:
-            state["red_flags"]["swelling"] = False
-            state["conversation_state"] = "waiting_fever"
-            active_agent = "IntakeSpecialist"
-            response_text = "Okay, no swelling. Do you have a fever or feel warm?"
         else:
             active_agent = "IntakeSpecialist"
             response_text = "Please let me know if you have swelling (yes/no)."
