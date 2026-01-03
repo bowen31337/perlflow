@@ -193,7 +193,7 @@
       "Step 3: Verify response offers to help",
       "Step 4: Verify no technical jargon is used"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
     "is_qa_passed": false,
     "qa_retry_count": 0,
@@ -228,7 +228,7 @@
       "Step 4: Respond with swelling symptom",
       "Step 5: Verify agent escalates priority"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
     "is_qa_passed": false,
     "qa_retry_count": 0,
@@ -250,7 +250,9 @@
     "is_qa_passed": false,
     "qa_retry_count": 0,
     "dev_completed_at": "2026-01-03T13:59:38.964207Z",
-    "dev_failure_count": 0
+    "dev_failure_count": 0,
+    "is_stuck": true,
+    "stuck_reason": "State persistence issue in multi-turn conversations"
   },
   {
     "category": "functional",
@@ -267,7 +269,9 @@
     "is_qa_passed": false,
     "qa_retry_count": 0,
     "dev_completed_at": "2026-01-03T14:18:59.712477Z",
-    "dev_failure_count": 0
+    "dev_failure_count": 0,
+    "is_stuck": true,
+    "stuck_reason": "State persistence issue in multi-turn conversations"
   },
   {
     "category": "functional",
@@ -279,8 +283,13 @@
       "Step 4: Verify priority is stored in session state"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-03T14:23:08.381142Z",
+    "dev_failure_count": 0,
+    "is_stuck": true,
+    "stuck_reason": "State persistence issue in multi-turn conversations"
   },
   {
     "category": "functional",
@@ -306,8 +315,11 @@
       "Step 5: Verify accuracy is >= 80%"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-03T14:22:12.597998Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -333,8 +345,11 @@
       "Step 5: Verify move recommendations are generated"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-03T14:23:02.953893Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -390,8 +405,11 @@
       "Step 4: Verify incentive calculations account for procedure value"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-03T14:25:16.107248Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -428,8 +446,11 @@
       "Step 4: Verify slots respect clinic operating hours"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-03T14:24:56.744001Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",

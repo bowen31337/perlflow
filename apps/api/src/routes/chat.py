@@ -81,6 +81,9 @@ async def send_message(
     current_messages = session.messages or []
     updated_messages = current_messages + [message_entry]
     session.messages = updated_messages
+    # Mark the JSONB field as modified so SQLAlchemy tracks the change
+    from sqlalchemy.orm.attributes import flag_modified
+    flag_modified(session, "messages")
 
     await db.commit()
 
@@ -140,9 +143,16 @@ async def generate_sse_events(db: AsyncSession, session_id: UUID) -> AsyncGenera
 
     is_pain_related = any(kw in last_user_message_lower for kw in pain_keywords)
     is_booking_related = any(kw in last_user_message_lower for kw in booking_keywords)
+    has_emergency = "breathing" in last_user_message_lower or "breath" in last_user_message_lower
 
     # Conversation flow logic
-    if is_pain_related and state["conversation_state"] == "initial":
+    # Emergency check - HIGHEST PRIORITY (must be first)
+    if has_emergency and state["conversation_state"] == "initial":
+        active_agent = "IntakeSpecialist"
+        state["priority_score"] = 100
+        response_text = "EMERGENCY: Difficulty breathing requires immediate medical attention. Please call emergency services or go to the nearest emergency room immediately."
+
+    elif is_pain_related and state["conversation_state"] == "initial":
         # First pain message - trigger IntakeSpecialist
         active_agent = "IntakeSpecialist"
         state["conversation_state"] = "waiting_pain_level"
@@ -216,12 +226,6 @@ async def generate_sse_events(db: AsyncSession, session_id: UUID) -> AsyncGenera
             }
         }
 
-    elif "breathing" in last_user_message_lower or "breath" in last_user_message_lower:
-        # Emergency - breathing difficulty
-        active_agent = "IntakeSpecialist"
-        state["priority_score"] = 100
-        response_text = "EMERGENCY: Difficulty breathing requires immediate medical attention. Please call emergency services or go to the nearest emergency room immediately."
-
     elif state["conversation_state"] == "triage_complete":
         # After triage, maintain empathetic flow
         active_agent = "IntakeSpecialist"
@@ -234,6 +238,9 @@ async def generate_sse_events(db: AsyncSession, session_id: UUID) -> AsyncGenera
 
     # Update session state
     session.state_snapshot = state
+    # Mark the JSONB field as modified so SQLAlchemy tracks the change
+    from sqlalchemy.orm.attributes import flag_modified
+    flag_modified(session, "state_snapshot")
     await db.commit()
 
     # Generate SSE events

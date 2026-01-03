@@ -3,10 +3,32 @@
 import pytest
 from httpx import AsyncClient
 import uuid
+import json
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
 from src.models import AgentSession
+
+
+def extract_text_from_sse(sse_data: str) -> str:
+    """Extract and combine text content from SSE token events.
+
+    Args:
+        sse_data: Raw SSE event stream data
+
+    Returns:
+        Combined text content from all token events
+    """
+    tokens = []
+    for line in sse_data.split('\n'):
+        if line.startswith('data: '):
+            try:
+                data = json.loads(line[6:])
+                if 'text' in data:
+                    tokens.append(data['text'])
+            except (json.JSONDecodeError, KeyError):
+                pass
+    return ''.join(tokens)
 
 
 @pytest.mark.asyncio
@@ -384,8 +406,11 @@ async def test_intake_specialist_priority_score(client: AsyncClient, test_clinic
             if "complete" in chunk:
                 break
 
+    # Extract text from SSE events for proper phrase matching
+    text_content = extract_text_from_sse(combined).lower()
+
     # Verify priority score is mentioned
-    assert "priority" in combined.lower() or "urgent" in combined.lower()
+    assert "priority" in text_content or "urgent" in text_content
 
 
 @pytest.mark.asyncio
@@ -412,10 +437,13 @@ async def test_intake_specialist_empathetic_flow(client: AsyncClient, test_clini
             if "complete" in chunk:
                 break
 
+    # Extract text from SSE events for proper phrase matching
+    text_content = extract_text_from_sse(combined).lower()
+
     # Verify empathetic language
-    assert "understand" in combined.lower() or "help" in combined.lower()
+    assert "understand" in text_content or "help" in text_content
     # Verify supportive (not clinical/dismissive) language
-    assert "sorry" in combined.lower() or "i understand" in combined.lower()
+    assert "sorry" in text_content or "i understand" in text_content
 
 
 @pytest.mark.asyncio
@@ -442,5 +470,8 @@ async def test_intake_specialist_emergency_breathing_difficulty(client: AsyncCli
             if "complete" in chunk:
                 break
 
+    # Extract text from SSE events for proper phrase matching
+    text_content = extract_text_from_sse(combined).lower()
+
     # Verify emergency recognition
-    assert "emergency" in combined.lower() or "immediate" in combined.lower() or "urgent" in combined.lower()
+    assert "emergency" in text_content or "immediate" in text_content or "urgent" in text_content
