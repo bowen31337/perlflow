@@ -2629,5 +2629,46 @@
     "passes": false,
     "is_dev_done": false,
     "is_qa_passed": false
+  },
+  {
+    "category": "functional",
+    "description": "Appointment Reminders - SMS notification sent before appointment",
+    "steps": [
+      "Step 1: Create appointment for tomorrow",
+      "Step 2: Trigger reminder job",
+      "Step 3: Verify SMS notification queued",
+      "Step 4: Verify message content is correct",
+      "Step 5: Verify reminder is AHPRA compliant"
+    ],
+    "passes": false,
+    "is_dev_done": false,
+    "is_qa_passed": false
+  },
+  {
+    "category": "functional",
+    "description": "Waitlist Management - Patient added to waitlist when no slots",
+    "steps": [
+      "Step 1: Book all available slots",
+      "Step 2: Patient requests appointment",
+      "Step 3: Verify waitlist option offered",
+      "Step 4: Add patient to waitlist",
+      "Step 5: Verify notification when slot opens"
+    ],
+    "passes": false,
+    "is_dev_done": false,
+    "is_qa_passed": false
+  },
+  {
+    "category": "style",
+    "description": "Responsive Breakpoints - Widget adapts at tablet viewport",
+    "steps": [
+      "Step 1: Set viewport to 768px (tablet)",
+      "Step 2: Verify widget layout adjusts appropriately",
+      "Step 3: Verify all components remain usable",
+      "Step 4: Take screenshot for verification"
+    ],
+    "passes": false,
+    "is_dev_done": false,
+    "is_qa_passed": false
   }
 ]
