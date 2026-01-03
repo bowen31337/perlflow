@@ -1,0 +1,56 @@
+# Git
+.git
+.gitignore
+
+# Node modules (will be installed in Docker)
+node_modules
+**/node_modules
+
+# Build outputs
+**/.next
+**/dist
+**/build
+**/.turbo
+**/playwright-report
+**/test-results
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.venv
+venv
+.env
+.env.local
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Tests
+**/tests/
+**/test_*.py
+pytest_cache
+.coverage
+
+# Documentation
+docs/
+README.md
+*.md
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore

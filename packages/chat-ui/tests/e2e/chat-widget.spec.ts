@@ -145,7 +145,12 @@ test.describe('PearlFlow Chat Widget - UI Components', () => {
 
     // Wait for UI component to appear in messages area
     const messagesArea = page.locator('.pf-overflow-y-auto');
-    await expect(messagesArea.getByText(/pain/i).first()).toBeVisible({ timeout: 10000 });
+
+    // Wait for the complete response containing "pain level"
+    await expect(messagesArea.getByText(/pain level/i).first()).toBeVisible({ timeout: 15000 });
+
+    // Also verify the PainScaleSelector UI component appears
+    await expect(messagesArea.getByText(/on a scale of 1-10/i).first()).toBeVisible();
   });
 
   test('Message bubbles have correct styling', async ({ page }) => {

@@ -13,7 +13,7 @@ export default function HomePage() {
   return (
     <PearlFlowProvider
       apiKey="pf_test_demo_key_12345"
-      apiUrl="http://localhost:8001"
+      apiUrl={process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8001'}
       theme={{
         primary: '#00D4FF',
         accent: '#10B981',

@@ -1,0 +1,76 @@
+# PearlFlow Standalone Dockerfile
+# Builds the entire project in a single image (for testing/development)
+# NOTE: This is for testing only. Use docker-compose.yml for production.
+
+FROM python:3.11-slim
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    postgresql-client \
+    curl \
+    gnupg \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Node.js
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs
+
+# Install pnpm
+RUN npm install -g pnpm
+
+# Install uv
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+ENV PATH="/root/.cargo/bin:$PATH"
+
+# Set working directory
+WORKDIR /app
+
+# Copy monorepo structure
+COPY package.json pnpm-workspace.yaml turbo.json ./
+
+# Copy API
+COPY apps/api/pyproject.toml apps/api/uv.lock ./apps/api/
+COPY apps/api/src ./apps/api/src
+
+# Copy demo-web
+COPY apps/demo-web/package.json ./apps/demo-web/
+COPY apps/demo-web/src ./apps/demo-web/src
+COPY apps/demo-web/public ./apps/demo-web/public 2>/dev/null || true
+COPY apps/demo-web/next.config.js apps/demo-web/postcss.config.js apps/demo-web/tailwind.config.ts apps/demo-web/tsconfig.json ./apps/demo-web/
+
+# Copy chat-ui
+COPY packages/chat-ui/package.json ./packages/chat-ui/
+COPY packages/chat-ui/src ./packages/chat-ui/src
+COPY packages/chat-ui/tsconfig.json packages/chat-ui/tailwind.config.js packages/chat-ui/postcss.config.js packages/chat-ui/vite.config.ts ./packages/chat-ui/
+
+# Install Python dependencies
+WORKDIR /app/apps/api
+RUN uv sync --frozen
+
+# Install JS dependencies and build
+WORKDIR /app
+RUN pnpm install --frozen-lockfile
+RUN pnpm --filter @pearlflow/chat-ui run build
+RUN pnpm --filter demo-web run build
+
+# Create non-root user
+RUN groupadd -r pearlflow && useradd -r -g pearlflow pearlflow
+RUN chown -R pearlflow:pearlflow /app
+
+# Set environment
+ENV PYTHONPATH=/app/apps/api
+ENV PATH=/root/.local/bin:$PATH
+
+# Expose ports
+EXPOSE 8000 3000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
+    CMD curl -f http://localhost:8000/health || exit 1
+
+# Start script
+CMD echo "Starting PearlFlow..." && \
+    cd /app/apps/api && uvicorn src.main:app --host 0.0.0.0 --port 8000 & \
+    cd /app/apps/demo-web && pnpm start & \
+    wait

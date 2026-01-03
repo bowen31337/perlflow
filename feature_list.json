@@ -1297,7 +1297,13 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "dev_completed_at": "2026-01-03T16:07:22.571912+00:00",
-    "qa_completed_at": "2026-01-03T16:07:22.571912+00:00"
+    "qa_completed_at": "2026-01-03T16:07:22.571912+00:00",
+    "qa_retry_count": 0,
+    "dev_failure_count": 1,
+    "last_dev_failure_at": "2026-01-03T16:22:05.286970Z",
+    "dev_failure_reasons": [
+      "Worker session timed out"
+    ]
   },
   {
     "category": "functional",
@@ -1312,8 +1318,10 @@
     "passes": true,
     "is_dev_done": true,
     "is_qa_passed": true,
-    "dev_completed_at": "2026-01-03T16:07:07.426802+00:00",
-    "qa_completed_at": "2026-01-03T16:07:07.426802+00:00"
+    "dev_completed_at": "2026-01-03T16:16:00.457487Z",
+    "qa_completed_at": "2026-01-03T16:07:07.426802+00:00",
+    "qa_retry_count": 0,
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -1346,8 +1354,10 @@
     "passes": true,
     "is_dev_done": true,
     "is_qa_passed": true,
-    "dev_completed_at": "2026-01-03T16:07:07.426802+00:00",
-    "qa_completed_at": "2026-01-03T16:07:07.426802+00:00"
+    "dev_completed_at": "2026-01-03T16:15:51.216996Z",
+    "qa_completed_at": "2026-01-03T16:07:07.426802+00:00",
+    "qa_retry_count": 0,
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -2600,9 +2610,12 @@
       "Step 3: Run container",
       "Step 4: Verify API responds"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "dev_completed_at": "2026-01-04T03:17:20+00:00",
+    "qa_completed_at": "2026-01-04T03:20:00.000000+00:00",
+    "qa_passed_at": "2026-01-04T03:25:42+00:00"
   },
   {
     "category": "functional",
@@ -2613,9 +2626,11 @@
       "Step 3: Verify PostgreSQL starts",
       "Step 4: Verify services communicate"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "dev_completed_at": "2026-01-04T03:17:20+00:00",
+    "qa_passed_at": "2026-01-04T03:25:42+00:00"
   },
   {
     "category": "functional",
