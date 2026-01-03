@@ -193,7 +193,7 @@ test.describe('Full E2E - Session Recovery After Disconnect', () => {
 });
 
 test.describe('Full E2E - Concurrent Sessions for Same Clinic', () => {
-  test('Multiple concurrent sessions are isolated', async ({ page, context }) => {
+  test('Multiple concurrent sessions are isolated', async ({ page, browser }) => {
     // Open first browser tab
     await page.goto('/');
     await page.getByRole('button', { name: 'Open chat' }).click();
@@ -209,7 +209,7 @@ test.describe('Full E2E - Concurrent Sessions for Same Clinic', () => {
     await expect(messagesArea1.getByText(/pain level/i)).toBeVisible({ timeout: 15000 });
 
     // Open second browser tab
-    const newContext = await context.newContext();
+    const newContext = await browser.newContext();
     const page2 = await newContext.newPage();
     await page2.goto('/');
     await page2.getByRole('button', { name: 'Open chat' }).click();
