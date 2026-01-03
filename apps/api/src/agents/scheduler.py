@@ -2,9 +2,8 @@
 
 from typing import Any, List
 
-from deepagents import create_deep_agent, Tool
-from deepagents.tools import Tool as AgentTool
-from langchain_openai import ChatOpenAI
+from deepagents import create_deep_agent
+from langchain_core.tools import StructuredTool
 from langchain_core.language_models import BaseChatModel
 
 # Import PMS tools
@@ -63,26 +62,26 @@ def create_scheduler_agent(llm: BaseChatModel | None = None) -> Any:
         The configured resource optimiser agent
     """
     # Create tool wrappers for the PMS tools
-    tools: List[AgentTool] = [
-        Tool.from_function(
+    tools = [
+        StructuredTool.from_function(
             check_availability,
             name="check_availability",
             description="Find open slots in the Practice Management System. "
                        "Takes start and end datetime strings and returns available slots."
         ),
-        Tool.from_function(
+        StructuredTool.from_function(
             heuristic_move_check,
             name="heuristic_move_check",
             description="Calculate if moving an existing appointment is beneficial. "
                        "Takes appointment_id and new_value, returns move_score and recommendation."
         ),
-        Tool.from_function(
+        StructuredTool.from_function(
             book_appointment,
             name="book_appointment",
             description="Book an appointment for a patient. "
                        "Takes patient_id, slot_id, and procedure_code."
         ),
-        Tool.from_function(
+        StructuredTool.from_function(
             send_move_offer,
             name="send_move_offer",
             description="Send an incentive offer to a patient to reschedule. "
@@ -90,7 +89,7 @@ def create_scheduler_agent(llm: BaseChatModel | None = None) -> Any:
         ),
     ]
 
-    # Create the agent with tools
+    # Create the agent with tools using the installed deepagents API
     scheduler_agent = create_deep_agent(
         name="ResourceOptimiser",
         instructions=RESOURCE_OPTIMISER_INSTRUCTIONS,

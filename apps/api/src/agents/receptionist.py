@@ -2,8 +2,7 @@
 
 from typing import Any, List
 
-from deepagents import create_deep_agent
-from deepagents.middleware import SubAgentMiddleware
+from deepagents import create_deep_agent, SubAgentMiddleware
 from langchain_openai import ChatOpenAI
 from langchain_core.language_models import BaseChatModel
 from langchain_core.messages import HumanMessage
@@ -71,6 +70,8 @@ def create_receptionist_agent(llm: BaseChatModel | None = None) -> Any:
     scheduler_agent = create_scheduler_agent(llm=llm)
 
     # Create middleware to handle delegation
+    # Note: For now, we just store metadata about sub-agents
+    # Actual delegation will be handled by the LLM based on instructions
     sub_agent_middleware = SubAgentMiddleware(
         sub_agents=[
             {"name": "IntakeSpecialist", "instructions": intake_agent.instructions},
@@ -78,11 +79,12 @@ def create_receptionist_agent(llm: BaseChatModel | None = None) -> Any:
         ]
     )
 
-    # Create the root agent with middleware
+    # Create the root agent without middleware for now
+    # The middleware will be integrated once we implement proper delegation logic
     root_agent = create_deep_agent(
         name="Receptionist",
         instructions=RECEPTIONIST_INSTRUCTIONS,
-        middleware=[sub_agent_middleware],
+        tools=[],  # Receptionist has no tools - delegates to sub-agents
         llm=llm,
     )
     return root_agent

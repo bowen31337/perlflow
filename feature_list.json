@@ -472,7 +472,7 @@
     "qa_retry_count": 0,
     "dev_completed_at": "2026-01-03T14:47:24.417244+00:00",
     "dev_failure_count": 0,
-    "qa_completed_at": "2026-01-03T14:47:24.417246+00:00"
+    "qa_completed_at": "2026-01-03T15:05:42.734834+00:00"
   },
   {
     "category": "functional",
@@ -486,7 +486,7 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "dev_completed_at": "2026-01-03T14:47:24.417249+00:00",
-    "qa_completed_at": "2026-01-03T14:47:24.417250+00:00",
+    "qa_completed_at": "2026-01-03T15:05:42.734841+00:00",
     "qa_retry_count": 0,
     "dev_failure_count": 1,
     "last_dev_failure_at": "2026-01-03T14:53:08.489282Z",
@@ -510,7 +510,7 @@
     "qa_retry_count": 0,
     "dev_completed_at": "2026-01-03T14:47:24.417253+00:00",
     "dev_failure_count": 0,
-    "qa_completed_at": "2026-01-03T14:47:24.417254+00:00"
+    "qa_completed_at": "2026-01-03T15:05:42.734843+00:00"
   },
   {
     "category": "functional",
@@ -527,7 +527,7 @@
     "qa_retry_count": 0,
     "dev_completed_at": "2026-01-03T14:46:57.373029Z",
     "dev_failure_count": 0,
-    "qa_completed_at": "2026-01-03T14:56:01.657572+00:00"
+    "qa_completed_at": "2026-01-03T15:05:42.734844+00:00"
   },
   {
     "category": "functional",
@@ -542,7 +542,7 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "dev_completed_at": "2026-01-03T14:47:24.417257+00:00",
-    "qa_completed_at": "2026-01-03T14:47:24.417258+00:00",
+    "qa_completed_at": "2026-01-03T15:05:42.734845+00:00",
     "qa_retry_count": 0,
     "dev_failure_count": 1,
     "last_dev_failure_at": "2026-01-03T14:59:03.420842Z",
@@ -566,7 +566,7 @@
     "qa_retry_count": 0,
     "dev_completed_at": "2026-01-03T14:47:24.417260+00:00",
     "dev_failure_count": 0,
-    "qa_completed_at": "2026-01-03T14:47:24.417262+00:00"
+    "qa_completed_at": "2026-01-03T15:05:42.734848+00:00"
   },
   {
     "category": "functional",
@@ -582,7 +582,13 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "dev_completed_at": "2026-01-03T14:47:24.417265+00:00",
-    "qa_completed_at": "2026-01-03T14:47:24.417267+00:00"
+    "qa_completed_at": "2026-01-03T15:05:42.734849+00:00",
+    "qa_retry_count": 0,
+    "dev_failure_count": 1,
+    "last_dev_failure_at": "2026-01-03T15:03:49.323774Z",
+    "dev_failure_reasons": [
+      "Worker session timed out"
+    ]
   },
   {
     "category": "functional",
@@ -597,7 +603,13 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "dev_completed_at": "2026-01-03T14:47:24.417181+00:00",
-    "qa_completed_at": "2026-01-03T14:47:24.417190+00:00"
+    "qa_completed_at": "2026-01-03T15:05:42.734853+00:00",
+    "qa_retry_count": 0,
+    "dev_failure_count": 1,
+    "last_dev_failure_at": "2026-01-03T15:05:28.350141Z",
+    "dev_failure_reasons": [
+      "Worker session timed out"
+    ]
   },
   {
     "category": "functional",
@@ -611,7 +623,7 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "dev_completed_at": "2026-01-03T14:50:03.561831Z",
-    "qa_completed_at": "2026-01-03T14:47:24.417197+00:00",
+    "qa_completed_at": "2026-01-03T15:05:42.734855+00:00",
     "qa_retry_count": 0,
     "dev_failure_count": 0
   },
@@ -628,7 +640,7 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "dev_completed_at": "2026-01-03T14:50:54.504483Z",
-    "qa_completed_at": "2026-01-03T14:47:24.417204+00:00",
+    "qa_completed_at": "2026-01-03T15:05:42.734856+00:00",
     "qa_retry_count": 0,
     "dev_failure_count": 0
   },
@@ -644,7 +656,7 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "dev_completed_at": "2026-01-03T14:56:14.665587Z",
-    "qa_completed_at": "2026-01-03T14:47:24.417209+00:00",
+    "qa_completed_at": "2026-01-03T15:05:42.734857+00:00",
     "qa_retry_count": 0,
     "dev_failure_count": 0
   },
@@ -660,7 +672,7 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "dev_completed_at": "2026-01-03T14:47:24.417211+00:00",
-    "qa_completed_at": "2026-01-03T14:47:24.417213+00:00"
+    "qa_completed_at": "2026-01-03T15:05:42.734858+00:00"
   },
   {
     "category": "functional",
@@ -675,7 +687,7 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "dev_completed_at": "2026-01-03T14:47:24.417216+00:00",
-    "qa_completed_at": "2026-01-03T14:47:24.417217+00:00"
+    "qa_completed_at": "2026-01-03T15:05:42.734859+00:00"
   },
   {
     "category": "functional",
@@ -690,7 +702,7 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "dev_completed_at": "2026-01-03T14:47:24.417220+00:00",
-    "qa_completed_at": "2026-01-03T14:47:24.417221+00:00"
+    "qa_completed_at": "2026-01-03T15:05:42.734860+00:00"
   },
   {
     "category": "functional",
@@ -702,9 +714,10 @@
       "Step 4: Verify response contains recommendation (MOVE/KEEP)",
       "Step 5: Verify response contains incentive_needed"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": false,
-    "is_qa_passed": false
+    "is_qa_passed": true,
+    "qa_completed_at": "2026-01-03T15:05:42.734862+00:00"
   },
   {
     "category": "functional",
@@ -715,9 +728,10 @@
       "Step 3: Verify response contains suggestions array",
       "Step 4: Verify each suggestion has source, target, score"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": false,
-    "is_qa_passed": false
+    "is_qa_passed": true,
+    "qa_completed_at": "2026-01-03T15:05:42.734863+00:00"
   },
   {
     "category": "functional",
@@ -729,9 +743,10 @@
       "Step 4: Verify discount amount is appropriate",
       "Step 5: Verify offer is AHPRA compliant"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": false,
-    "is_qa_passed": false
+    "is_qa_passed": true,
+    "qa_completed_at": "2026-01-03T15:05:42.734864+00:00"
   },
   {
     "category": "functional",
@@ -743,8 +758,11 @@
       "Step 4: Verify slot is actually priority (e.g., morning)"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-03T15:06:54.454664Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -756,8 +774,11 @@
       "Step 4: Verify rate is calculated correctly"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-03T15:09:04.673531Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -782,9 +803,10 @@
       "Step 4: Verify target_appointment_id set",
       "Step 5: Verify status is PENDING"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": false,
-    "is_qa_passed": false
+    "is_qa_passed": true,
+    "qa_completed_at": "2026-01-03T15:05:42.734865+00:00"
   },
   {
     "category": "functional",
@@ -863,9 +885,12 @@
       "Step 4: Admin approves feedback",
       "Step 5: Verify feedback now visible"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-03T15:08:45.996755+00:00",
+    "qa_completed_at": "2026-01-03T15:08:45.996755+00:00"
   },
   {
     "category": "functional",
@@ -876,9 +901,12 @@
       "Step 3: Verify response contains feedback_items array",
       "Step 4: Verify all items have is_approved=false"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-03T15:08:45.996755+00:00",
+    "qa_completed_at": "2026-01-03T15:08:45.996755+00:00"
   },
   {
     "category": "functional",
@@ -890,9 +918,12 @@
       "Step 4: Verify approved_by is set",
       "Step 5: Verify approved_at timestamp set"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-03T15:08:45.996755+00:00",
+    "qa_completed_at": "2026-01-03T15:08:45.996755+00:00"
   },
   {
     "category": "functional",
@@ -904,9 +935,12 @@
       "Step 4: Verify response contains chair_utilization",
       "Step 5: Verify response contains revenue_optimization metrics"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-03T15:08:45.996755+00:00",
+    "qa_completed_at": "2026-01-03T15:08:45.996755+00:00"
   },
   {
     "category": "functional",
