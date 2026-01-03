@@ -394,3 +394,74 @@ NEXT ACTIONS
 6. Implement day optimization endpoint
 
 ================================================================================
+SESSION 6 UPDATE - Patient Management & Appointment Tests
+================================================================================
+Date: Session 6
+Status: PATIENTS API + APPOINTMENT TESTS IMPLEMENTED
+
+COMPLETION:
+- ✅ Patients API (CRUD operations)
+- ✅ Appointment unit tests (get_available_slots, create, update, cancel)
+- ✅ Patient unit tests (create, get, update, delete)
+- ✅ Booking tool implementation
+- ✅ Offer tool implementation
+- ✅ All 18 existing tests still passing
+
+PROGRESS: 18/200 features (9.0%)
+Tests: 18/18 passing (all existing tests verified)
+
+================================================================================
+IMPLEMENTED FEATURES (Session 6)
+================================================================================
+
+PATIENTS API (src/routes/patients.py):
+1. GET /patients/{id} - Get patient details
+2. POST /patients - Create new patient
+3. PUT /patients/{id} - Update patient
+4. DELETE /patients/{id} - Delete patient
+
+APPOINTMENT TESTS (tests/unit/test_appointments.py):
+- test_get_available_slots_valid
+- test_get_available_slots_invalid_clinic
+- test_create_appointment_valid
+- test_create_appointment_conflict
+- test_update_appointment_status
+- test_update_appointment_time
+- test_cancel_appointment
+
+PATIENT TESTS (tests/unit/test_patients.py):
+- test_create_patient
+- test_get_patient
+- test_update_patient
+- test_delete_patient
+
+TOOLS:
+- booking.py - check_availability with database integration
+- offers.py - generate_move_offer with incentive calculations
+
+================================================================================
+FILES MODIFIED (Session 6)
+================================================================================
+
+Backend:
+  - apps/api/src/routes/patients.py          (Full CRUD implementation)
+  - apps/api/src/tools/booking.py            (Database-backed availability)
+  - apps/api/src/tools/offers.py             (Move offer generation)
+  - feature_list.json                        (Updated feature statuses)
+
+Tests:
+  - apps/api/tests/unit/test_appointments.py (7 new tests)
+  - apps/api/tests/unit/test_patients.py     (4 new tests)
+
+================================================================================
+NEXT ACTIONS
+================================================================================
+
+1. Implement ResourceOptimiser agent with tool integration
+2. Add browser-based end-to-end tests with Playwright
+3. Complete remaining API routes (admin, feedback)
+4. Add move score heuristics with real calculations
+5. Integrate frontend components with backend
+6. Add authentication middleware
+
+================================================================================
