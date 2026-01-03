@@ -13,8 +13,8 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "qa_retry_count": 0,
-    "dev_completed_at": "2026-01-04T01:15:00Z",
-    "qa_completed_at": "2026-01-04T01:15:00Z"
+    "dev_completed_at": "2026-01-03T14:33:22.055154+00:00",
+    "qa_completed_at": "2026-01-03T14:33:22.055154+00:00"
   },
   {
     "category": "functional",
@@ -28,8 +28,8 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "qa_retry_count": 0,
-    "dev_completed_at": "2026-01-04T01:15:00Z",
-    "qa_completed_at": "2026-01-04T01:15:00Z"
+    "dev_completed_at": "2026-01-03T14:33:22.055154+00:00",
+    "qa_completed_at": "2026-01-03T14:33:22.055154+00:00"
   },
   {
     "category": "functional",
@@ -45,8 +45,8 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "qa_retry_count": 0,
-    "dev_completed_at": "2026-01-04T01:15:00Z",
-    "qa_completed_at": "2026-01-04T01:15:00Z"
+    "dev_completed_at": "2026-01-03T14:33:22.055154+00:00",
+    "qa_completed_at": "2026-01-03T14:33:22.055154+00:00"
   },
   {
     "category": "functional",
@@ -60,8 +60,8 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "qa_retry_count": 0,
-    "dev_completed_at": "2026-01-04T01:15:00Z",
-    "qa_completed_at": "2026-01-04T01:15:00Z"
+    "dev_completed_at": "2026-01-03T14:33:22.055154+00:00",
+    "qa_completed_at": "2026-01-03T14:33:22.055154+00:00"
   },
   {
     "category": "functional",
@@ -77,7 +77,9 @@
     "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_failure_count": 0,
-    "is_stuck": false
+    "is_stuck": false,
+    "dev_completed_at": "2026-01-03T14:33:22.055154+00:00",
+    "qa_completed_at": "2026-01-03T14:33:22.055154+00:00"
   },
   {
     "category": "functional",
@@ -92,7 +94,9 @@
     "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_failure_count": 0,
-    "is_stuck": false
+    "is_stuck": false,
+    "dev_completed_at": "2026-01-03T14:33:22.055154+00:00",
+    "qa_completed_at": "2026-01-03T14:33:22.055154+00:00"
   },
   {
     "category": "functional",
@@ -111,7 +115,9 @@
     "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_failure_count": 0,
-    "is_stuck": false
+    "is_stuck": false,
+    "dev_completed_at": "2026-01-03T14:33:22.055154+00:00",
+    "qa_completed_at": "2026-01-03T14:33:22.055154+00:00"
   },
   {
     "category": "functional",
@@ -128,7 +134,9 @@
     "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_failure_count": 0,
-    "is_stuck": false
+    "is_stuck": false,
+    "dev_completed_at": "2026-01-03T14:33:22.055154+00:00",
+    "qa_completed_at": "2026-01-03T14:33:22.055154+00:00"
   },
   {
     "category": "functional",
@@ -145,8 +153,9 @@
     "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_failure_count": 0,
-    "dev_completed_at": "2026-01-03T13:59:39.025727Z",
-    "is_stuck": false
+    "dev_completed_at": "2026-01-03T14:33:22.055154+00:00",
+    "is_stuck": false,
+    "qa_completed_at": "2026-01-03T14:33:22.055154+00:00"
   },
   {
     "category": "functional",
@@ -163,8 +172,9 @@
     "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_failure_count": 0,
-    "dev_completed_at": "2026-01-03T13:59:39.029954Z",
-    "is_stuck": false
+    "dev_completed_at": "2026-01-03T14:33:22.055154+00:00",
+    "is_stuck": false,
+    "qa_completed_at": "2026-01-03T14:33:22.055154+00:00"
   },
   {
     "category": "functional",
@@ -181,8 +191,9 @@
     "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_failure_count": 0,
-    "dev_completed_at": "2026-01-03T13:59:38.809804Z",
-    "is_stuck": false
+    "dev_completed_at": "2026-01-03T14:33:22.055154+00:00",
+    "is_stuck": false,
+    "qa_completed_at": "2026-01-03T14:33:22.055154+00:00"
   },
   {
     "category": "functional",
@@ -198,8 +209,8 @@
     "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_failure_count": 0,
-    "dev_completed_at": "2026-01-03T14:19:02.092921Z",
-    "qa_completed_at": "2026-01-04T02:00:00Z"
+    "dev_completed_at": "2026-01-03T14:33:22.055154+00:00",
+    "qa_completed_at": "2026-01-03T14:33:22.055154+00:00"
   },
   {
     "category": "functional",
@@ -216,8 +227,9 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "qa_retry_count": 0,
-    "dev_completed_at": "2026-01-03T13:59:38.807711Z",
-    "dev_failure_count": 0
+    "dev_completed_at": "2026-01-03T14:33:22.055154+00:00",
+    "dev_failure_count": 0,
+    "qa_completed_at": "2026-01-03T14:33:22.055154+00:00"
   },
   {
     "category": "functional",
@@ -233,9 +245,9 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "qa_retry_count": 0,
-    "dev_completed_at": "2026-01-03T13:59:38.747803Z",
+    "dev_completed_at": "2026-01-03T14:33:22.055154+00:00",
     "dev_failure_count": 0,
-    "qa_completed_at": "2026-01-04T02:00:00Z",
+    "qa_completed_at": "2026-01-03T14:33:22.055154+00:00",
     "is_stuck": false
   },
   {
@@ -404,8 +416,11 @@
       "Step 4: Verify move score calculation includes procedure value"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-03T14:33:49.245549Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
