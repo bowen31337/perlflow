@@ -226,8 +226,6 @@ async def test_create_appointment_success(client: AsyncClient, async_session: As
         },
     )
 
-    if response.status_code != 201:
-
     assert response.status_code == 201
     data = response.json()
     assert data["patient_id"] == str(patient.id)
