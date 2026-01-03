@@ -9,9 +9,12 @@
       "Step 4: Verify response contains welcome_message string",
       "Step 5: Verify session_id is stored in database"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_failure_count": 0,
+    "is_stuck": false
   },
   {
     "category": "functional",
@@ -21,9 +24,12 @@
       "Step 2: Verify response status is 401",
       "Step 3: Verify error message indicates invalid credentials"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_failure_count": 0,
+    "is_stuck": false
   },
   {
     "category": "functional",
@@ -35,9 +41,12 @@
       "Step 4: Verify response contains status (ACTIVE)",
       "Step 5: Verify response contains current_agent field"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_failure_count": 0,
+    "is_stuck": false
   },
   {
     "category": "functional",
@@ -47,9 +56,12 @@
       "Step 2: Verify response status is 404",
       "Step 3: Verify error message indicates session not found"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_failure_count": 0,
+    "is_stuck": false
   },
   {
     "category": "functional",
@@ -62,7 +74,18 @@
     ],
     "passes": false,
     "is_dev_done": false,
-    "is_qa_passed": false
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_failure_count": 3,
+    "last_dev_failure_at": "2026-01-03T13:59:00.579112Z",
+    "dev_failure_reasons": [
+      "All 1 API pairs failed for this request",
+      "All 1 API pairs failed for this request",
+      "All 1 API pairs failed for this request"
+    ],
+    "is_stuck": true,
+    "stuck_reason": "Max DEV failures exceeded. Last errors: ['All 1 API pairs failed for this request', 'All 1 API pairs failed for this request']",
+    "stuck_at": "2026-01-03T13:59:10.220339Z"
   },
   {
     "category": "functional",
@@ -74,7 +97,18 @@
     ],
     "passes": false,
     "is_dev_done": false,
-    "is_qa_passed": false
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_failure_count": 3,
+    "last_dev_failure_at": "2026-01-03T13:58:58.786086Z",
+    "dev_failure_reasons": [
+      "All 1 API pairs failed for this request",
+      "All 1 API pairs failed for this request",
+      "All 1 API pairs failed for this request"
+    ],
+    "is_stuck": true,
+    "stuck_reason": "Max DEV failures exceeded. Last errors: ['All 1 API pairs failed for this request', 'All 1 API pairs failed for this request']",
+    "stuck_at": "2026-01-03T13:59:05.314176Z"
   },
   {
     "category": "functional",
@@ -90,7 +124,18 @@
     ],
     "passes": false,
     "is_dev_done": false,
-    "is_qa_passed": false
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_failure_count": 3,
+    "last_dev_failure_at": "2026-01-03T13:59:01.050714Z",
+    "dev_failure_reasons": [
+      "All 1 API pairs failed for this request",
+      "All 1 API pairs failed for this request",
+      "All 1 API pairs failed for this request"
+    ],
+    "is_stuck": true,
+    "stuck_reason": "Max DEV failures exceeded. Last errors: ['All 1 API pairs failed for this request', 'All 1 API pairs failed for this request']",
+    "stuck_at": "2026-01-03T13:59:08.473124Z"
   },
   {
     "category": "functional",
@@ -104,7 +149,18 @@
     ],
     "passes": false,
     "is_dev_done": false,
-    "is_qa_passed": false
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_failure_count": 3,
+    "last_dev_failure_at": "2026-01-03T13:58:58.106759Z",
+    "dev_failure_reasons": [
+      "All 1 API pairs failed for this request",
+      "All 1 API pairs failed for this request",
+      "All 1 API pairs failed for this request"
+    ],
+    "is_stuck": true,
+    "stuck_reason": "Max DEV failures exceeded. Last errors: ['All 1 API pairs failed for this request', 'All 1 API pairs failed for this request']",
+    "stuck_at": "2026-01-03T13:59:07.349900Z"
   },
   {
     "category": "functional",
@@ -117,8 +173,11 @@
       "Step 5: Verify component props are valid"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-03T13:59:39.025727Z"
   },
   {
     "category": "functional",
@@ -131,8 +190,11 @@
       "Step 5: Verify response asks about pain level"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-03T13:59:39.029954Z"
   },
   {
     "category": "functional",
@@ -145,8 +207,11 @@
       "Step 5: Verify response relates to appointment availability"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-03T13:59:38.809804Z"
   },
   {
     "category": "functional",
@@ -159,7 +224,13 @@
     ],
     "passes": false,
     "is_dev_done": false,
-    "is_qa_passed": false
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_failure_count": 1,
+    "last_dev_failure_at": "2026-01-03T13:59:10.411884Z",
+    "dev_failure_reasons": [
+      "All 1 API pairs failed for this request"
+    ]
   },
   {
     "category": "functional",
@@ -173,8 +244,11 @@
       "Step 6: Verify agent acknowledges the pain level"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-03T13:59:38.807711Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -187,8 +261,11 @@
       "Step 5: Verify agent escalates priority"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-03T13:59:38.747803Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -201,8 +278,11 @@
       "Step 5: Verify agent increases priority score"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-03T13:59:38.964207Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -295,8 +375,11 @@
       "Step 4: Verify patient is offered the incentive"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-03T14:06:04.118941Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",

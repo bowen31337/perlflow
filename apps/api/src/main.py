@@ -14,11 +14,17 @@ from src.routes import chat, session, appointments, patients, heuristics, admin
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     """Application lifespan handler for startup and shutdown events."""
     # Startup
-    # TODO: Initialize database connection pool
+    from src.core.database import init_db
+
+    # Initialize database tables
+    await init_db()
     # TODO: Initialize agent system
     yield
     # Shutdown
-    # TODO: Close database connections
+    from src.core.database import close_db
+
+    # Close database connections
+    await close_db()
     # TODO: Cleanup agent resources
 
 

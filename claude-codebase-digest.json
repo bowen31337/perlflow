@@ -1,0 +1,355 @@
+{
+  "generated_at": "2026-01-03T13:58:28.736487Z",
+  "project_dir": "pearlflow",
+  "structure": {
+    "directories": [
+      {
+        "name": "apps",
+        "path": "apps",
+        "depth": 3,
+        "subdirectories": [
+          {
+            "name": "api",
+            "path": "apps/api",
+            "depth": 3,
+            "subdirectories": [
+              {
+                "name": "src",
+                "path": "apps/api/src",
+                "depth": 3,
+                "subdirectories": [],
+                "file_count": 2,
+                "key_files": [
+                  "main.py"
+                ]
+              },
+              {
+                "name": "tests",
+                "path": "apps/api/tests",
+                "depth": 3,
+                "subdirectories": [],
+                "file_count": 2,
+                "key_files": []
+              }
+            ],
+            "file_count": 1,
+            "key_files": []
+          },
+          {
+            "name": "demo-web",
+            "path": "apps/demo-web",
+            "depth": 3,
+            "subdirectories": [
+              {
+                "name": "src",
+                "path": "apps/demo-web/src",
+                "depth": 3,
+                "subdirectories": [],
+                "file_count": 0,
+                "key_files": []
+              }
+            ],
+            "file_count": 1,
+            "key_files": []
+          },
+          {
+            "name": "docs",
+            "path": "apps/docs",
+            "depth": 2,
+            "subdirectories": [],
+            "file_count": 0,
+            "key_files": []
+          }
+        ],
+        "file_count": 0,
+        "key_files": []
+      },
+      {
+        "name": "docs",
+        "path": "docs",
+        "depth": 2,
+        "subdirectories": [
+          {
+            "name": "api",
+            "path": "docs/api",
+            "depth": 2,
+            "subdirectories": [],
+            "file_count": 0,
+            "key_files": []
+          }
+        ],
+        "file_count": 0,
+        "key_files": []
+      },
+      {
+        "name": "infrastructure",
+        "path": "infrastructure",
+        "depth": 1,
+        "subdirectories": [],
+        "file_count": 0,
+        "key_files": []
+      },
+      {
+        "name": "packages",
+        "path": "packages",
+        "depth": 3,
+        "subdirectories": [
+          {
+            "name": "chat-ui",
+            "path": "packages/chat-ui",
+            "depth": 3,
+            "subdirectories": [
+              {
+                "name": "src",
+                "path": "packages/chat-ui/src",
+                "depth": 3,
+                "subdirectories": [],
+                "file_count": 1,
+                "key_files": [
+                  "index.ts"
+                ]
+              },
+              {
+                "name": "tests",
+                "path": "packages/chat-ui/tests",
+                "depth": 3,
+                "subdirectories": [],
+                "file_count": 0,
+                "key_files": []
+              }
+            ],
+            "file_count": 6,
+            "key_files": [
+              "postcss.config.js",
+              "tailwind.config.js",
+              "tsconfig.json",
+              "tsconfig.node.json",
+              "vite.config.ts"
+            ]
+          },
+          {
+            "name": "ts-client",
+            "path": "packages/ts-client",
+            "depth": 3,
+            "subdirectories": [
+              {
+                "name": "src",
+                "path": "packages/ts-client/src",
+                "depth": 3,
+                "subdirectories": [],
+                "file_count": 1,
+                "key_files": [
+                  "index.ts"
+                ]
+              }
+            ],
+            "file_count": 1,
+            "key_files": []
+          }
+        ],
+        "file_count": 0,
+        "key_files": []
+      },
+      {
+        "name": "scripts",
+        "path": "scripts",
+        "depth": 1,
+        "subdirectories": [],
+        "file_count": 0,
+        "key_files": []
+      }
+    ],
+    "root_files": [
+      {
+        "name": ".gitignore",
+        "size": 670,
+        "type": "other"
+      },
+      {
+        "name": "README.md",
+        "size": 5038,
+        "type": "markdown"
+      },
+      {
+        "name": "app_spec.txt",
+        "size": 34834,
+        "type": "text"
+      },
+      {
+        "name": "claude-progress.txt",
+        "size": 7460,
+        "type": "text"
+      },
+      {
+        "name": "feature_list.json",
+        "size": 83795,
+        "type": "config"
+      },
+      {
+        "name": "init.sh",
+        "size": 10372,
+        "type": "shell"
+      },
+      {
+        "name": "package.json",
+        "size": 933,
+        "type": "config"
+      },
+      {
+        "name": "pnpm-workspace.yaml",
+        "size": 40,
+        "type": "config"
+      },
+      {
+        "name": "token-consumption-report.json",
+        "size": 1370,
+        "type": "config"
+      },
+      {
+        "name": "tsconfig.json",
+        "size": 688,
+        "type": "config"
+      },
+      {
+        "name": "turbo.json",
+        "size": 1208,
+        "type": "config"
+      }
+    ],
+    "depth": 3
+  },
+  "components": {
+    "components": [
+      {
+        "name": "ChatWidget",
+        "path": "packages/chat-ui/src/components/ChatWidget.tsx"
+      },
+      {
+        "name": "DateTimePicker",
+        "path": "packages/chat-ui/src/components/DateTimePicker.tsx"
+      },
+      {
+        "name": "IncentiveOffer",
+        "path": "packages/chat-ui/src/components/IncentiveOffer.tsx"
+      },
+      {
+        "name": "AgentIndicator",
+        "path": "packages/chat-ui/src/components/AgentIndicator.tsx"
+      },
+      {
+        "name": "ConfirmationCard",
+        "path": "packages/chat-ui/src/components/ConfirmationCard.tsx"
+      },
+      {
+        "name": "SlotList",
+        "path": "packages/chat-ui/src/components/SlotList.tsx"
+      },
+      {
+        "name": "ChatWindow",
+        "path": "packages/chat-ui/src/components/ChatWindow.tsx"
+      },
+      {
+        "name": "MessageBubble",
+        "path": "packages/chat-ui/src/components/MessageBubble.tsx"
+      },
+      {
+        "name": "PainScaleSelector",
+        "path": "packages/chat-ui/src/components/PainScaleSelector.tsx"
+      }
+    ],
+    "services": [],
+    "utilities": [],
+    "routes": [],
+    "models": [
+      {
+        "name": "patient",
+        "path": "apps/api/src/models/patient.py"
+      },
+      {
+        "name": "feedback",
+        "path": "apps/api/src/models/feedback.py"
+      },
+      {
+        "name": "dentist",
+        "path": "apps/api/src/models/dentist.py"
+      },
+      {
+        "name": "appointment",
+        "path": "apps/api/src/models/appointment.py"
+      },
+      {
+        "name": "session",
+        "path": "apps/api/src/models/session.py"
+      },
+      {
+        "name": "__init__",
+        "path": "apps/api/src/models/__init__.py"
+      },
+      {
+        "name": "clinic",
+        "path": "apps/api/src/models/clinic.py"
+      },
+      {
+        "name": "procedure",
+        "path": "apps/api/src/models/procedure.py"
+      },
+      {
+        "name": "move_offer",
+        "path": "apps/api/src/models/move_offer.py"
+      }
+    ],
+    "hooks": [
+      {
+        "name": "useConnection",
+        "path": "packages/chat-ui/src/hooks/useConnection.ts"
+      }
+    ]
+  },
+  "file_stats": {
+    "typescript": {
+      "count": 15,
+      "total_size": 45349
+    },
+    "javascript": {
+      "count": 2,
+      "total_size": 1900
+    },
+    "python": {
+      "count": 36,
+      "total_size": 67244
+    },
+    "css": {
+      "count": 1,
+      "total_size": 1392
+    },
+    "config": {
+      "count": 13,
+      "total_size": 95481
+    }
+  },
+  "recent_changes": {
+    "available": true,
+    "recent_commits": [
+      {
+        "hash": "f4c3694",
+        "message": "Add 3 more test cases to reach 200 features"
+      },
+      {
+        "hash": "d6c1a73",
+        "message": "Add session 1 progress report"
+      },
+      {
+        "hash": "ad788f2",
+        "message": "Initial setup: feature_list.json, init.sh, and project structure"
+      }
+    ],
+    "files_changed_recently": []
+  },
+  "dependencies": {
+    "npm": [
+      "typescript"
+    ],
+    "python": []
+  },
+  "estimated_tokens": 2061
+}

@@ -5,8 +5,8 @@ import uuid
 from datetime import datetime
 from typing import TYPE_CHECKING, Any
 
-from sqlalchemy import DateTime, Enum, ForeignKey, String, func
-from sqlalchemy.dialects.postgresql import JSONB, UUID
+from sqlalchemy import DateTime, Enum, ForeignKey, String, JSON, func
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.core.database import Base
@@ -49,7 +49,7 @@ class AgentSession(Base):
         index=True,
     )
     state_snapshot: Mapped[dict[str, Any]] = mapped_column(
-        JSONB,
+        JSON,
         default=dict,
         comment="LangGraph checkpoint state",
     )
@@ -59,7 +59,7 @@ class AgentSession(Base):
         comment="Active agent: Receptionist, IntakeSpecialist, ResourceOptimiser",
     )
     messages: Mapped[list[dict[str, Any]]] = mapped_column(
-        JSONB,
+        JSON,
         default=list,
         comment="Conversation history",
     )

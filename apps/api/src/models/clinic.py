@@ -4,8 +4,8 @@ import uuid
 from datetime import datetime
 from typing import TYPE_CHECKING, Any
 
-from sqlalchemy import DateTime, String, func
-from sqlalchemy.dialects.postgresql import JSONB, UUID
+from sqlalchemy import DateTime, String, JSON, func
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.core.database import Base
@@ -33,7 +33,7 @@ class Clinic(Base):
         comment="IANA timezone string",
     )
     settings: Mapped[dict[str, Any]] = mapped_column(
-        JSONB,
+        JSON,
         default=dict,
         comment="Clinic settings: operating_hours, slot_duration, etc.",
     )

@@ -4,8 +4,8 @@ import uuid
 from datetime import datetime
 from typing import TYPE_CHECKING, Any
 
-from sqlalchemy import Boolean, DateTime, ForeignKey, String, func
-from sqlalchemy.dialects.postgresql import JSONB, UUID
+from sqlalchemy import Boolean, DateTime, ForeignKey, String, JSON, func
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.core.database import Base
@@ -33,12 +33,12 @@ class Dentist(Base):
     )
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     specializations: Mapped[list[str]] = mapped_column(
-        JSONB,
+        JSON,
         default=list,
         comment="List of specializations (e.g., implants, orthodontics)",
     )
     schedule: Mapped[dict[str, Any]] = mapped_column(
-        JSONB,
+        JSON,
         default=dict,
         comment="Weekly availability schedule",
     )
