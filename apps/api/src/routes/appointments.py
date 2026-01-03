@@ -175,8 +175,8 @@ async def get_available_slots(
                     )
                 )
 
-        # Move to next time slot (30 min increments)
-        current_time += timedelta(minutes=30)
+        # Move to next time slot (based on procedure duration)
+        current_time += timedelta(minutes=procedure_duration)
 
     return AvailableSlotsResponse(slots=slots)
 
@@ -205,12 +205,28 @@ async def create_appointment(
     # Validate inputs
     try:
         patient_uuid = PyUUID(request.patient_id)
-        clinic_uuid = PyUUID(request.session_id)  # Assuming session_id contains clinic info or we need to get it
+        session_uuid = PyUUID(request.session_id)
     except ValueError:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid UUID format",
         )
+
+    # Get session to find clinic_id
+    from src.models import AgentSession
+
+    session_result = await db.execute(
+        select(AgentSession).where(AgentSession.session_id == session_uuid)
+    )
+    session = session_result.scalar_one_or_none()
+
+    if not session:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Session {request.session_id} not found",
+        )
+
+    clinic_uuid = session.clinic_id
 
     # Get patient
     patient_result = await db.execute(

@@ -197,6 +197,19 @@ async def test_create_appointment_success(client: AsyncClient, async_session: As
         priority_weight=0.3,
     )
     async_session.add(procedure)
+
+    # Create a session for this clinic
+    from src.models import AgentSession, SessionStatus
+    session = AgentSession(
+        id=uuid4(),
+        patient_id=patient.id,
+        clinic_id=clinic.id,
+        current_node="Receptionist",
+        messages=[],
+        status=SessionStatus.ACTIVE,
+    )
+    async_session.add(session)
+
     await async_session.commit()
 
     # Create a slot_id manually
@@ -206,7 +219,7 @@ async def test_create_appointment_success(client: AsyncClient, async_session: As
     response = await client.post(
         "/appointments",
         json={
-            "session_id": str(clinic.id),  # Using clinic_id for now
+            "session_id": str(session.id),  # Use actual session ID
             "patient_id": str(patient.id),
             "slot_id": slot_id,
             "procedure_code": "D1110",
