@@ -475,3 +475,61 @@ async def test_intake_specialist_emergency_breathing_difficulty(client: AsyncCli
 
     # Verify emergency recognition
     assert "emergency" in text_content or "immediate" in text_content or "urgent" in text_content
+
+
+@pytest.mark.asyncio
+async def test_stream_chat_sends_ui_component_for_pain(client: AsyncClient, test_clinic):
+    """Test that SSE stream sends PainScaleSelector UI component for pain messages."""
+    # Create session
+    create_response = await client.post(
+        "/session",
+        json={"clinic_api_key": test_clinic.api_key},
+    )
+    session_id = create_response.json()["session_id"]
+
+    # Send pain message
+    await client.post(
+        "/chat/message",
+        json={"session_id": session_id, "text": "I have severe toothache"},
+    )
+
+    # Stream and check for UI component
+    async with client.stream("GET", f"/chat/stream/{session_id}") as response:
+        combined = ""
+        async for chunk in response.aiter_text():
+            combined += chunk
+            if "complete" in chunk:
+                break
+
+    # Verify UI component event is present
+    assert "ui_component" in combined
+    assert "PainScaleSelector" in combined
+
+
+@pytest.mark.asyncio
+async def test_stream_chat_sends_ui_component_for_booking(client: AsyncClient, test_clinic):
+    """Test that SSE stream sends DateTimePicker UI component for booking messages."""
+    # Create session
+    create_response = await client.post(
+        "/session",
+        json={"clinic_api_key": test_clinic.api_key},
+    )
+    session_id = create_response.json()["session_id"]
+
+    # Send booking message
+    await client.post(
+        "/chat/message",
+        json={"session_id": session_id, "text": "I want to book an appointment"},
+    )
+
+    # Stream and check for UI component
+    async with client.stream("GET", f"/chat/stream/{session_id}") as response:
+        combined = ""
+        async for chunk in response.aiter_text():
+            combined += chunk
+            if "complete" in chunk:
+                break
+
+    # Verify UI component event is present
+    assert "ui_component" in combined
+    assert "DateTimePicker" in combined

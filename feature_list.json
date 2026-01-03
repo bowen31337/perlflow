@@ -372,7 +372,11 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "qa_retry_count": 0,
-    "dev_failure_count": 0
+    "dev_failure_count": 1,
+    "last_dev_failure_at": "2026-01-03T15:36:54.727356Z",
+    "dev_failure_reasons": [
+      "Worker session timed out"
+    ]
   },
   {
     "category": "functional",
