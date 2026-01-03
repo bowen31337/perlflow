@@ -1174,3 +1174,168 @@ READY FOR:
 - Production deployment preparation
 
 ================================================================================
+
+================================================================================
+SESSION 12 - PLAYWRIGHT E2E TESTS AND FRONTEND SETUP
+================================================================================
+Date: Session 12 (Coding Agent)
+Status: FRONTEND TESTING INFRASTRUCTURE CREATED - 113 TOTAL TESTS
+
+================================================================================
+COMPLETED TASKS
+================================================================================
+
+1. CREATED PLAYWRIGHT E2E TEST INFRASTRUCTURE
+
+   a. Playwright Configuration
+      - Created playwright.config.ts in packages/chat-ui
+      - Configured for Chrome, Firefox, and WebKit browsers
+      - Set up webServer to auto-start demo-web app
+      - Configured trace collection and screenshots
+
+   b. Demo Web Application
+      - Created apps/demo-web/src/app/page.tsx
+      - Created apps/demo-web/src/app/layout.tsx
+      - Integrated PearlFlowProvider with chat widget
+      - Configured to connect to API on port 8001
+
+   c. E2E Test Suite
+      - Created tests/e2e/chat-widget.spec.ts
+      - Tests for basic widget functionality
+      - Tests for message flow and agent hand-offs
+      - Tests for UI components and accessibility
+      - Tests for error handling
+
+2. CREATED FRONTEND UNIT TESTS
+
+   a. Vitest Configuration
+      - Updated vite.config.ts with test configuration
+      - Added jsdom environment
+      - Configured test file patterns
+
+   b. Test Setup File
+      - Created tests/setup.ts for React Testing Library
+      - Configured cleanup after each test
+
+   c. Component Tests
+      - Created tests/unit/MessageBubble.test.tsx
+      - 4 unit tests for MessageBubble component
+      - Mocked usePearlFlow hook for isolation
+
+3. CREATED FRONTEND DEMO APP
+
+   a. Next.js Setup
+      - Page component with chat widget integration
+      - Layout component with proper HTML structure
+      - Configured to use @pearlflow/chat-ui package
+
+   b. Integration
+      - Provider configured with test API key
+      - Theme customization (primary color)
+      - Widget positioned bottom-right
+
+================================================================================
+TEST RESULTS - CURRENT STATE
+================================================================================
+
+BACKEND TESTS:
+  ✅ Session API:           8/8 passing  (100%)
+  ✅ Chat API:             14/14 passing  (100%)
+  ✅ Patients API:         13/13 passing  (100%)
+  ✅ Appointments API:     11/11 passing  (100%)
+  ✅ Heuristics API:        5/5 passing   (100%)
+  ✅ Tools:                14/14 passing  (100%)
+  ✅ Admin API:            11/11 passing  (100%)
+  ✅ Move Offer Tests:      5/5 passing  (100%)
+  ✅ Compliance API:       17/17 passing  (100%)
+  ✅ Session Persistence:   6/6 passing  (100%)
+  ✅ Additional Session:    6/6 passing  (100%)
+  TOTAL: 109/109 backend tests passing (100%)
+
+FRONTEND TESTS:
+  ✅ MessageBubble Unit:    4/4 passing  (100%)
+  ✅ E2E Tests:            Created (10 tests)
+  TOTAL: 4/4 frontend unit tests passing
+
+OVERALL: 113/113 tests passing (100%)
+
+================================================================================
+FILES CREATED/MODIFIED (Session 12)
+================================================================================
+
+NEW FILES:
+  - packages/chat-ui/playwright.config.ts
+  - packages/chat-ui/tests/e2e/chat-widget.spec.ts
+  - packages/chat-ui/tests/unit/MessageBubble.test.tsx
+  - packages/chat-ui/tests/setup.ts
+  - apps/demo-web/src/app/page.tsx
+  - apps/demo-web/src/app/layout.tsx
+
+MODIFIED FILES:
+  - packages/chat-ui/vite.config.ts
+    * Added vitest configuration for unit tests
+
+  - packages/chat-ui/package.json
+    * (Already had test:e2e script)
+
+================================================================================
+PROGRESS UPDATE
+================================================================================
+
+Previous: 71/200 features (35.5%)
+Current:  71/200 features (35.5%)
+Increase: +0 features (infrastructure setup)
+
+Note: The 10 new E2E tests cover multiple features but are not yet
+      marked in feature_list.json. They will be marked as passing
+      once the full E2E flow is verified.
+
+================================================================================
+KEY ACHIEVEMENTS
+================================================================================
+
+✅ Created complete Playwright E2E test infrastructure
+✅ Created frontend unit test infrastructure
+✅ Created demo web application for testing
+✅ 109 backend tests still passing (100%)
+✅ 4 frontend unit tests passing (100%)
+✅ E2E tests ready to run (require API server + demo app)
+
+================================================================================
+NEXT PRIORITIES
+================================================================================
+
+1. RUN E2E TESTS
+   - Start API server on port 8001
+   - Start demo-web app on port 3000
+   - Run Playwright tests
+   - Verify all E2E scenarios pass
+
+2. UPDATE FEATURE LIST
+   - Mark E2E-tested features as passing
+   - Update progress percentage
+
+3. FRONTEND COMPONENT FEATURES
+   - Implement PainScaleSelector tests
+   - Implement DateTimePicker tests
+   - Implement SlotList tests
+   - Implement ConfirmationCard tests
+   - Implement IncentiveOffer tests
+
+4. AGENT HAND-OFF INDICATORS
+   - Test visual indicators for agent switching
+   - Verify Receptionist → IntakeSpecialist transition
+   - Verify IntakeSpecialist → ResourceOptimiser transition
+
+================================================================================
+NEXT SESSION ACTION ITEMS
+================================================================================
+
+1. Start API server: cd apps/api && uv run uvicorn src.main:app --port 8001
+2. Start demo-web: cd apps/demo-web && pnpm dev
+3. Run E2E tests: cd packages/chat-ui && pnpm test:e2e
+4. Verify all 10 E2E tests pass
+5. Update feature_list.json with passing status
+6. Commit all changes
+
+================================================================================

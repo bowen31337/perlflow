@@ -533,3 +533,70 @@ async def test_stream_chat_sends_ui_component_for_booking(client: AsyncClient, t
     # Verify UI component event is present
     assert "ui_component" in combined
     assert "DateTimePicker" in combined
+
+
+@pytest.mark.asyncio
+async def test_stream_chat_sends_previous_agent_on_handoff(client: AsyncClient, test_clinic):
+    """Test that SSE stream includes previous_agent when agent hand-off occurs."""
+    # Create session
+    create_response = await client.post(
+        "/session",
+        json={"clinic_api_key": test_clinic.api_key},
+    )
+    session_id = create_response.json()["session_id"]
+
+    # Send pain message to trigger hand-off from Receptionist to IntakeSpecialist
+    await client.post(
+        "/chat/message",
+        json={"session_id": session_id, "text": "I have severe toothache"},
+    )
+
+    # Stream and check for previous_agent
+    async with client.stream("GET", f"/chat/stream/{session_id}") as response:
+        combined = ""
+        async for chunk in response.aiter_text():
+            combined += chunk
+            if "complete" in chunk:
+                break
+
+    # Verify agent_state event includes previous_agent
+    assert "agent_state" in combined
+    assert "previous_agent" in combined
+    assert "Receptionist" in combined  # Previous agent
+    assert "IntakeSpecialist" in combined  # New agent
+
+
+@pytest.mark.asyncio
+async def test_stream_chat_no_previous_agent_on_same_agent(client: AsyncClient, test_clinic):
+    """Test that SSE stream does NOT include previous_agent when agent stays the same."""
+    # Create session
+    create_response = await client.post(
+        "/session",
+        json={"clinic_api_key": test_clinic.api_key},
+    )
+    session_id = create_response.json()["session_id"]
+
+    # Send greeting message (stays with Receptionist)
+    await client.post(
+        "/chat/message",
+        json={"session_id": session_id, "text": "Hello"},
+    )
+
+    # Stream response
+    async with client.stream("GET", f"/chat/stream/{session_id}") as response:
+        combined = ""
+        async for chunk in response.aiter_text():
+            combined += chunk
+            if "complete" in chunk:
+                break
+
+    # Verify agent_state event does NOT include previous_agent (no hand-off)
+    assert "agent_state" in combined
+    # Check that previous_agent is NOT in the agent_state event
+    # Extract agent_state data
+    import re
+    agent_state_match = re.search(r'agent_state\\ndata: ({[^}]+})', combined)
+    if agent_state_match:
+        import json
+        data = json.loads(agent_state_match.group(1))
+        assert "previous_agent" not in data

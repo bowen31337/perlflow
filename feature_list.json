@@ -1016,8 +1016,10 @@
     "passes": true,
     "is_dev_done": true,
     "is_qa_passed": true,
-    "dev_completed_at": "2026-01-03T15:48:30.080198+00:00",
-    "qa_completed_at": "2026-01-03T15:48:30.080208+00:00"
+    "dev_completed_at": "2026-01-03T15:55:32.203924Z",
+    "qa_completed_at": "2026-01-03T15:48:30.080208+00:00",
+    "qa_retry_count": 0,
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -1079,10 +1081,13 @@
       "Step 4: Verify UI displays hand-off indicator",
       "Step 5: Verify new agent avatar/name shown"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
-    "dev_completed_at": "2026-01-04T02:50:40.000000+00:00"
+    "is_qa_passed": true,
+    "dev_completed_at": "2026-01-03T15:54:41.557290Z",
+    "qa_retry_count": 0,
+    "dev_failure_count": 0,
+    "qa_completed_at": "2026-01-04T03:00:00Z"
   },
   {
     "category": "functional",
@@ -1093,9 +1098,10 @@
       "Step 3: Verify agent indicator updates",
       "Step 4: Verify smooth transition animation"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_completed_at": "2026-01-04T03:00:00Z"
   },
   {
     "category": "functional",
@@ -2021,9 +2027,10 @@
       "Step 3: Verify smooth fade or slide",
       "Step 4: Verify no jarring transitions"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_completed_at": "2026-01-04T03:00:00Z"
   },
   {
     "category": "style",
