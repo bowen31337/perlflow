@@ -150,7 +150,7 @@ test.describe('Full E2E - Move Negotiation for High-Value Procedure', () => {
 });
 
 test.describe('Full E2E - Session Recovery After Disconnect', () => {
-  test('Session state recovery after browser close', async ({ page, context }) => {
+  test('Session state recovery after browser close', async ({ page, browser }) => {
     // Start conversation
     await page.goto('/');
     await page.getByRole('button', { name: 'Open chat' }).click();
@@ -170,7 +170,7 @@ test.describe('Full E2E - Session Recovery After Disconnect', () => {
     await expect(messagesArea.getByText(/swelling/i).first()).toBeVisible({ timeout: 10000 });
 
     // Simulate reconnection by opening new context
-    const newContext = await context.browser().newContext();
+    const newContext = await browser.newContext();
     const newPage = await newContext.newPage();
 
     // Reopen with session
@@ -209,7 +209,7 @@ test.describe('Full E2E - Concurrent Sessions for Same Clinic', () => {
     await expect(messagesArea1.getByText(/pain level/i)).toBeVisible({ timeout: 15000 });
 
     // Open second browser tab
-    const newContext = await context.browser().newContext();
+    const newContext = await context.newContext();
     const page2 = await newContext.newPage();
     await page2.goto('/');
     await page2.getByRole('button', { name: 'Open chat' }).click();

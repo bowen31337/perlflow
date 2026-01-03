@@ -86,6 +86,7 @@ export interface Session {
 export interface Theme {
   primary?: string;
   secondary?: string;
+  accent?: string;
   background?: string;
   text?: string;
   fontFamily?: string;

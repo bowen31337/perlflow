@@ -1,0 +1,15 @@
+{
+  "content_hash": "debc6b3e6d90588cffec934591ad44946a59a9ec2535580c4577bd5b8777e756",
+  "cached_at": "2026-01-03T16:51:11.435157Z",
+  "result": {
+    "passed": true,
+    "duration_seconds": 305.05,
+    "tool": "biome",
+    "tool_version": "biome=unknown",
+    "errors": [],
+    "warnings": [],
+    "from_cache": false,
+    "cache_hit": false,
+    "files_checked": 129
+  }
+}

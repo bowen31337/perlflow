@@ -379,7 +379,7 @@ test.describe('PearlFlow Chat Widget - Full E2E - New Patient Triage Flow', () =
     await expect(messagesArea.getByText(/pain/i).first()).toBeVisible();
   });
 
-  test('Concurrent sessions for same clinic', async ({ context }) => {
+  test('Concurrent sessions for same clinic', async ({ page, context }) => {
     // Create second browser context
     const page2 = await context.newPage();
 

@@ -16,8 +16,8 @@ export default function HomePage() {
       apiUrl={process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8001'}
       theme={{
         primary: '#00D4FF',
-        accent: '#10B981',
-        font: 'Inter, system-ui, sans-serif',
+        secondary: '#10B981',
+        fontFamily: 'Inter, system-ui, sans-serif',
       }}
     >
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50">

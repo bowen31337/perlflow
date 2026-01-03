@@ -1,0 +1,183 @@
+{
+  "$schema": "qa-report-schema-v1.json",
+  "feature_id": 189,
+  "feature_description": "No-Show Rate - Analytics calculated correctly",
+  "timestamp": "2026-01-03T16:51:11.443685Z",
+  "overall_status": "FAILED",
+  "gates": {
+    "typecheck": {
+      "passed": false,
+      "duration_seconds": 2.24,
+      "tool": "tsc",
+      "tool_version": "tsc=\u001b[41m                                                                               \u001b[0m\n\u001b[41m\u001b[37m                This is not the tsc command you are looking for                \u001b[0m\n\u001b[41m                                                                               \u001b[0m\n\nTo get access to the TypeScript compiler, \u001b[34mtsc\u001b[0m, from the command line either:\n\n- Use \u001b[1mnpm install typescript\u001b[0m to first add TypeScript to your project \u001b[1mbefore\u001b[0m using npx\n- Use \u001b[1myarn\u001b[0m to avoid accidentally running code from un-installed packages",
+      "errors": [
+        {
+          "file": "apps/demo-web/src/app/page.tsx",
+          "line": 19,
+          "column": 9,
+          "message": "Object literal may only specify known properties, and 'accent' does not exist in type 'PearlFlowTheme'.",
+          "rule": "TS2353",
+          "severity": "error"
+        },
+        {
+          "file": "packages/chat-ui/tests/e2e/chat-widget.spec.ts",
+          "line": 387,
+          "column": 11,
+          "message": "Cannot find name 'page'. Did you mean 'page2'?",
+          "rule": "TS2552",
+          "severity": "error"
+        },
+        {
+          "file": "packages/chat-ui/tests/e2e/chat-widget.spec.ts",
+          "line": 391,
+          "column": 11,
+          "message": "Cannot find name 'page'. Did you mean 'page2'?",
+          "rule": "TS2552",
+          "severity": "error"
+        },
+        {
+          "file": "packages/chat-ui/tests/e2e/chat-widget.spec.ts",
+          "line": 395,
+          "column": 18,
+          "message": "Cannot find name 'page'. Did you mean 'page2'?",
+          "rule": "TS2552",
+          "severity": "error"
+        },
+        {
+          "file": "packages/chat-ui/tests/e2e/chat-widget.spec.ts",
+          "line": 399,
+          "column": 20,
+          "message": "Cannot find name 'page'. Did you mean 'page2'?",
+          "rule": "TS2552",
+          "severity": "error"
+        },
+        {
+          "file": "packages/chat-ui/tests/e2e/chat-widget.spec.ts",
+          "line": 405,
+          "column": 11,
+          "message": "Cannot find name 'page'. Did you mean 'page2'?",
+          "rule": "TS2552",
+          "severity": "error"
+        },
+        {
+          "file": "packages/chat-ui/tests/e2e/chat-widget.spec.ts",
+          "line": 409,
+          "column": 27,
+          "message": "Cannot find name 'page'. Did you mean 'page2'?",
+          "rule": "TS2552",
+          "severity": "error"
+        },
+        {
+          "file": "packages/chat-ui/tests/e2e/comprehensive-flows.spec.ts",
+          "line": 173,
+          "column": 30,
+          "message": "Object is possibly 'null'.",
+          "rule": "TS2531",
+          "severity": "error"
+        },
+        {
+          "file": "packages/chat-ui/tests/e2e/comprehensive-flows.spec.ts",
+          "line": 212,
+          "column": 30,
+          "message": "Object is possibly 'null'.",
+          "rule": "TS2531",
+          "severity": "error"
+        }
+      ],
+      "from_cache": false,
+      "cache_hit": false,
+      "files_checked": 111
+    },
+    "lint": {
+      "passed": true,
+      "duration_seconds": 305.05,
+      "tool": "biome",
+      "tool_version": "biome=unknown",
+      "errors": [],
+      "warnings": [],
+      "from_cache": false,
+      "cache_hit": false,
+      "files_checked": 129
+    },
+    "unit_tests": {
+      "passed": false,
+      "duration_seconds": 0,
+      "errors": [
+        {
+          "message": "Skipped: Static analysis failed"
+        }
+      ],
+      "skipped": true
+    },
+    "browser_automation": {
+      "passed": false,
+      "duration_seconds": 0,
+      "errors": [
+        {
+          "message": "Skipped: Static analysis failed"
+        }
+      ],
+      "skipped": true
+    },
+    "story_validation": {
+      "passed": false,
+      "duration_seconds": 0,
+      "errors": [
+        {
+          "message": "Skipped: Static analysis failed"
+        }
+      ],
+      "skipped": true
+    }
+  },
+  "summary": {
+    "gates_passed": 1,
+    "gates_failed": 4,
+    "gates_total": 5,
+    "total_duration_seconds": 307.29,
+    "total_errors": 12,
+    "total_warnings": 0,
+    "errors_by_gate": {
+      "typecheck": 9,
+      "unit_tests": 1,
+      "browser_automation": 1,
+      "story_validation": 1
+    },
+    "files_with_errors": 3,
+    "tests_run": 0,
+    "tests_passed": 0,
+    "tests_failed": 0
+  },
+  "priority_fixes": [
+    {
+      "priority": 3,
+      "gate": "unit_tests",
+      "message": "Fix failing test: Skipped: Static analysis failed",
+      "file": "",
+      "line": 0,
+      "column": 0,
+      "rule": ""
+    },
+    {
+      "priority": 4,
+      "gate": "browser_automation",
+      "message": "Fix browser test failure: Skipped: Static analysis failed",
+      "file": "",
+      "line": 0,
+      "column": 0,
+      "rule": ""
+    },
+    {
+      "priority": 5,
+      "gate": "story_validation",
+      "message": "Fix story validation failure: Skipped: Static analysis failed",
+      "file": "",
+      "line": 0,
+      "column": 0,
+      "rule": ""
+    }
+  ],
+  "qa_agent_version": "2.1.0",
+  "batch_mode": true,
+  "batch_failure_reason": "Static analysis failed"
+}
