@@ -30,7 +30,7 @@ PROHIBITED_PATTERNS = [
     # Guaranteed outcomes
     (r'\b(guaranteed|guarantee|promise|warranty|assured)\b', 'GUARANTEE'),
     (r'\b(painless|risk-free|no pain|no risk)\b', 'GUARANTEE'),
-    (r'\b(100%|always|never fail|perfect)\b', 'GUARANTEE'),
+    (r'100%|always|never fail|perfect', 'GUARANTEE'),
 
     # Misleading expertise claims
     (r'\b(expert|specialist|leading expert) (in|on) (everything|all|any)\b', 'MISLEADING'),
