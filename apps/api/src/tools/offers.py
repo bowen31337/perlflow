@@ -143,7 +143,6 @@ async def send_move_offer(
         move_score=75,  # Placeholder - would come from heuristic_move_check
         status=MoveOfferStatus.PENDING,
         offered_at=datetime.now(),
-        expiry_at=datetime.now() + timedelta(hours=24),
     )
 
     db.add(move_offer)
@@ -155,12 +154,15 @@ async def send_move_offer(
     # For now, assume it succeeds
     notification_sent = True
 
+    # Calculate expiry (24 hours from now)
+    expiry = datetime.now() + timedelta(hours=24)
+
     return {
         "offer_id": str(move_offer.id),
         "status": move_offer.status.value,
         "original_appointment_id": str(move_offer.original_appointment_id),
         "proposed_new_slot": new_slot,
         "incentive": move_offer.incentive_value,
-        "expiry": move_offer.expiry_at.isoformat(),
+        "expiry": expiry.isoformat(),
         "notification_sent": notification_sent,
     }

@@ -1,10 +1,17 @@
 """ResourceOptimiser Agent - Scheduling optimization with PMS tools."""
 
-from typing import Any
+from typing import Any, List
 
-# Note: deepagents is a custom library - this is the expected pattern
-# from deepagents import create_deep_agent
-# from deepagents.tools import Tool
+from deepagents import create_deep_agent, Tool
+from deepagents.tools import Tool as AgentTool
+from langchain_openai import ChatOpenAI
+from langchain_core.language_models import BaseChatModel
+
+# Import PMS tools
+from src.tools.availability import check_availability
+from src.tools.heuristics import heuristic_move_check
+from src.tools.booking import book_appointment
+from src.tools.offers import send_move_offer
 
 RESOURCE_OPTIMISER_INSTRUCTIONS = """
 You are the ResourceOptimiser, an intelligent Scheduling Agent.
@@ -42,43 +49,52 @@ Always be transparent about scheduling and never pressure patients.
 """
 
 
-def create_scheduler_agent() -> Any:
+def create_scheduler_agent(llm: BaseChatModel | None = None) -> Any:
     """
     Create the ResourceOptimiser agent for appointment scheduling.
 
     This agent has access to PMS integration tools for checking
     availability, calculating move scores, and booking appointments.
 
+    Args:
+        llm: Optional LLM override (defaults to OpenAI gpt-4o-mini)
+
     Returns:
         The configured resource optimiser agent
     """
-    # TODO: Import actual tool implementations
-    # from src.tools.availability import check_availability
-    # from src.tools.heuristics import heuristic_move_check
-    # from src.tools.booking import book_appointment
-    # from src.tools.offers import send_move_offer
+    # Create tool wrappers for the PMS tools
+    tools: List[AgentTool] = [
+        Tool.from_function(
+            check_availability,
+            name="check_availability",
+            description="Find open slots in the Practice Management System. "
+                       "Takes start and end datetime strings and returns available slots."
+        ),
+        Tool.from_function(
+            heuristic_move_check,
+            name="heuristic_move_check",
+            description="Calculate if moving an existing appointment is beneficial. "
+                       "Takes appointment_id and new_value, returns move_score and recommendation."
+        ),
+        Tool.from_function(
+            book_appointment,
+            name="book_appointment",
+            description="Book an appointment for a patient. "
+                       "Takes patient_id, slot_id, and procedure_code."
+        ),
+        Tool.from_function(
+            send_move_offer,
+            name="send_move_offer",
+            description="Send an incentive offer to a patient to reschedule. "
+                       "Takes original_appointment_id, new_slot, and incentive."
+        ),
+    ]
 
-    # TODO: Replace with actual deepagents implementation when available
-    # scheduler_agent = create_deep_agent(
-    #     name="ResourceOptimiser",
-    #     instructions=RESOURCE_OPTIMISER_INSTRUCTIONS,
-    #     tools=[
-    #         Tool.from_function(check_availability),
-    #         Tool.from_function(heuristic_move_check),
-    #         Tool.from_function(book_appointment),
-    #         Tool.from_function(send_move_offer),
-    #     ],
-    # )
-    # return scheduler_agent
-
-    # Placeholder return
-    return {
-        "name": "ResourceOptimiser",
-        "instructions": RESOURCE_OPTIMISER_INSTRUCTIONS,
-        "tools": [
-            "check_availability",
-            "heuristic_move_check",
-            "book_appointment",
-            "send_move_offer",
-        ],
-    }
+    # Create the agent with tools
+    scheduler_agent = create_deep_agent(
+        name="ResourceOptimiser",
+        instructions=RESOURCE_OPTIMISER_INSTRUCTIONS,
+        tools=tools,
+        llm=llm,
+    )
+    return scheduler_agent

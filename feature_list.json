@@ -333,10 +333,9 @@
       "Step 5: Verify accuracy is >= 80%"
     ],
     "passes": false,
-    "is_dev_done": true,
+    "is_dev_done": false,
     "is_qa_passed": false,
     "qa_retry_count": 0,
-    "dev_completed_at": "2026-01-03T14:22:12.597998Z",
     "dev_failure_count": 0
   },
   {
@@ -349,11 +348,10 @@
       "Step 4: Verify available slots are returned to user"
     ],
     "passes": false,
-    "is_dev_done": true,
+    "is_dev_done": false,
     "is_qa_passed": false,
     "qa_retry_count": 0,
-    "dev_failure_count": 0,
-    "dev_completed_at": "2026-01-03T14:42:30.465056Z"
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -366,10 +364,9 @@
       "Step 5: Verify move recommendations are generated"
     ],
     "passes": false,
-    "is_dev_done": true,
+    "is_dev_done": false,
     "is_qa_passed": false,
     "qa_retry_count": 0,
-    "dev_completed_at": "2026-01-03T14:23:02.953893Z",
     "dev_failure_count": 0
   },
   {
@@ -382,10 +379,9 @@
       "Step 4: Verify patient is offered the incentive"
     ],
     "passes": false,
-    "is_dev_done": true,
+    "is_dev_done": false,
     "is_qa_passed": false,
     "qa_retry_count": 0,
-    "dev_completed_at": "2026-01-03T14:06:04.118941Z",
     "dev_failure_count": 0
   },
   {
@@ -397,10 +393,9 @@
       "Step 3: Verify alternative options are suggested"
     ],
     "passes": false,
-    "is_dev_done": true,
+    "is_dev_done": false,
     "is_qa_passed": false,
     "qa_retry_count": 0,
-    "dev_completed_at": "2026-01-03T14:16:54.661085Z",
     "dev_failure_count": 0
   },
   {
@@ -413,10 +408,9 @@
       "Step 4: Verify move score calculation includes procedure value"
     ],
     "passes": false,
-    "is_dev_done": true,
+    "is_dev_done": false,
     "is_qa_passed": false,
     "qa_retry_count": 0,
-    "dev_completed_at": "2026-01-03T14:33:49.245549Z",
     "dev_failure_count": 0
   },
   {
@@ -429,10 +423,9 @@
       "Step 4: Verify incentive calculations account for procedure value"
     ],
     "passes": false,
-    "is_dev_done": true,
+    "is_dev_done": false,
     "is_qa_passed": false,
     "qa_retry_count": 0,
-    "dev_completed_at": "2026-01-03T14:25:16.107248Z",
     "dev_failure_count": 0
   },
   {
@@ -444,10 +437,9 @@
       "Step 3: Verify these are prioritized for move suggestions"
     ],
     "passes": false,
-    "is_dev_done": true,
+    "is_dev_done": false,
     "is_qa_passed": false,
     "qa_retry_count": 0,
-    "dev_completed_at": "2026-01-03T14:35:28.268354Z",
     "dev_failure_count": 0
   },
   {
@@ -460,10 +452,9 @@
       "Step 4: Verify high-LTV patients less likely to be moved"
     ],
     "passes": false,
-    "is_dev_done": true,
+    "is_dev_done": false,
     "is_qa_passed": false,
     "qa_retry_count": 0,
-    "dev_completed_at": "2026-01-03T14:31:50.413039Z",
     "dev_failure_count": 0
   },
   {
@@ -495,7 +486,13 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "dev_completed_at": "2026-01-03T14:47:24.417249+00:00",
-    "qa_completed_at": "2026-01-03T14:47:24.417250+00:00"
+    "qa_completed_at": "2026-01-03T14:47:24.417250+00:00",
+    "qa_retry_count": 0,
+    "dev_failure_count": 1,
+    "last_dev_failure_at": "2026-01-03T14:53:08.489282Z",
+    "dev_failure_reasons": [
+      "Worker session timed out"
+    ]
   },
   {
     "category": "functional",
@@ -524,12 +521,13 @@
       "Step 3: Verify response status is 409 Conflict",
       "Step 4: Verify error message indicates slot taken"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_completed_at": "2026-01-03T14:46:57.373029Z",
-    "dev_failure_count": 0
+    "dev_failure_count": 0,
+    "qa_completed_at": "2026-01-03T14:56:01.657572+00:00"
   },
   {
     "category": "functional",
@@ -544,7 +542,13 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "dev_completed_at": "2026-01-03T14:47:24.417257+00:00",
-    "qa_completed_at": "2026-01-03T14:47:24.417258+00:00"
+    "qa_completed_at": "2026-01-03T14:47:24.417258+00:00",
+    "qa_retry_count": 0,
+    "dev_failure_count": 1,
+    "last_dev_failure_at": "2026-01-03T14:59:03.420842Z",
+    "dev_failure_reasons": [
+      "Worker session timed out"
+    ]
   },
   {
     "category": "functional",
@@ -606,8 +610,10 @@
     "passes": true,
     "is_dev_done": true,
     "is_qa_passed": true,
-    "dev_completed_at": "2026-01-03T14:47:24.417195+00:00",
-    "qa_completed_at": "2026-01-03T14:47:24.417197+00:00"
+    "dev_completed_at": "2026-01-03T14:50:03.561831Z",
+    "qa_completed_at": "2026-01-03T14:47:24.417197+00:00",
+    "qa_retry_count": 0,
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -621,8 +627,10 @@
     "passes": true,
     "is_dev_done": true,
     "is_qa_passed": true,
-    "dev_completed_at": "2026-01-03T14:47:24.417202+00:00",
-    "qa_completed_at": "2026-01-03T14:47:24.417204+00:00"
+    "dev_completed_at": "2026-01-03T14:50:54.504483Z",
+    "qa_completed_at": "2026-01-03T14:47:24.417204+00:00",
+    "qa_retry_count": 0,
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -635,8 +643,10 @@
     "passes": true,
     "is_dev_done": true,
     "is_qa_passed": true,
-    "dev_completed_at": "2026-01-03T14:47:24.417207+00:00",
-    "qa_completed_at": "2026-01-03T14:47:24.417209+00:00"
+    "dev_completed_at": "2026-01-03T14:56:14.665587Z",
+    "qa_completed_at": "2026-01-03T14:47:24.417209+00:00",
+    "qa_retry_count": 0,
+    "dev_failure_count": 0
   },
   {
     "category": "functional",

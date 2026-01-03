@@ -90,9 +90,9 @@ async def book_appointment(
         }
 
     # Parse slot_id to extract dentist_id and start_time
-    # Format: "{dentist_id}-{start_time_iso}"
+    # Format: "{dentist_id}@{start_time_iso}" (using @ as separator)
     try:
-        dentist_id_str, start_time_str = slot_id.split("-", 1)
+        dentist_id_str, start_time_str = slot_id.split("@", 1)
         dentist_uuid = UUID(dentist_id_str)
         from datetime import datetime
         start_time = datetime.fromisoformat(start_time_str)

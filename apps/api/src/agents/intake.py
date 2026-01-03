@@ -2,9 +2,8 @@
 
 from typing import Any
 
-# Note: deepagents is a custom library - this is the expected pattern
-# from deepagents import create_deep_agent
-# from deepagents.tools import Tool
+from deepagents import create_deep_agent
+from langchain_core.language_models import BaseChatModel
 
 INTAKE_SPECIALIST_INSTRUCTIONS = """
 You are the IntakeSpecialist, a compassionate and professional Triage Nurse Agent.
@@ -42,27 +41,24 @@ Recommendation: [suggested action]
 """
 
 
-def create_intake_agent() -> Any:
+def create_intake_agent(llm: BaseChatModel | None = None) -> Any:
     """
     Create the IntakeSpecialist agent for patient triage.
 
     This is a conversational agent with no tools - it conducts
     a diagnostic dialogue to assess patient urgency.
 
+    Args:
+        llm: Optional LLM override (defaults to OpenAI gpt-4o-mini)
+
     Returns:
         The configured intake specialist agent
     """
-    # TODO: Replace with actual deepagents implementation when available
-    # intake_agent = create_deep_agent(
-    #     name="IntakeSpecialist",
-    #     instructions=INTAKE_SPECIALIST_INSTRUCTIONS,
-    #     tools=[],  # No tools - conversational only
-    # )
-    # return intake_agent
-
-    # Placeholder return
-    return {
-        "name": "IntakeSpecialist",
-        "instructions": INTAKE_SPECIALIST_INSTRUCTIONS,
-        "tools": [],
-    }
+    # Create the agent with no tools (conversational only)
+    intake_agent = create_deep_agent(
+        name="IntakeSpecialist",
+        instructions=INTAKE_SPECIALIST_INSTRUCTIONS,
+        tools=[],  # No tools - conversational only
+        llm=llm,
+    )
+    return intake_agent

@@ -1,11 +1,12 @@
 """Root Receptionist Agent - Main orchestrator with SubAgentMiddleware."""
 
-from typing import Any
+from typing import Any, List
 
-# Note: deepagents is a custom library - this is the expected pattern
-# from deepagents import create_deep_agent
-# from deepagents.middleware import SubAgentMiddleware
-# from langchain_core.messages import HumanMessage
+from deepagents import create_deep_agent
+from deepagents.middleware import SubAgentMiddleware
+from langchain_openai import ChatOpenAI
+from langchain_core.language_models import BaseChatModel
+from langchain_core.messages import HumanMessage
 
 from src.agents.intake import create_intake_agent
 from src.agents.scheduler import create_scheduler_agent
@@ -50,7 +51,7 @@ AHPRA Compliance:
 """
 
 
-def create_receptionist_agent() -> Any:
+def create_receptionist_agent(llm: BaseChatModel | None = None) -> Any:
     """
     Create the root Receptionist agent with SubAgentMiddleware.
 
@@ -59,67 +60,51 @@ def create_receptionist_agent() -> Any:
     - IntakeSpecialist: For pain/emergency triage
     - ResourceOptimiser: For appointment scheduling
 
+    Args:
+        llm: Optional LLM override (defaults to OpenAI gpt-4o-mini)
+
     Returns:
         The configured receptionist agent with middleware
     """
     # Create sub-agents
-    intake_agent = create_intake_agent()
-    scheduler_agent = create_scheduler_agent()
+    intake_agent = create_intake_agent(llm=llm)
+    scheduler_agent = create_scheduler_agent(llm=llm)
 
-    # TODO: Replace with actual deepagents implementation when available
-    # sub_agent_middleware = SubAgentMiddleware(
-    #     sub_agents=[intake_agent, scheduler_agent]
-    # )
+    # Create middleware to handle delegation
+    sub_agent_middleware = SubAgentMiddleware(
+        sub_agents=[
+            {"name": "IntakeSpecialist", "instructions": intake_agent.instructions},
+            {"name": "ResourceOptimiser", "instructions": scheduler_agent.instructions},
+        ]
+    )
 
-    # root_agent = create_deep_agent(
-    #     name="Receptionist",
-    #     instructions=RECEPTIONIST_INSTRUCTIONS,
-    #     middleware=[sub_agent_middleware],
-    # )
-    # return root_agent
-
-    # Placeholder return
-    return {
-        "name": "Receptionist",
-        "instructions": RECEPTIONIST_INSTRUCTIONS,
-        "sub_agents": [intake_agent, scheduler_agent],
-    }
+    # Create the root agent with middleware
+    root_agent = create_deep_agent(
+        name="Receptionist",
+        instructions=RECEPTIONIST_INSTRUCTIONS,
+        middleware=[sub_agent_middleware],
+        llm=llm,
+    )
+    return root_agent
 
 
-async def run_chat(user_input: str, session_id: str) -> dict[str, Any]:
+async def run_chat(user_input: str, session_id: str, llm: BaseChatModel | None = None) -> dict[str, Any]:
     """
     Execute a chat turn with the agent system.
 
     Args:
         user_input: The user's message text
         session_id: The session UUID for state persistence
+        llm: Optional LLM override
 
     Returns:
         The agent's response including messages and tool calls
     """
-    # TODO: Replace with actual deepagents implementation
-    # from langchain_core.messages import HumanMessage
+    from langchain_core.messages import HumanMessage
 
-    # root_agent = create_receptionist_agent()
-    # response = await root_agent.ainvoke(
-    #     {"messages": [HumanMessage(content=user_input)]},
-    #     config={"configurable": {"thread_id": session_id}}
-    # )
-    # return response
-
-    # Placeholder implementation
-    return {
-        "messages": [
-            {
-                "role": "assistant",
-                "content": (
-                    "Hello! Welcome to PearlFlow. I'm your virtual dental assistant. "
-                    "How can I help you today?"
-                ),
-            }
-        ],
-        "agent_state": {
-            "active_agent": "Receptionist",
-            "thinking": False,
-        },
-    }
+    root_agent = create_receptionist_agent(llm=llm)
+    response = await root_agent.ainvoke(
+        {"messages": [HumanMessage(content=user_input)]},
+        config={"configurable": {"thread_id": session_id}}
+    )
+    return response

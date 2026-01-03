@@ -54,10 +54,9 @@ class MoveOffer(Base):
         Enum(IncentiveType),
         nullable=False,
     )
-    incentive_value: Mapped[float] = mapped_column(
-        Float,
+    incentive_value: Mapped[str] = mapped_column(
         nullable=False,
-        comment="Discount percentage or value of gift",
+        comment="Human-readable incentive description (e.g., '10% discount', 'priority slot')",
     )
     move_score: Mapped[float] = mapped_column(
         Float,
