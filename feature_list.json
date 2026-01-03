@@ -181,7 +181,8 @@
     "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_failure_count": 0,
-    "dev_completed_at": "2026-01-03T13:59:38.809804Z"
+    "dev_completed_at": "2026-01-03T13:59:38.809804Z",
+    "is_stuck": false
   },
   {
     "category": "functional",
@@ -213,9 +214,9 @@
       "Step 5: Send pain level response",
       "Step 6: Verify agent acknowledges the pain level"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_completed_at": "2026-01-03T13:59:38.807711Z",
     "dev_failure_count": 0
@@ -360,8 +361,11 @@
       "Step 3: Verify alternative options are suggested"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-03T14:16:54.661085Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",

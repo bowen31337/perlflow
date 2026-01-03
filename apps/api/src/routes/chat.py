@@ -1,5 +1,6 @@
 """Chat API routes with SSE streaming."""
 
+import json
 import asyncio
 from typing import Annotated, AsyncGenerator
 from uuid import UUID
@@ -71,7 +72,6 @@ async def send_message(
         )
 
     # Store message in conversation history
-    # IMPORTANT: Create new list to ensure SQLAlchemy detects the change
     message_entry = {
         "role": "user",
         "content": request.text,
@@ -102,39 +102,156 @@ async def generate_sse_events(db: AsyncSession, session_id: UUID) -> AsyncGenera
         yield 'event: error\ndata: {"error": "Session not found"}\n\n'
         return
 
-    # Get the last user message for context
-    user_message = ""
-    if session.messages:
-        for msg in reversed(session.messages):
+    # Get conversation state
+    state = session.state_snapshot or {}
+    messages = session.messages or []
+
+    # Get the last user message
+    last_user_message = ""
+    if messages:
+        for msg in reversed(messages):
             if msg.get("role") == "user":
-                user_message = msg.get("content", "")
+                last_user_message = msg.get("content", "")
                 break
 
-    # Determine agent context based on user message
-    user_message_lower = user_message.lower()
-    if any(keyword in user_message_lower for keyword in ["pain", "ache", "hurt", "emergency", "toothache"]):
-        # Pain/emergency context - IntakeSpecialist
+    # Initialize state if needed
+    if "conversation_state" not in state:
+        state["conversation_state"] = "initial"
+
+    if "pain_level" not in state:
+        state["pain_level"] = None
+
+    if "red_flags" not in state:
+        state["red_flags"] = {}
+
+    if "priority_score" not in state:
+        state["priority_score"] = 0
+
+    # Determine response based on conversation state
+    active_agent = "Receptionist"
+    response_text = ""
+    ui_component = None
+
+    last_user_message_lower = last_user_message.lower()
+
+    # Check for pain/emergency keywords to trigger IntakeSpecialist
+    pain_keywords = ["pain", "ache", "hurt", "emergency", "toothache", "sore", "throbbing"]
+    booking_keywords = ["book", "appointment", "schedule", "booking", "see a dentist"]
+
+    is_pain_related = any(kw in last_user_message_lower for kw in pain_keywords)
+    is_booking_related = any(kw in last_user_message_lower for kw in booking_keywords)
+
+    # Conversation flow logic
+    if is_pain_related and state["conversation_state"] == "initial":
+        # First pain message - trigger IntakeSpecialist
         active_agent = "IntakeSpecialist"
+        state["conversation_state"] = "waiting_pain_level"
         response_text = "I understand you're experiencing pain. Let me help you with that. First, can you tell me your pain level on a scale of 1-10?"
-    elif any(keyword in user_message_lower for keyword in ["book", "appointment", "schedule", "booking"]):
-        # Booking context - ResourceOptimiser
+        ui_component = {
+            "type": "PainScaleSelector",
+            "props": {
+                "min": 1,
+                "max": 10,
+                "label": "Please rate your pain level"
+            }
+        }
+
+    elif state["conversation_state"] == "waiting_pain_level":
+        # Extract pain level from message
+        import re
+        pain_match = re.search(r'(\d+)', last_user_message)
+        if pain_match:
+            state["pain_level"] = int(pain_match.group(1))
+            state["priority_score"] = state["pain_level"] * 10  # Base score from pain
+            state["conversation_state"] = "waiting_swelling"
+            active_agent = "IntakeSpecialist"
+            response_text = f"I understand your pain level is {state['pain_level']}. Let me check for other symptoms. Do you have any swelling?"
+        else:
+            active_agent = "IntakeSpecialist"
+            response_text = "I need to know your pain level on a scale of 1-10 to help you better."
+
+    elif state["conversation_state"] == "waiting_swelling":
+        # Check for swelling
+        if "yes" in last_user_message_lower or "i have" in last_user_message_lower or "swelling" in last_user_message_lower:
+            state["red_flags"]["swelling"] = True
+            state["priority_score"] += 30
+            state["conversation_state"] = "waiting_fever"
+            active_agent = "IntakeSpecialist"
+            response_text = "Swelling can be a concern. Do you have a fever or feel warm?"
+        elif "no" in last_user_message_lower:
+            state["red_flags"]["swelling"] = False
+            state["conversation_state"] = "waiting_fever"
+            active_agent = "IntakeSpecialist"
+            response_text = "Okay, no swelling. Do you have a fever or feel warm?"
+        else:
+            active_agent = "IntakeSpecialist"
+            response_text = "Please let me know if you have swelling (yes/no)."
+
+    elif state["conversation_state"] == "waiting_fever":
+        # Check for fever
+        if "yes" in last_user_message_lower or "fever" in last_user_message_lower or "hot" in last_user_message_lower:
+            state["red_flags"]["fever"] = True
+            state["priority_score"] += 40
+            state["conversation_state"] = "triage_complete"
+            active_agent = "IntakeSpecialist"
+            response_text = f"Fever with dental pain is concerning. Your priority score is {state['priority_score']}. I recommend urgent care."
+        elif "no" in last_user_message_lower:
+            state["red_flags"]["fever"] = False
+            state["conversation_state"] = "triage_complete"
+            active_agent = "IntakeSpecialist"
+            response_text = f"Thank you for the information. Your priority score is {state['priority_score']}. We'll help you get an appointment soon."
+        else:
+            active_agent = "IntakeSpecialist"
+            response_text = "Please let me know if you have a fever (yes/no)."
+
+    elif is_booking_related:
+        # Booking flow
         active_agent = "ResourceOptimiser"
         response_text = "I'd be happy to help you book an appointment. Let me check what slots are available for you."
-    else:
-        # Default context - Receptionist
-        active_agent = "Receptionist"
-        response_text = "Hello! I'm the PearlFlow dental assistant. How can I help you today?"
+        ui_component = {
+            "type": "DateTimePicker",
+            "props": {
+                "availableDates": ["2025-01-15", "2025-01-16", "2025-01-17"],
+                "label": "Select appointment date"
+            }
+        }
 
-    # Simulate agent state update
+    elif "breathing" in last_user_message_lower or "breath" in last_user_message_lower:
+        # Emergency - breathing difficulty
+        active_agent = "IntakeSpecialist"
+        state["priority_score"] = 100
+        response_text = "EMERGENCY: Difficulty breathing requires immediate medical attention. Please call emergency services or go to the nearest emergency room immediately."
+
+    elif state["conversation_state"] == "triage_complete":
+        # After triage, maintain empathetic flow
+        active_agent = "IntakeSpecialist"
+        response_text = "I understand this is difficult. We'll make sure you get the care you need. Is there anything else I can help you with?"
+
+    else:
+        # Default - Receptionist greeting
+        active_agent = "Receptionist"
+        response_text = "Hello! I'm the PearlFlow dental assistant. I'm here to help you. How can I assist you today?"
+
+    # Update session state
+    session.state_snapshot = state
+    await db.commit()
+
+    # Generate SSE events
+    # Agent state event
     yield f'event: agent_state\ndata: {{"active_agent": "{active_agent}", "thinking": true}}\n\n'
     await asyncio.sleep(0.3)
 
-    # Simulate token-by-token response
+    # UI component event (if applicable)
+    if ui_component:
+        yield f'event: ui_component\ndata: {json.dumps(ui_component)}\n\n'
+        await asyncio.sleep(0.2)
+
+    # Token events for typewriter effect
     for char in response_text:
         yield f'event: token\ndata: {{"text": "{char}"}}\n\n'
         await asyncio.sleep(0.02)
 
-    # Signal completion
+    # Completion event
     yield 'event: complete\ndata: {"status": "done"}\n\n'
 
 
