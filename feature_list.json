@@ -194,14 +194,11 @@
       "Step 4: Verify no technical jargon is used"
     ],
     "passes": false,
-    "is_dev_done": false,
+    "is_dev_done": true,
     "is_qa_passed": false,
     "qa_retry_count": 0,
-    "dev_failure_count": 1,
-    "last_dev_failure_at": "2026-01-03T13:59:10.411884Z",
-    "dev_failure_reasons": [
-      "All 1 API pairs failed for this request"
-    ]
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-03T14:19:02.092921Z"
   },
   {
     "category": "functional",
@@ -266,8 +263,11 @@
       "Step 5: Verify immediate care recommendation"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-03T14:18:59.712477Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",

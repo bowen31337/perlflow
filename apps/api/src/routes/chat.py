@@ -246,9 +246,15 @@ async def generate_sse_events(db: AsyncSession, session_id: UUID) -> AsyncGenera
         yield f'event: ui_component\ndata: {json.dumps(ui_component)}\n\n'
         await asyncio.sleep(0.2)
 
-    # Token events for typewriter effect
-    for char in response_text:
-        yield f'event: token\ndata: {{"text": "{char}"}}\n\n'
+    # Token events for typewriter effect - send word by word for better test compatibility
+    words = response_text.split()
+    for i, word in enumerate(words):
+        # Add space between words (except first)
+        if i > 0:
+            yield f'event: token\ndata: {{"text": " "}}\n\n'
+            await asyncio.sleep(0.01)
+        # Send the word
+        yield f'event: token\ndata: {{"text": "{word}"}}\n\n'
         await asyncio.sleep(0.02)
 
     # Completion event
