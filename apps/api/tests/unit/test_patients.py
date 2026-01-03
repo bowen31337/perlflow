@@ -143,11 +143,11 @@ async def test_create_patient_invalid_phone_format(client: AsyncClient):
 
     assert response.status_code == 422
 
-    # Test too short (only 2 digits after country code, minimum is 1)
+    # Test too short (just + with no digits)
     response = await client.post(
         "/patients",
         json={
-            "phone": "+612",  # Too short (only 1 digit after country code)
+            "phone": "+",  # Just the plus sign
             "name": "John Doe",
         },
     )
@@ -159,6 +159,17 @@ async def test_create_patient_invalid_phone_format(client: AsyncClient):
         "/patients",
         json={
             "phone": "+01234567890",  # Country code can't start with 0
+            "name": "John Doe",
+        },
+    )
+
+    assert response.status_code == 422
+
+    # Test missing + prefix
+    response = await client.post(
+        "/patients",
+        json={
+            "phone": "61412345678",  # Missing +
             "name": "John Doe",
         },
     )
