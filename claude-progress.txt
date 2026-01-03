@@ -299,3 +299,98 @@ NEXT PRIORITIES:
 3. Patients API (Features 45-51)
 
 ================================================================================
+SESSION 5 UPDATE - Appointments API & Heuristics Implementation
+================================================================================
+Date: Session 5
+Status: APPOINTMENTS API IMPLEMENTED WITH DATABASE INTEGRATION
+
+COMPLETION:
+- ✅ get_available_slots - Real database queries with slot generation
+- ✅ create_appointment - Full booking flow with validation
+- ✅ update_appointment - Status/time updates with conflict checking
+- ✅ cancel_appointment - Status change to CANCELLED
+- ✅ heuristics tool - Database-backed move scoring
+
+PROGRESS: 18/200 features (9.0%)
+Tests: 18/18 passing (all existing tests still pass)
+
+================================================================================
+IMPLEMENTED FEATURES
+================================================================================
+
+APPOINTMENTS API (src/routes/appointments.py):
+
+1. GET /appointments/available
+   - Parses date range (YYYY-MM-DD/YYYY-MM-DD format)
+   - Validates clinic exists
+   - Queries active dentists for clinic
+   - Gets existing appointments in range
+   - Gets procedure duration (if specified)
+   - Generates available slots (9 AM - 5 PM, 30-min intervals)
+   - Checks for conflicts with existing appointments
+   - Skips weekends
+   - Returns SlotResponse objects with dentist info
+
+2. POST /appointments
+   - Validates patient exists
+   - Validates procedure code exists
+   - Parses slot_id (format: "{dentist_id}-{iso_datetime}")
+   - Checks for double booking
+   - Creates appointment with:
+     * Generated UUID
+     * Patient, clinic, dentist IDs
+     * Start time and duration
+     * Procedure code, name, value
+     * BOOKED status
+   - Returns AppointmentResponse
+
+3. PUT /appointments/{id}
+   - Fetches appointment with relationships
+   - Updates status (validates enum values)
+   - Updates start_time (with conflict checking)
+   - Returns updated AppointmentResponse
+
+4. DELETE /appointments/{id}
+   - Fetches appointment
+   - Sets status to CANCELLED
+   - Updates timestamp
+
+HEURISTICS TOOL (src/tools/heuristics.py):
+
+- heuristic_move_check(appointment_id, new_value, db)
+  - Fetches appointment from database
+  - Gets patient LTV score
+  - Calculates revenue difference
+  - Applies LTV penalty (high LTV = less likely to move)
+  - Adds timing bonus (more notice = higher score)
+  - Returns move_score (0-100), recommendation, incentive
+
+DATABASE MODELS USED:
+- Appointment, AppointmentStatus
+- Patient, Dentist, Clinic, Procedure
+- All with proper relationships
+
+================================================================================
+FILES MODIFIED (Session 5)
+================================================================================
+
+Backend:
+  - apps/api/src/routes/appointments.py    (443 lines, full implementation)
+  - apps/api/src/tools/heuristics.py       (Database integration)
+  - feature_list.json                      (Marked features as dev_done)
+
+Tests:
+  - All 18 existing tests still passing
+
+================================================================================
+NEXT ACTIONS
+================================================================================
+
+1. Write unit tests for new appointments API
+2. Implement remaining routes (patients, admin)
+3. Add browser-based end-to-end tests
+4. Integrate with frontend components
+5. Add move offer functionality
+6. Implement day optimization endpoint
+
+================================================================================
