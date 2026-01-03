@@ -49,7 +49,7 @@ class TestWaitlistManagement:
 
     def test_waitlist_database_model_exists(self):
         """Verify waitlist database model is implemented."""
-        models_path = Path("src/models.py")
+        models_path = Path("src/models/waitlist.py")
         if models_path.exists():
             content = models_path.read_text()
             # Verify Waitlist model exists
@@ -91,7 +91,7 @@ class TestFutureEnhancementsIntegration:
     def test_waitlist_integration_readiness(self):
         """Verify system is ready for waitlist management."""
         required_files = [
-            "src/models.py",  # Contains Waitlist model
+            "src/models/waitlist.py",  # Contains Waitlist model
             "src/routes/waitlist.py",
             "src/services/waitlist_service.py",
             "src/services/waitlist_notifications.py"
@@ -102,7 +102,7 @@ class TestFutureEnhancementsIntegration:
 
     def test_database_extensions_ready(self):
         """Verify database is ready for future table extensions."""
-        models_path = Path("src/models.py")
+        models_path = Path("src/models/waitlist.py")
         if models_path.exists():
             content = models_path.read_text()
             # Verify models are extensible

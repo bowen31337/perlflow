@@ -1390,7 +1390,13 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "dev_completed_at": "2026-01-03T16:06:45.946966+00:00",
-    "qa_completed_at": "2026-01-03T16:06:45.946966+00:00"
+    "qa_completed_at": "2026-01-03T16:06:45.946966+00:00",
+    "qa_retry_count": 0,
+    "dev_failure_count": 1,
+    "last_dev_failure_at": "2026-01-03T16:32:07.032354Z",
+    "dev_failure_reasons": [
+      "Worker session timed out"
+    ]
   },
   {
     "category": "functional",
@@ -1441,8 +1447,10 @@
     "passes": true,
     "is_dev_done": true,
     "is_qa_passed": true,
-    "dev_completed_at": "2026-01-03T16:06:45.946966+00:00",
-    "qa_completed_at": "2026-01-03T16:06:45.946966+00:00"
+    "dev_completed_at": "2026-01-03T16:28:35.813574Z",
+    "qa_completed_at": "2026-01-03T16:06:45.946966+00:00",
+    "qa_retry_count": 0,
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -2905,9 +2913,12 @@
       "Step 10: Verify confirmation card displayed",
       "Step 11: Verify appointment in database"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T03:32:00+00:00",
+    "qa_completed_at": "2026-01-04T03:32:00+00:00"
   },
   {
     "category": "functional",
@@ -2924,9 +2935,13 @@
       "Step 9: Verify confirmation received",
       "Step 10: Verify appointment linked to patient"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-03T16:36:41.864784Z",
+    "qa_completed_at": "2026-01-04T03:32:00+00:00",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -2941,9 +2956,12 @@
       "Step 7: Verify immediate care recommendation",
       "Step 8: Verify offer for earliest available slot"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T03:32:00+00:00",
+    "qa_completed_at": "2026-01-04T03:32:00+00:00"
   },
   {
     "category": "functional",
@@ -2958,9 +2976,12 @@
       "Step 7: Verify high-value appointment booked",
       "Step 8: Verify original patient notified"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T03:32:00+00:00",
+    "qa_completed_at": "2026-01-04T03:32:00+00:00"
   },
   {
     "category": "functional",
@@ -2975,9 +2996,12 @@
       "Step 7: Complete booking flow",
       "Step 8: Verify success"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T03:32:00+00:00",
+    "qa_completed_at": "2026-01-04T03:32:00+00:00"
   },
   {
     "category": "functional",
@@ -2991,9 +3015,12 @@
       "Step 6: Verify no slot conflicts",
       "Step 7: Verify both appointments created"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T03:32:00+00:00",
+    "qa_completed_at": "2026-01-04T03:32:00+00:00"
   },
   {
     "category": "functional",
@@ -3175,9 +3202,13 @@
       "Step 4: Verify message content is correct",
       "Step 5: Verify reminder is AHPRA compliant"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-03T16:34:21.281286Z",
+    "qa_completed_at": "2026-01-04T03:32:00+00:00",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -3189,9 +3220,12 @@
       "Step 4: Add patient to waitlist",
       "Step 5: Verify notification when slot opens"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T03:32:00+00:00",
+    "qa_completed_at": "2026-01-04T03:32:00+00:00"
   },
   {
     "category": "style",

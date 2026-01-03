@@ -7,7 +7,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from src.core.config import settings
-from src.routes import chat, session, appointments, patients, heuristics, admin
+from src.routes import chat, session, appointments, patients, heuristics, admin, notifications, waitlist
 
 
 @asynccontextmanager
@@ -79,3 +79,5 @@ app.include_router(appointments.router, prefix="/appointments", tags=["Appointme
 app.include_router(patients.router, prefix="/patients", tags=["Patients"])
 app.include_router(heuristics.router, prefix="/heuristics", tags=["Heuristics"])
 app.include_router(admin.router, prefix="/admin", tags=["Admin"])
+app.include_router(notifications.router, prefix="/notifications", tags=["Notifications"])
+app.include_router(waitlist.router, prefix="", tags=["Waitlist"])

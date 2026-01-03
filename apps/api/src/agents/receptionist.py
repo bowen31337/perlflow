@@ -7,8 +7,8 @@ from langchain_openai import ChatOpenAI
 from langchain_core.language_models import BaseChatModel
 from langchain_core.messages import HumanMessage
 
-from src.agents.intake import create_intake_agent
-from src.agents.scheduler import create_scheduler_agent
+from .intake import create_intake_agent
+from .scheduler import create_scheduler_agent
 
 RECEPTIONIST_INSTRUCTIONS = """
 You are the Main Receptionist for a dental practice, a warm and professional

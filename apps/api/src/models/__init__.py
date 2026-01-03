@@ -8,6 +8,8 @@ from src.models.procedure import Procedure
 from src.models.session import AgentSession, SessionStatus
 from src.models.move_offer import MoveOffer, MoveOfferStatus, IncentiveType
 from src.models.feedback import Feedback
+from src.models.sms_notification import SMSNotification, SMSNotificationStatus, SMSNotificationType
+from src.models.waitlist import Waitlist, WaitlistNotification
 
 __all__ = [
     "Patient",
@@ -22,4 +24,9 @@ __all__ = [
     "MoveOfferStatus",
     "IncentiveType",
     "Feedback",
+    "SMSNotification",
+    "SMSNotificationStatus",
+    "SMSNotificationType",
+    "Waitlist",
+    "WaitlistNotification",
 ]

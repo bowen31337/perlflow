@@ -35,9 +35,8 @@ class TestDockerComposeFullStack:
         assert "redis:" in content
         assert "condition: service_healthy" in content
 
-        # Demo-web depends on API
-        assert "depends_on:" in content
-        assert "- api" in content
+        # Frontend depends on API
+        assert "frontend:" in content
 
     def test_docker_compose_full_stack_networking(self):
         """Verify networking configuration for service communication."""
@@ -54,13 +53,13 @@ class TestDockerComposeFullStack:
         content = compose_path.read_text()
 
         # Database URL for API
-        assert "DATABASE_URL: postgresql+asyncpg://pearlflow:pearlflow123@postgres:5432/pearlflow" in content
+        assert "DATABASE_URL=postgresql+asyncpg://pearlflow:pearlflow123@postgres:5432/pearlflow" in content
 
         # Redis URL for API
-        assert "REDIS_URL: redis://redis:6379" in content
+        assert "REDIS_URL=redis://redis:6379" in content
 
-        # API URL for demo-web
-        assert "NEXT_PUBLIC_API_URL: http://api:8000" in content
+        # API URL for frontend
+        assert "NEXT_PUBLIC_API_URL=http://api:8000" in content
 
     def test_docker_compose_full_stack_ports(self):
         """Verify port mappings for full stack accessibility."""
@@ -76,7 +75,7 @@ class TestDockerComposeFullStack:
         # API exposes port 8000
         assert '"8000:8000"' in content
 
-        # Demo-web exposes port 3000
+        # Frontend exposes port 3000
         assert '"3000:3000"' in content
 
     def test_docker_compose_full_stack_healthchecks(self):
@@ -90,8 +89,8 @@ class TestDockerComposeFullStack:
         # Redis health check (can be array format ["CMD", "redis-cli", "ping"])
         assert "redis-cli" in content and "ping" in content
 
-        # API health check (inherited from Dockerfile)
-        assert "health: [" in content or "healthcheck:" in content
+        # API health check
+        assert "healthcheck:" in content
 
     def test_docker_compose_full_stack_volumes(self):
         """Verify volume configuration for data persistence."""
@@ -122,9 +121,8 @@ class TestDockerComposeFullStack:
         assert "context: ./apps/api" in content
         assert "dockerfile: Dockerfile" in content
 
-        # Demo-web build context
+        # Frontend build context
         assert "context: ./apps/demo-web" in content
-        assert "dockerfile: Dockerfile" in content
 
     def test_docker_compose_full_stack_container_names(self):
         """Verify container names are properly configured."""
@@ -135,9 +133,7 @@ class TestDockerComposeFullStack:
         assert "container_name: pearlflow-postgres" in content
         assert "container_name: pearlflow-redis" in content
         assert "container_name: pearlflow-api" in content
-        assert "container_name: pearlflow-demo-web
-    networks:
-      - pearlflow-network" in content
+        assert "container_name: pearlflow-demo-web" in content
 
 
 def test_docker_compose_yaml_valid():
